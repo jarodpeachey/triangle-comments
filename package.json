@@ -1,0 +1,36 @@
+{
+  "name": "triangle_cms",
+  "version": "1.0.0",
+  "description": "A modern, blazing fast and intuitive CMS",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint \"./packages/**/*{.js,.jsx}\"",
+    "build": "lerna run build --reject-cycles",
+    "bootstrap": "lerna bootstrap --hoist --reject-cycles --force-local",
+    "postinstall": "npm run bootstrap",
+    "bs": "npm run bootstrap",
+    "dev": "lerna run dev --reject-cycles",
+    "publish": "lerna publish",
+    "nuke": "./scripts/nuke.sh",
+    "hard-reset": "npm run nuke && npm run bs && npm run build",
+    "test": "lerna run test --reject-cycles",
+    "watch": "lerna run watch --parallel --reject-cycles",
+    "docs": "lerna run docs"
+  },
+  "author": "Jarod Peachey",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.1.0",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.19.0",
+    "prettier": "^2.0.4"
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.9.9",
+    "gatsby-plugin-styled-components": "^3.2.1",
+    "lerna": "^3.20.2",
+    "react": "^16.10.2",
+    "styled-components": "^5.0.1"
+  }
+}
