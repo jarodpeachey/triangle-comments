@@ -1,12 +1,12 @@
 {
-  "name": "root",
+  "name": "triangle",
+  "version": "1.0.0",
   "description": "A modern, blazing fast and intuitive CMS",
   "main": "index.js",
   "scripts": {
     "lint": "eslint \"./packages/**/*{.js,.jsx}\"",
     "build": "lerna run build --reject-cycles",
     "bootstrap": "lerna bootstrap --hoist --reject-cycles --force-local",
-    "postinstall": "npm run bootstrap",
     "link": "lerna link",
     "bs": "npm run bootstrap",
     "dev": "lerna run dev --reject-cycles",

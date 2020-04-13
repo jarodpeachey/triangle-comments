@@ -1,0 +1,79 @@
+label {
+  margin-bottom: 8px;
+  display: block;
+  font-weight: 500;
+}
+
+input {
+  padding: 14px;
+  border: 2px solid white;
+  box-shadow: 1px 1px 3px 0px #e7e7e7;
+  font-size: 16px;
+  outline: none;
+  width: 100%;
+  :focus {
+    border: 2px solid #264966;
+  }
+}
+
+label[hidden] {
+  height: 0px !important;
+  width: 0px !important;
+  background: transparent !important;
+  color: transparent !important;
+  border: none !important;
+  outline: none !important;
+  cursor: default !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  max-height: 0px !important;
+  min-height: 0px !important;
+  display: float;
+}
+
+input[hidden] {
+  height: 0px !important;
+  width: 0px !important;
+  background: transparent !important;
+  color: transparent !important;
+  border: none !important;
+  outline: none !important;
+  cursor: default !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  max-height: 0px !important;
+  min-height: 0px !important;
+  display: float;
+}
+
+textarea {
+  padding: 14px;
+  width: 100%;
+  min-height: 125px;
+  border: 2px solid white;
+  box-shadow: 1px 1px 3px 0px #e7e7e7;
+  font-size: 16px;
+  outline: none;
+  resize: vertical;
+  :focus {
+    border: 2px solid #264966;
+  }
+}
+
+button {
+  margin: 0;
+  margin-left: auto;
+  display: block;
+  background: #264966;
+  color: white;
+  text-transform: uppercase;
+  padding: 14px 28px;
+  border: none;
+  transition-duration: 0.4s;
+  :hover {
+    background: #264966d9;
+    transition-duration: 0.4s;
+    box-shadow: 4px 5px 20px 0px #66666610;
+    transform: scale(1.04);
+  }
+}

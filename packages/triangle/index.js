@@ -1,4 +1,4 @@
 /* eslint-disable import/prefer-default-export */
-import Form from './form';
+import Form from './src/form';
 
 export { Form };
