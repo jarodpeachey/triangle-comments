@@ -22,7 +22,7 @@
     "node-fetch": "^2.6.0",
     "react": "^16.10.2"
   },
-  "gitHead": "fae9d3bdafab4f16d3e1fa60b6cc75141476a736",
+  "gitHead": "ebd881bd9ab9cffd087d1ed60fd377ffcc43f4f4",
   "publishConfig": {
     "access": "public"
   }
