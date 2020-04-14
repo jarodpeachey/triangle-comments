@@ -9,7 +9,7 @@
   "author": "Jarod Peachey",
   "license": "ISC",
   "devDependencies": {
-    "triangle-comments": "^1.0.2",
+    "triangle-comments": "^0.0.1",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.1.0",
     "eslint-plugin-jsx-a11y": "^6.2.3",
