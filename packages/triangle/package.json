@@ -1,7 +1,7 @@
 {
-  "name": "@triangle-comments/triangle",
-  "version": "1.0.2",
-  "description": "A modern, blazing fast and intuitive CMS",
+  "name": "triangle-comments",
+  "version": "0.0.1",
+  "description": "A drop-in solution for using comments on JAMstack sites.",
   "main": "index.js",
   "scripts": {
     "lint": "eslint \"./packages/**/*{.js,.jsx}\"",
@@ -33,7 +33,7 @@
     "react": "^16.10.2",
     "styled-components": "^5.0.1"
   },
-  "gitHead": "f1f502ae51236917b58f53b5a9efd721bc0006a4",
+  "gitHead": "fae9d3bdafab4f16d3e1fa60b6cc75141476a736",
   "publishConfig": {
     "access": "public"
   }

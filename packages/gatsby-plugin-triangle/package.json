@@ -1,6 +1,6 @@
 {
-  "name": "gatsby-plugin-triangle",
-  "version": "1.0.2",
+  "name": "gatsby-plugin-triangle-comments",
+  "version": "0.0.1",
   "description": "A plugin for using comments in Gatsby",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,7 @@
   "author": "Jarod Peachey",
   "license": "ISC",
   "devDependencies": {
-    "@triangle-comments/triangle": "^1.0.2",
+    "triangle-comments": "^1.0.2",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.1.0",
     "eslint-plugin-jsx-a11y": "^6.2.3",
@@ -22,7 +22,7 @@
     "node-fetch": "^2.6.0",
     "react": "^16.10.2"
   },
-  "gitHead": "f1f502ae51236917b58f53b5a9efd721bc0006a4",
+  "gitHead": "fae9d3bdafab4f16d3e1fa60b6cc75141476a736",
   "publishConfig": {
     "access": "public"
   }

@@ -13,7 +13,7 @@ module.exports = {
   },
   plugins: [
     {
-      resolve: 'gatsby-plugin-triangle',
+      resolve: 'gatsby-plugin-triangle-comments',
       options: {
         key: process.env.NETLIFY_TOKEN,
         siteID: 'b6b13974-f786-41c8-841f-38ba49c28710',
