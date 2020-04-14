@@ -21,5 +21,9 @@
     "dotenv": "^8.2.0",
     "node-fetch": "^2.6.0",
     "react": "^16.10.2"
+  },
+  "gitHead": "f1f502ae51236917b58f53b5a9efd721bc0006a4",
+  "publishConfig": {
+    "access": "public"
   }
 }

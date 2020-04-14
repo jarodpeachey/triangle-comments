@@ -32,5 +32,9 @@
     "lerna": "^3.20.2",
     "react": "^16.10.2",
     "styled-components": "^5.0.1"
+  },
+  "gitHead": "f1f502ae51236917b58f53b5a9efd721bc0006a4",
+  "publishConfig": {
+    "access": "public"
   }
 }
