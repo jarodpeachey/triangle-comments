@@ -2,11 +2,18 @@
 
 Triangle comments is the simplest way to add comments to your static website. Simply define your API key and Site ID from Netlify, and you can add comments to any page on your website 🎉
 
-***Important:** Currently, Triangle only works with Gatsby and Netlify, but support for other SSGs and hosting providers will be added in the future.*
+***Important:** Currently, Triangle only works with Gatsby and Netlify, but support for other SSGs and hosting providers will be added in the future. If you have any questions or need assistance, you can [contact us](https://github.com/jarodpeachey/triangle-comments#support)*
 
 ### Table of Contents
 
- - [Getting Started](https://github.com/jarodpeachey/triangle-comments#getting-started)
+ - [🚀 Getting Started](https://github.com/jarodpeachey/triangle-comments#getting-started)
+	 - [Setting Up Your Website](https://github.com/jarodpeachey/triangle-comments#setting-up-your-website)
+	 - [Installing Packages](https://github.com/jarodpeachey/triangle-comments#installing-packages)	 
+	 - [Configuration](https://github.com/jarodpeachey/triangle-comments#configuration)
+ - [💬 Adding Comment Functionality](https://github.com/jarodpeachey/triangle-comments#adding-comment-functionality)
+	 - [Adding a Form](https://github.com/jarodpeachey/triangle-comments#adding-a-form)
+	 - [Displaying Your Comments](https://github.com/jarodpeachey/triangle-comments#displaying-your-comments)
+- [🎨 Custom Configuration](https://github.com/jarodpeachey/triangle-comments#custom-configuration) 
 
 ## Getting Started
 ### Setting up your website
