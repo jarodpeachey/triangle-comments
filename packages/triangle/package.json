@@ -1,6 +1,6 @@
 {
   "name": "@triangle-comments/triangle",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A modern, blazing fast and intuitive CMS",
   "main": "index.js",
   "scripts": {
