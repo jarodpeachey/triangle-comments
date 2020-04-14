@@ -16,8 +16,7 @@ exports.sourceNodes = async (
 ) => {
   const { createNode } = actions;
 
-  const apiKey = options.key;
-  const { siteID, color } = options;
+  const { siteID, color, apiKey } = options;
 
   if (!apiKey) {
     reporter.panicOnBuild('Please define a Netlify access token');

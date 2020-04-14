@@ -8,16 +8,6 @@ import Footer from './footer';
 const Layout = (props) => {
   console.log(props);
 
-  // const site = useStaticQuery(graphql`
-  //   query {
-  //     site {
-  //       siteMetadata {
-  //         title
-  //       }
-  //     }
-  //   }
-  // `);
-
   return (
     <>
       <Header siteTitle={props.title} />

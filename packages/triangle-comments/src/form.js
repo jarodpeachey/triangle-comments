@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import './css/style.css';
 
@@ -8,7 +8,11 @@ function encode(data) {
     .join('&');
 }
 
-const Form = ({ formName = 'Comments', color = '#264966' }) => {
+export const Form = () => {
+  console.log(window.triangle);
+
+  const color = 'tomato';
+
   const [state, setState] = useState({});
 
   const handleChange = (e) => {
@@ -19,6 +23,8 @@ const Form = ({ formName = 'Comments', color = '#264966' }) => {
       parentCommentNumber: state.parentCommentNumber,
     });
   };
+
+  const formName = 'Comments';
 
   // const [emailError, setEmailError] = useState(false);
 
@@ -200,5 +206,3 @@ const Button = styled.button`
     transform: scale(1.04) !important;
   }
 `;
-
-export default Form;

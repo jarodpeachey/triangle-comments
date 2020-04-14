@@ -83,28 +83,13 @@ const SecondPage = ({ data }) => {
       <SkillsSection />
       <PortfolioSection />
       <ContactSection />
-      <CommentSection comments={data.allNetlifySubmissions.edges} />
+      {/* <CommentSection comments={data.allNetlifySubmissions.edges} /> */}
     </Layout>
   );
 };
 
 export const IndexQuery = graphql`
-  query($pathname: String!) {
-    allNetlifySubmissions(filter: { data: { path: { eq: $pathname } } }) {
-      edges {
-        node {
-          number
-          data {
-            comment
-            email
-            name
-            path
-            parentCommentNumber
-          }
-          created_at(formatString: "M/D/YYYY")
-        }
-      }
-    }
+  query {
     site {
       siteMetadata {
         title
@@ -112,6 +97,22 @@ export const IndexQuery = graphql`
     }
   }
 `;
+
+    // allNetlifySubmissions(filter: { data: { path: { eq: $pathname } } }) {
+    //   edges {
+    //     node {
+    //       number
+    //       data {
+    //         comment
+    //         email
+    //         name
+    //         path
+    //         parentCommentNumber
+    //       }
+    //       created_at(formatString: "M/D/YYYY")
+    //     }
+    //   }
+    // }
 
 const ButtonContainer = styled.div`
   max-width: 400px;

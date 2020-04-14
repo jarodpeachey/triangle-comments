@@ -32,6 +32,7 @@ import SkillsSection from '../components/Homepage/skills_section';
 import PortfolioSection from '../components/Homepage/portfolio_section';
 import ContactSection from '../components/Homepage/contact_section';
 import CommentSection from '../components/Homepage/comment_section';
+import { Form } from 'triangle-comments';
 
 library.add(
   faMobileAlt,
@@ -49,7 +50,7 @@ library.add(
   faPhp,
   faDatabase,
   faGithub,
-  faWordpress,
+  faWordpress
 );
 
 const IndexPage = ({ data }) => {
@@ -83,28 +84,14 @@ const IndexPage = ({ data }) => {
       <SkillsSection />
       <PortfolioSection />
       <ContactSection />
-      <CommentSection comments={data.allNetlifySubmissions.edges} />
+      {/* <CommentSection comments={data.allNetlifySubmissions.edges} /> */}
+      <Form />
     </Layout>
   );
 };
 
 export const IndexQuery = graphql`
-  query($pathname: String!) {
-    allNetlifySubmissions(filter: { data: { path: { eq: $pathname } } }) {
-      edges {
-        node {
-          number
-          data {
-            comment
-            email
-            name
-            path
-            parentCommentNumber
-          }
-          created_at(formatString: "M/D/YYYY")
-        }
-      }
-    }
+  query {
     site {
       siteMetadata {
         title
@@ -112,6 +99,22 @@ export const IndexQuery = graphql`
     }
   }
 `;
+
+// allNetlifySubmissions(filter: { data: { path: { eq: $pathname } } }) {
+//   edges {
+//     node {
+//       number
+//       data {
+//         comment
+//         email
+//         name
+//         path
+//         parentCommentNumber
+//       }
+//       created_at(formatString: "M/D/YYYY")
+//     }
+//   }
+// }
 
 const ButtonContainer = styled.div`
   max-width: 400px;

@@ -1,4 +1,2 @@
-/* eslint-disable import/prefer-default-export */
-import Form from './src/form';
-
-export { Form };
+export * from './src/Triangle';
+export * from './src/form';
