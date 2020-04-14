@@ -8,98 +8,8 @@ function encode(data) {
     .join('&');
 }
 
-const Form = ({ formName }) => {
+const Form = ({ formName = 'Comments', color = '#264966' }) => {
   const [state, setState] = useState({});
-  const [focusState, setFocusState] = useState({});
-
-  const LabelStyles = {
-    marginBottom: '8px !important',
-    display: 'block !important',
-    fontWeight: '500 !important',
-  };
-
-  console.log(LabelStyles);
-
-  const HiddenStyles = {
-    height: '0px ',
-    width: '0px ',
-    background: 'transparent ',
-    color: 'transparent ',
-    border: 'none ',
-    outline: 'none ',
-    cursor: 'default ',
-    padding: '0 ',
-    margin: '0 ',
-    maxHeight: '0px ',
-    minHeight: '0px ',
-    display: 'float ',
-  };
-
-  const InputStyles = {
-    padding: '14px ',
-    border: ' 2px solid white ',
-    boxShadow: '1px 1px 3px 0px #e7e7e7 ',
-    fontSize: '16px ',
-    outline: 'none ',
-    width: '100% ',
-  };
-
-  const InputStylesFocus = {
-    padding: '14px ',
-    border: '2px solid #264966 ',
-    boxShadow: '1px 1px 3px 0px #e7e7e7 ',
-    fontSize: '16px ',
-    outline: 'none ',
-    width: '100% ',
-  };
-
-  const TextAreaStyles = {
-    padding: ' 14px ',
-    width: ' 100% ',
-    minHeight: ' 125px ',
-    border: ' 2px solid white ',
-    boxShadow: ' 1px 1px 3px 0px #e7e7e7 ',
-    fontSize: ' 16px ',
-    outline: ' none ',
-    resize: ' vertical ',
-  };
-
-  const TextAreaStylesFocus = {
-    padding: ' 14px ',
-    width: ' 100% ',
-    minHeight: ' 125px ',
-    border: '2px solid #264966 ',
-    boxShadow: ' 1px 1px 3px 0px #e7e7e7 ',
-    fontSize: ' 16px ',
-    outline: ' none ',
-    resize: ' vertical ',
-  };
-
-  const ButtonStyles = {
-    margin: '0 ',
-    marginLeft: 'auto ',
-    display: 'block ',
-    background: '#264966 ',
-    textTransform: 'uppercase ',
-    color: 'white ',
-    padding: '14px 28px ',
-    border: 'none ',
-    transitionDuration: '0.4s ',
-  };
-
-  const ButtonStylesHover = {
-    margin: '0 ',
-    marginLeft: 'auto ',
-    display: 'block ',
-    background: '#264966 ',
-    textTransform: 'uppercase ',
-    color: 'white ',
-    padding: '14px 28px ',
-    border: 'none ',
-    transitionDuration: '0.4s ',
-    boxShadow: '4px 5px 20px 0px #66666610 ',
-    transform: 'scale(1.04) ',
-  };
 
   const handleChange = (e) => {
     setState({
@@ -110,19 +20,6 @@ const Form = ({ formName }) => {
     });
   };
 
-  const handleFocus = (e) => {
-    setFocusState({
-      ...focusState,
-      [e.target.name]: true,
-    });
-  };
-
-  const handleBlur = (e) => {
-    setFocusState({
-      ...focusState,
-      [e.target.name]: false,
-    });
-  };
   // const [emailError, setEmailError] = useState(false);
 
   // const onEmailInputChange = (e) => {
@@ -186,8 +83,7 @@ const Form = ({ formName }) => {
             />
             <Label htmlFor='name'>Name</Label>
             <Input
-              onFocus={handleFocus}
-              onBlur={handleBlur}
+              color={color}
               onChange={handleChange}
               type='text'
               name='name'
@@ -197,8 +93,7 @@ const Form = ({ formName }) => {
           <div className='col col-6'>
             <Label htmlFor='email'>Email</Label>
             <Input
-              onFocus={handleFocus}
-              onBlur={handleBlur}
+              color={color}
               onChange={handleChange}
               type='email'
               name='email'
@@ -208,20 +103,14 @@ const Form = ({ formName }) => {
           <div className='col col-12'>
             <Label htmlFor='comment'>Comment</Label>
             <TextArea
-              onFocus={handleFocus}
-              onBlur={handleBlur}
+              color={color}
               onChange={handleChange}
               name='comment'
               id='comment'
             ></TextArea>
           </div>
           <div className='col col-12'>
-            <Button
-              onMouseEnter={handleFocus}
-              onMouseLeave={handleBlur}
-              name='button'
-              type='submit'
-            >
+            <Button color={color} name='button' type='submit'>
               Post your comment
             </Button>
           </div>
@@ -260,7 +149,7 @@ const Input = styled.input`
   outline: none !important;
   width: 100% !important;
   :focus {
-    border: 2px solid #264966 !important;
+    border: 2px solid ${(props) => props.color} !important;
   }
 `;
 
@@ -289,7 +178,7 @@ const TextArea = styled.textarea`
   outline: none !important;
   resize: vertical !important;
   :focus {
-    border: 2px solid #264966 !important;
+    border: 2px solid ${(props) => props.color} !important;
   }
 `;
 
@@ -297,7 +186,7 @@ const Button = styled.button`
   margin: 0 !important;
   margin-left: auto !important;
   display: block !important;
-  background: #264966 !important;
+  background: ${(props) => props.color} !important;
   color: white !important;
   text-transform: uppercase !important;
   color: white !important;
@@ -305,7 +194,7 @@ const Button = styled.button`
   border: none !important;
   transition-duration: 0.4s !important;
   :hover {
-    background: #264966d9 !important;
+    background: ${(props) => props.color}d9 !important;
     transition-duration: 0.4s !important;
     box-shadow: 4px 5px 20px 0px #66666610 !important;
     transform: scale(1.04) !important;

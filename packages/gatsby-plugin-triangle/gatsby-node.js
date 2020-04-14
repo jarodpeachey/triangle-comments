@@ -10,16 +10,14 @@ require('dotenv').config({
 
 const fetch = require('node-fetch');
 
-exports.sourceNodes = async ({
-  actions,
-  createNodeId,
-  createContentDigest,
-  reporter,
-}, options) => {
+exports.sourceNodes = async (
+  { actions, createNodeId, createContentDigest, reporter },
+  options
+) => {
   const { createNode } = actions;
 
   const apiKey = options.key;
-  const {siteID} = options;
+  const { siteID, color } = options;
 
   if (!apiKey) {
     reporter.panicOnBuild('Please define a Netlify access token');
@@ -49,7 +47,7 @@ exports.sourceNodes = async ({
 
     console.log(nodeMeta);
 
-    createNode({ ...input, ...nodeMeta});
+    createNode({ ...input, ...nodeMeta });
   };
 
   try {

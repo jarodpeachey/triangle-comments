@@ -14,7 +14,7 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.19.0",
     "prettier": "^2.0.4",
-    "triangle": "^1.0.0"
+    "@triangle-comments/triangle": "^1.0.0"
   },
   "dependencies": {
     "@material-ui/core": "^4.9.9",

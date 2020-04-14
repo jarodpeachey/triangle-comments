@@ -8,6 +8,7 @@
     "bootstrap": "lerna bootstrap --hoist --reject-cycles --force-local",
     "postinstall": "npm run bootstrap",
     "link": "lerna link",
+    "clean": "lerna clean",
     "bs": "npm run bootstrap",
     "dev": "lerna run dev --reject-cycles",
     "publish": "lerna publish",
