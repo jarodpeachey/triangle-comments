@@ -1,2 +1,3 @@
 export * from './src/Triangle';
-export * from './src/form';
+export * from './src/Form';
+export * from './src/Comments';

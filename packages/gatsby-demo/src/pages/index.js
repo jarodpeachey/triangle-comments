@@ -84,8 +84,7 @@ const IndexPage = ({ data }) => {
       <SkillsSection />
       <PortfolioSection />
       <ContactSection />
-      {/* <CommentSection comments={data.allNetlifySubmissions.edges} /> */}
-      <Form />
+      <CommentSection />
     </Layout>
   );
 };

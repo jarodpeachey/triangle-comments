@@ -31,6 +31,10 @@
     "styled-components": "^5.0.1"
   },
   "dependencies": {
+    "@apollo/react-hooks": "^3.1.5",
+    "apollo-boost": "^0.4.7",
+    "gatsby": "^2.15.36",
+    "isomorphic-fetch": "^2.2.1",
     "lodash.merge": "^4.6.2"
   },
   "gitHead": "ebd881bd9ab9cffd087d1ed60fd377ffcc43f4f4",

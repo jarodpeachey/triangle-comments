@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import './css/style.css';
@@ -9,7 +10,9 @@ function encode(data) {
 }
 
 export const Form = () => {
+  console.log(window);
   console.log(window.triangle);
+  console.log(window.temporaryComments);
 
   const color = 'tomato';
 
@@ -74,8 +77,8 @@ export const Form = () => {
         onSubmit={handleSubmit}
       >
         <input type='hidden' name='form-name' value={formName} />
-        <div className='row'>
-          <div className='col col-6'>
+        <div className='custom-row'>
+          <div className='custom-col custom-col-6'>
             <HiddenLabel htmlFor='path'>Path</HiddenLabel>
             <HiddenInput name='path' id='path' type='text' value={state.path} />
             <HiddenLabel htmlFor='parentCommentNumber'>
@@ -96,7 +99,7 @@ export const Form = () => {
               id='name'
             />
           </div>
-          <div className='col col-6'>
+          <div className='custom-col custom-col-6'>
             <Label htmlFor='email'>Email</Label>
             <Input
               color={color}
@@ -106,7 +109,7 @@ export const Form = () => {
               id='email'
             />
           </div>
-          <div className='col col-12'>
+          <div className='custom-col custom-col-12'>
             <Label htmlFor='comment'>Comment</Label>
             <TextArea
               color={color}
@@ -115,7 +118,7 @@ export const Form = () => {
               id='comment'
             ></TextArea>
           </div>
-          <div className='col col-12'>
+          <div className='custom-col custom-col-12'>
             <Button color={color} name='button' type='submit'>
               Post your comment
             </Button>

@@ -83,7 +83,7 @@ const SecondPage = ({ data }) => {
       <SkillsSection />
       <PortfolioSection />
       <ContactSection />
-      {/* <CommentSection comments={data.allNetlifySubmissions.edges} /> */}
+      <CommentSection />
     </Layout>
   );
 };

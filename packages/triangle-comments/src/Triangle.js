@@ -1,4 +1,7 @@
-const React = require('react');
+import { useStaticQuery } from 'gatsby';
+import React from 'react';
+import { ApolloProvider } from '@apollo/react-hooks';
+import { client } from './apollo/client';
 
 export const TriangleContext = React.createContext({});
 
@@ -14,18 +17,16 @@ export class TriangleConstructor {
 
   siteID = '';
 
-  constructor(props) {
-    console.log(props);
+  constructor(options) {
+    console.log(options);
 
-    this.apiKey = props.apiKey;
-    this.color = props.color;
-    this.siteID = props.siteID;
+    this.apiKey = options.apiKey;
+    this.color = options.color;
+    this.siteID = options.siteID;
   }
 }
 
 export const Triangle = ({ options, children }) => {
-  console.log(options, children);
-
   const { apiKey, siteID, color } = options;
 
   window.triangle = new TriangleConstructor(options);
@@ -37,8 +38,10 @@ export const Triangle = ({ options, children }) => {
   };
 
   return (
-    <TriangleContext.Provider value={{ ...ctx }}>
-      {children}
-    </TriangleContext.Provider>
+    <ApolloProvider client={client}>
+      <TriangleContext.Provider value={{ ...ctx }}>
+        {children}
+      </TriangleContext.Provider>
+    </ApolloProvider>
   );
 };

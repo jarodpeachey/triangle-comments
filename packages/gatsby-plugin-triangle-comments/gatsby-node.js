@@ -57,6 +57,8 @@ exports.sourceNodes = async (
         console.log(typeof json);
         console.log(json);
 
+        // window.temporaryComments = Object.values(json);
+
         Object.values(json).forEach((submission) => {
           nodeHelper(submission, 'Submissions');
         });

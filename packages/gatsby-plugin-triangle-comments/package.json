@@ -22,7 +22,8 @@
   "dependencies": {
     "dotenv": "^8.2.0",
     "node-fetch": "^2.6.0",
-    "triangle-comments": "^0.0.2"
+    "triangle-comments": "^0.0.2",
+    "gatsby": "^2.15.36"
   },
   "gitHead": "ebd881bd9ab9cffd087d1ed60fd377ffcc43f4f4",
   "publishConfig": {

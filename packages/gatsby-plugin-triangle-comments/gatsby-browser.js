@@ -1,4 +1,5 @@
 const React = require('react');
+const { useStaticQuery } = require('gatsby');
 const { Triangle, TriangleConstructor } = require('triangle-comments');
 
 exports.wrapRootElement = ({ element }, options) => {
