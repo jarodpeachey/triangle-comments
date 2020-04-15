@@ -10,10 +10,6 @@ function encode(data) {
 }
 
 export const Form = () => {
-  console.log(window);
-  console.log(window.triangle);
-  console.log(window.temporaryComments);
-
   const color = 'tomato';
 
   const [state, setState] = useState({});

@@ -3,43 +3,60 @@
 import React, { useState, useEffect, createRef } from 'react';
 import styled from 'styled-components';
 import { useStaticQuery, graphql } from 'gatsby';
-
+import { useQuery } from '@apollo/react-hooks';
+import { gql } from 'apollo-boost';
 import { formatDate } from './utils/formatDate';
 
-function encode (data) {
+function encode(data) {
   return Object.keys(data)
     .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
     .join('&');
 }
 
-export const Comments = () => {
-  const data = useStaticQuery(graphql`
-    query {
-      allNetlifySubmissions {
-        edges {
-          node {
-            number
-            data {
-              comment
-              email
-              name
-              path
-              parentCommentNumber
-            }
-            created_at(formatString: "M/D/YYYY")
-          }
+const QUERY = gql`
+  {
+    allNetlifySubmissions {
+      edges {
+        node {
+          number
         }
       }
     }
-  `);
+  }
+`;
 
-  console.log(data);
+export const Comments = () => {
+  // const data = useStaticQuery(graphql`
+  //   query {
+  //     allNetlifySubmissions {
+  //       edges {
+  //         node {
+  //           number
+  //           data {
+  //             comment
+  //             email
+  //             name
+  //             path
+  //             parentCommentNumber
+  //           }
+  //           created_at(formatString: "M/D/YYYY")
+  //         }
+  //       }
+  //     }
+  //   }
+  // `);
+
+  const { loading, error, data } = useQuery(QUERY);
+
+  console.log(loading, error, data);
 
   const [state, setState] = React.useState({});
   const [parentCommentNumber, setParentCommentNumber] = React.useState(0);
-  const [stateComments, setStateComments] = React.useState(data.allNetlifySubmissions.edges);
+  const [stateComments, setStateComments] = React.useState(
+    loading ? [] : data.edges
+  );
 
-  const {apiKey} = window.triangle;
+  const { apiKey } = window.triangle;
 
   const fetchNewComments = async () => {
     const newComments = await fetch(
@@ -82,9 +99,9 @@ export const Comments = () => {
     'First level comments: ',
     stateComments
       .filter((comment) =>
-        comment.node ?
-          comment.node.data.parentCommentNumber == 'undefined' :
-          comment.data.parentCommentNumber == 'undefined'
+        comment.node
+          ? comment.node.data.parentCommentNumber == 'undefined'
+          : comment.data.parentCommentNumber == 'undefined'
       )
       .sort((a, b) =>
         a.node ? a.node.number - b.node.number : a.number - b.number
@@ -94,9 +111,9 @@ export const Comments = () => {
     'Replies: ',
     stateComments
       .filter((comment) =>
-        comment.node ?
-          comment.node.data.parentCommentNumber !== 'undefined' :
-          comment.data.parentCommentNumber !== 'undefined'
+        comment.node
+          ? comment.node.data.parentCommentNumber !== 'undefined'
+          : comment.data.parentCommentNumber !== 'undefined'
       )
       .sort((a, b) =>
         a.node ? a.node.number - b.node.number : a.number - b.number
@@ -184,9 +201,9 @@ export const Comments = () => {
     <>
       {stateComments
         .filter((comment) =>
-          comment.node ?
-            comment.node.data.parentCommentNumber == 'undefined' :
-            comment.data.parentCommentNumber == 'undefined'
+          comment.node
+            ? comment.node.data.parentCommentNumber == 'undefined'
+            : comment.data.parentCommentNumber == 'undefined'
         )
         .sort((a, b) =>
           a.node ? a.node.number - b.node.number : a.number - b.number
@@ -196,54 +213,54 @@ export const Comments = () => {
           <CommentsSection>
             {stateComments
               .filter((comment) =>
-                comment.node ?
-                  comment.node.data.parentCommentNumber == 'undefined' :
-                  comment.data.parentCommentNumber == 'undefined'
+                comment.node
+                  ? comment.node.data.parentCommentNumber == 'undefined'
+                  : comment.data.parentCommentNumber == 'undefined'
               )
               .sort((a, b) =>
                 a.node ? a.node.number - b.node.number : a.number - b.number
               )
               .map((parentComment) => {
                 if (
-                  parentComment.node ?
-                    parentComment.node.data.name !== 'placeholder' :
-                    parentComment.data.name
+                  parentComment.node
+                    ? parentComment.node.data.name !== 'placeholder'
+                    : parentComment.data.name
                 ) {
                   return (
                     <Comment
                       key={
-                        parentComment.node ?
-                          parentComment.node.data.name :
-                          parentComment.data.name
+                        parentComment.node
+                          ? parentComment.node.data.name
+                          : parentComment.data.name
                       }
                     >
                       <CommentName>
-                        {parentComment.node ?
-                          parentComment.node.data.name :
-                          parentComment.data.name}
+                        {parentComment.node
+                          ? parentComment.node.data.name
+                          : parentComment.data.name}
                       </CommentName>
                       <CommentDate>
                         on{' '}
-                        {parentComment.node ?
-                          parentComment.node.created_at :
-                          formatDate(parentComment.created_at)}
+                        {parentComment.node
+                          ? parentComment.node.created_at
+                          : formatDate(parentComment.created_at)}
                       </CommentDate>
                       <p>
-                        {parentComment.node ?
-                          parentComment.node.data.comment :
-                          parentComment.data.comment}
+                        {parentComment.node
+                          ? parentComment.node.data.comment
+                          : parentComment.data.comment}
                       </p>
                       <CommentFooter>
                         <span
                           number={
-                            parentComment.node ?
-                              parentComment.node.number :
-                              parentComment.number
+                            parentComment.node
+                              ? parentComment.node.number
+                              : parentComment.number
                           }
                           name={`comment${
-                            parentComment.node ?
-                              parentComment.node.data.name :
-                              parentComment.data.name
+                            parentComment.node
+                              ? parentComment.node.data.name
+                              : parentComment.data.name
                           }`}
                           onClick={handleReplyOpen}
                         >
@@ -252,53 +269,53 @@ export const Comments = () => {
                       </CommentFooter>
                       {stateComments
                         .filter((comment) =>
-                          comment.node ?
-                            comment.node.data.parentCommentNumber !==
-                              'undefined' :
-                            comment.data.parentCommentNumber !== 'undefined'
+                          comment.node
+                            ? comment.node.data.parentCommentNumber !==
+                              'undefined'
+                            : comment.data.parentCommentNumber !== 'undefined'
                         )
                         .sort((a, b) =>
-                          a.node ?
-                            a.node.number - b.node.number :
-                            a.number - b.number
+                          a.node
+                            ? a.node.number - b.node.number
+                            : a.number - b.number
                         )
                         .map((reply) => {
                           if (
-                            reply.node ?
-                              reply.node.data.parentCommentNumber ==
-                                parentComment.node.number :
-                              reply.data.parentCommentNumber ==
+                            reply.node
+                              ? reply.node.data.parentCommentNumber ==
+                                parentComment.node.number
+                              : reply.data.parentCommentNumber ==
                                 parentComment.number
                           ) {
                             return (
                               <GrayComment>
                                 <CommentName>
-                                  {reply.node ?
-                                    reply.node.data.name :
-                                    reply.data.name}
+                                  {reply.node
+                                    ? reply.node.data.name
+                                    : reply.data.name}
                                 </CommentName>
                                 <CommentDate>
                                   on{' '}
-                                  {reply.node ?
-                                    reply.node.created_at :
-                                    formatDate(reply.created_at)}
+                                  {reply.node
+                                    ? reply.node.created_at
+                                    : formatDate(reply.created_at)}
                                 </CommentDate>
                                 <p>
-                                  {reply.node ?
-                                    reply.node.data.comment :
-                                    reply.data.comment}
+                                  {reply.node
+                                    ? reply.node.data.comment
+                                    : reply.data.comment}
                                 </p>
                                 <CommentFooter>
                                   <span
                                     number={
-                                      parentComment.node ?
-                                        parentComment.node.number :
-                                        parentComment.number
+                                      parentComment.node
+                                        ? parentComment.node.number
+                                        : parentComment.number
                                     }
                                     name={`reply${
-                                      reply.node ?
-                                        reply.node.data.name :
-                                        reply.data.name
+                                      reply.node
+                                        ? reply.node.data.name
+                                        : reply.data.name
                                     }`}
                                     onClick={handleReplyOpen}
                                   >
