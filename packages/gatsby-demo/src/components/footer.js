@@ -35,7 +35,7 @@ const Footer = () => (
 
 const Wrapper = styled.div`
   width: 100%;
-  background: rgb(37, 72, 100)  ;
+  background: rgb(81, 160, 249)  ;
   color: white;
 `;
 

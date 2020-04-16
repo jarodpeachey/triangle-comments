@@ -204,7 +204,7 @@
 }
 
 ::-webkit-scrollbar-thumb:vertical {
-  background: rgb(37, 72, 100);
+  background: rgb(81, 160, 249);
   border-radius: 100px;
 } */
 
@@ -213,7 +213,7 @@
 }
 
 .mobile-menu-items::-webkit-scrollbar-track {
-  background: rgb(37, 72, 100);
+  background: rgb(81, 160, 249);
   box-shadow: inset 10px 5px 10px -5px rgba(0, 0, 0, 0.3);
 }
 
@@ -246,7 +246,7 @@
   /* box-shadow: inset -200px 50px 200px -100px rgba(255, 255, 255, 0.8); */
   background: white;
   transition-duration: 0.5s;
-  color: rgb(37, 72, 100);
+  color: rgb(81, 160, 249);
 }
 
 * {
@@ -269,7 +269,7 @@ code {
   --space-xl: 64px;
   --space-xxl: 72px;
 
-  --primary: rgb(37, 72, 100);
+  --primary: rgb(81, 160, 249);
   --button-color: #e97a13;
   --button-color-light: #f39033;
 }

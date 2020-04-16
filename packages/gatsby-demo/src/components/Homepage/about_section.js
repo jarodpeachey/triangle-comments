@@ -134,7 +134,7 @@ const MainSkillIcon = styled.div`
   height: 135px;
   width: 160px;
   margin: 0 auto;
-  background: rgb(37, 72, 100);
+  background: rgb(81, 160, 249);
   padding: 24px;
   display: flex;
   align-items: center;

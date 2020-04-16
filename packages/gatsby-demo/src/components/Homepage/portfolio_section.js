@@ -202,7 +202,7 @@ const PortfolioSkills = styled.div`
 const PortfolioSkill = styled.div`
   padding: 4px 12px;
   margin: 8px;
-  background: rgb(37, 72, 100);
+  background: rgb(81, 160, 249);
   // border: 1px solid #ddd;
   display: inline-block;
   font-weight: bold;

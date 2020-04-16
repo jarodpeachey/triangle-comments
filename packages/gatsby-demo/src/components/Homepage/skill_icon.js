@@ -41,7 +41,7 @@ const MainSkillIcon = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 64px;
-  // background: rgb(37, 72, 100);
+  // background: rgb(81, 160, 249);
   // clip-path: polygon(22% 0%, 78% 0%, 100% 50%, 78% 100%, 22% 100%, 0% 50%);
 `;
 
