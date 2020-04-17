@@ -12,6 +12,14 @@
   transition: all 0.25s ease-in-out;
 }
 
+button a {
+  color: inherit !important;
+}
+
+button a:hover {
+  color: inherit !important;
+}
+
 #mobile-menu-toggle {
   z-index: 9999;
   /* position: fixed;

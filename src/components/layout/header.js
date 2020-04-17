@@ -1,82 +1,31 @@
 import PropTypes from 'prop-types';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import { Link } from 'gatsby';
 import Menu from './Menu';
 import MobileMenu from './MobileMenu';
+import { AppContext } from '../AppProvider';
 
 const Header = ({ siteTitle }) => {
-  const [scrolled, setHeaderState] = useState(false);
-  const [menuOpen, setMenuState] = useState(false);
+  const { scrolled } = useContext(AppContext);
+
+  const { setScrolled } = useContext(AppContext);
 
   const onScroll = () => {
     if (window.scrollY > 40) {
-      setHeaderState(true);
+      setScrolled(true);
     } else {
-      setHeaderState(false);
+      setScrolled(false);
     }
   };
-
-  // const closeMobileMenu = () => {
-  //   setMenuState(false);
-  //   clearAllBodyScrollLocks();
-  //   document.getElementById('mobile-menu-toggle').classList.remove('open');
-  // };
-
-  // const openMobileMenu = () => {
-  //   setMenuState(true);
-  //   disableBodyScroll(document.getElementById('mobile-menu-items'));
-  //   document.getElementById('mobile-menu-toggle').classList.add('open');
-  // };
-
-  // const mobileMenuToggle = () => {
-  //   if (menuOpen) {
-  //     closeMobileMenu();
-  //   } else {
-  //     openMobileMenu();
-  //   }
-  // };
-
-  // const mobileMenuClick = () => {
-  //   closeMobileMenu();
-  // };
-
-  // const mobileMenuItemClick = () => {
-  //   closeMobileMenu();
-  // };
 
   useEffect(() => {
     window.addEventListener('scroll', onScroll);
 
-    // document
-    //   .getElementById('mobile-menu-toggle')
-    //   .addEventListener('click', mobileMenuToggle);
-
-    // document
-    //   .getElementById('mobile-menu')
-    //   .addEventListener('click', mobileMenuClick);
-
-    // const mobileMenuItems = document.querySelectorAll('.mobile-menu-item');
-
-    // mobileMenuItems.forEach((item) => {
-    //   item.addEventListener('click', mobileMenuItemClick);
-    // });
-
     return () => {
       window.removeEventListener('scroll', onScroll);
-      // document
-      //   .getElementById('mobile-menu-toggle')
-      //   .removeEventListener('click', mobileMenuToggle);
-
-      // document
-      //   .getElementById('mobile-menu')
-      //   .removeEventListener('click', mobileMenuClick);
-
-      // mobileMenuItems.forEach((item) => {
-      //   item.removeEventListener('click', mobileMenuItemClick);
-      // });
     };
   });
 
@@ -116,9 +65,9 @@ const Wrapper = styled.header`
   transition-duration: 0.25s;
   box-shadow: ${(props) =>
     props.scrolled ? '1px 0px 60px -5px rgba(81, 160, 249, 0.4)' : ''};
-  a {
-    color: ${(props) => (props.scrolled ? 'black' : 'black')} !important;
-  }
+  // a {
+  //   color: ${(props) => (props.scrolled ? 'black' : 'black')} !important;
+  // }
   z-index: 999;
 `;
 

@@ -25,7 +25,7 @@
     "node-fetch": "^2.6.0",
     "triangle-comments": "^0.0.4"
   },
-  "gitHead": "936d0f6d04d5d844531d4ad1b9e3abdc2bbd0496",
+  "gitHead": "3b898beb081bdb1525b4c4c23db25ae506b16c7d",
   "publishConfig": {
     "access": "public"
   }

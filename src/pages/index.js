@@ -13,7 +13,7 @@ import GetStartedSection from '../components/layout/sections/GetStartedSection';
 
 const IndexPage = ({ data }) => {
   return (
-    <Layout title={data.site.siteMetadata.title}>
+   <Layout> 
       <Hero>
         <Title>COMMENTS DONE RIGHT</Title>
         <SubTitle>

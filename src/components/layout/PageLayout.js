@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { useStaticQuery, graphql } from 'gatsby';
 import '../breeze_layout.css';
@@ -14,9 +14,8 @@ import {
 import { fab, faLinkedin, faGithub } from '@fortawesome/free-brands-svg-icons';
 import Footer from './footer';
 import Header from './header';
-import AuthProvider from '../../auth/AuthProvider';
+import { AuthProvider } from '../../auth/AuthProvider';
 import { config } from '../../../auth-config';
-import { AppProvider } from '../AppProvider';
 
 library.add(
   faBars,
@@ -30,17 +29,29 @@ library.add(
 );
 
 const Layout = (props) => {
+  console.log(props);
+
+  const onRedirectCallback = (appState) => {
+    window.location =
+      appState && appState.targetUrl
+        ? appState.targetUrl
+        : window.location.pathname;
+  };
+
   return (
     // <Security {...config}>
-    <AuthProvider>
-      <AppProvider>
-        <Header siteTitle={props.title} />
-        <div id='blur'>
-          <main>{props.children}</main>
-        </div>
+    <AuthProvider
+      domain={config.domain}
+      client_id={config.clientId}
+      redirect_uri={window.location.origin}
+      onRedirectCallback={onRedirectCallback}
+    >
+      <Header siteTitle={props.title} />
+      <div id='blur'>
+        <main>{props.children}</main>
+      </div>
 
-        <Footer />
-      </AppProvider>
+      <Footer />
     </AuthProvider>
     // </Security>
   );

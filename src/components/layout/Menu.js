@@ -1,26 +1,42 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Link } from 'gatsby';
 import Button from '../Button';
+import { AuthContext } from '../../auth/AuthProvider';
 
 const Menu = ({ scrolled }) => {
+  const { signedIn } = useContext(AuthContext);
+
   return (
     <MenuWrapper scrolled={scrolled}>
       {/* <MenuItem scrolled={scrolled}>
         <Link to='/'>Home</Link>
       </MenuItem> */}
-      <MenuItem>
-        <Button small outlined>
-          Sign Up
-        </Button>
-      </MenuItem>
-      <MenuItem>
-        <Link to='/login'>
-          <Button margin small>
-            Login
-          </Button>
-        </Link>
-      </MenuItem>
+      {signedIn ? (
+        <>
+          <MenuItem>
+            <Link to='/account'>Account</Link>
+          </MenuItem>
+          <MenuItem noColor>
+            <Button small outlined>
+              Log Out
+            </Button>
+          </MenuItem>
+        </>
+      ) : (
+        <>
+          <MenuItem noColor>
+            <Button small outlined>
+              <Link to='/signup'>Sign Up</Link>
+            </Button>
+          </MenuItem>
+          <MenuItem noColor>
+            <Button margin small>
+              <Link to='/login'>Log In</Link>
+            </Button>
+          </MenuItem>
+        </>
+      )}
     </MenuWrapper>
   );
 };
@@ -49,7 +65,9 @@ const MenuItem = styled.div`
   :hover a {
     transition-duration: 0.25s;
     color: ${(props) =>
-      props.scrolled
+      props.noColor
+        ? ''
+        : props.scrolled
         ? 'rgba(81, 160, 249, 1)'
         : 'rgba(81, 160, 249, 1)'} !important;
   }

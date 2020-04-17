@@ -10,6 +10,7 @@ const Button = ({
   secondary,
   outlined,
   solid,
+  onClick,
 }) => {
   return (
     <StyledButton
@@ -18,6 +19,7 @@ const Button = ({
       margin={margin}
       secondary={secondary}
       outlined={outlined}
+      onClick={onClick || null}
     >
       {children}
     </StyledButton>
@@ -113,6 +115,17 @@ const StyledButton = styled.button`
   // :active ::before {
   //   right: 0 !important;
   // }
+  a {
+    text-decoration: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    color: ${(props) =>
+      props.outlined
+        ? 'black'
+        : props.secondary
+        ? 'white'
+        : 'white'} !important;
+  }
 `;
 
 export default Button;
