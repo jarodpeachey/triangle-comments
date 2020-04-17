@@ -1,6 +1,6 @@
 {
   "name": "gatsby-plugin-triangle-comments",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A plugin for using comments in Gatsby",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,7 @@
     "dotenv": "^8.2.0",
     "gatsby": "^2.15.36",
     "node-fetch": "^2.6.0",
-    "triangle-comments": "^0.0.3"
+    "triangle-comments": "^0.0.4"
   },
   "gitHead": "936d0f6d04d5d844531d4ad1b9e3abdc2bbd0496",
   "publishConfig": {
