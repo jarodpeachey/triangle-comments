@@ -21,7 +21,7 @@ const SignupPage = () => {
   const [message, setMessage] = useState('Processing...');
   const [error, setError] = useState(false);
   const [activeTab, setActiveTab] = useState(
-    window.location.pathname.replace('/', '')
+    typeof window !== 'undefined' && window.location.pathname.replace('/', '')
   );
 
   if (signedIn) {
