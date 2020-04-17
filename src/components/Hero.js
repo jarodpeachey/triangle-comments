@@ -88,15 +88,12 @@ const Background = styled.div`
 const HeroContainer = styled.div`
   display: flex;
   align-items: center;
-  height: 100vh;
-  text-align: center;
   overflow: hidden;
   min-height: 420px !important;
 `;
 
 const ChildContainer = styled.div`
   margin-top: 0;
-  margin-top: ${(props) => props.scrollValue * 1.1}px;
 `;
 
 export default Hero;

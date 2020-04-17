@@ -22,7 +22,7 @@ const Footer = () => (
               </MenuLink>
             </div>
             <div className='menu-item'>
-              <MenuLink href='https://linkeding.com/in/jarod-peachey'>
+              <MenuLink href='https://linkedin.com/in/jarod-peachey'>
                 <FontAwesomeIcon icon={['fab', 'linkedin']} id='menu-toggle' />
               </MenuLink>
             </div>

@@ -147,7 +147,7 @@ const Header = ({ siteTitle }) => {
                     />
                   </a>
                   <a
-                    href='https://linkeding.com/in/jarod-peachey'
+                    href='https://linkedin.com/in/jarod-peachey'
                     className='mobile-menu-item'
                   >
                     <FontAwesomeIcon

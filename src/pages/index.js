@@ -2,78 +2,38 @@ import React from 'react';
 // import { Link } from 'gatsby';
 // import Image from '../components/image';
 // import BackgroundImage from 'gatsby-background-image';
-import { library } from '@fortawesome/fontawesome-svg-core';
 import styled from 'styled-components';
-import {
-  faMobileAlt,
-  faCode,
-  faCodeBranch,
-  faRocket,
-  faBars,
-  faEnvelope,
-  faDatabase,
-} from '@fortawesome/free-solid-svg-icons';
-import {
-  fab,
-  faCss3,
-  faHtml5,
-  faJsSquare,
-  faReact,
-  faBootstrap,
-  faPhp,
-  faGithub,
-  faWordpress,
-} from '@fortawesome/free-brands-svg-icons';
-import Layout from '../components/layout';
+import Layout from '../components/layout/layout';
 import SEO from '../components/seo';
 import Hero from '../components/Hero';
-
-library.add(
-  faMobileAlt,
-  faCode,
-  faCodeBranch,
-  faRocket,
-  faBars,
-  faEnvelope,
-  fab,
-  faCss3,
-  faHtml5,
-  faJsSquare,
-  faReact,
-  faBootstrap,
-  faPhp,
-  faDatabase,
-  faGithub,
-  faWordpress
-);
+import Button from '../components/Button';
+import FeaturesSection from '../components/layout/sections/FeaturesSection';
+import Section from '../components/layout/Section';
+import GetStartedSection from '../components/layout/sections/GetStartedSection';
 
 const IndexPage = ({ data }) => {
   return (
     <Layout title={data.site.siteMetadata.title}>
-      <SEO title='Home' />
       <Hero>
-        <h1>Hi. I'm Jarod</h1>
-        <h4>
-          I'm a Front End Web Developer focused on code quality, consistency and
-          website speed.
-        </h4>
-        <ButtonContainer className='row mobile-lg'>
-          <div className='col col-6'>
-            <a href='#contact'>
-              <button className='button primary full-width m-none'>
-                Hire Me
-              </button>
-            </a>
-          </div>
-          <div className='col col-6'>
-            <a href='#about'>
-              <button className='button secondary transparent full-width m-none'>
-                Learn More
-              </button>
-            </a>
-          </div>
-        </ButtonContainer>
+        <Title>COMMENTS DONE RIGHT</Title>
+        <SubTitle>
+          The simplest, easiest and best way to add comments to a static
+          website.
+        </SubTitle>
+        <ButtonWrapper>
+          <a href='#contact'>
+            <Button>Get Started</Button>
+          </a>
+        </ButtonWrapper>
+        <ButtonWrapper>
+          <a href='#about'>
+            <Button outlined>Learn More</Button>
+          </a>
+        </ButtonWrapper>
       </Hero>
+      <FeaturesSection />
+      <GetStartedSection />
+      <SEO title='Home' />
     </Layout>
   );
 };
@@ -88,25 +48,30 @@ export const IndexQuery = graphql`
   }
 `;
 
-// allNetlifySubmissions(filter: { data: { path: { eq: $pathname } } }) {
-//   edges {
-//     node {
-//       number
-//       data {
-//         comment
-//         email
-//         name
-//         path
-//         parentCommentNumber
-//       }
-//       created_at(formatString: "M/D/YYYY")
-//     }
-//   }
-// }
+const Title = styled.h1`
+  font-weight: 900;
+  font-size: 48px;
+  font-family: 'overpass', sans-serif !important;
+  margin-bottom: 16px;
+`;
 
-const ButtonContainer = styled.div`
-  max-width: 400px;
-  margin: 0 auto !important;
+const SubTitle = styled.h2`
+  color: rgba(81, 160, 249, 0.4);
+`;
+
+const ButtonWrapper = styled.div`
+  @media (max-width: 520px) {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+  }
+  padding: 8px 18px !important;
+  margin-left: -18px;
+  width: fit-content;
+  display: inline-block;
+  button {
+    margin: 0 !important;
+  }
 `;
 
 export default IndexPage;
