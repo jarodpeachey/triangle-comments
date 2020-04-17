@@ -6,7 +6,7 @@ import Row from '../grid/row';
 const Footer = () => (
   <Wrapper>
     <Container className='container'>
-      <Row spacing={[12, 0]} breakpoints={[576]}>
+      <Row spacing={[12, 0]} breakpoints={[1]}>
         <div widths={[6]}>
           <Title>
             <h2>Triangle</h2>
@@ -37,30 +37,25 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.div`
-  @media (max-width: 576px) {
-    justify-content: center;
-  }
   display: flex;
   height: 100%;
   align-items: center;
   height: 50px;
   h2 {
     margin: 0;
+    margin-bottom: -8px;
   }
 `;
 
 const Container = styled.div`
-  padding-top: 16px;
-  padding-bottom: 16px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 `;
 
 const Menu = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  @media (max-width: 576px) {
-    justify-content: center;
-  }
 `;
 
 const MenuLink = styled.a`

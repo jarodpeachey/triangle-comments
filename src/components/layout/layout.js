@@ -1,6 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useStaticQuery, graphql } from 'gatsby';
+import styled from 'styled-components';
 import '../breeze_layout.css';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
@@ -9,6 +10,7 @@ import {
   faBars,
   faPuzzlePiece,
   faCog,
+  faUser,
   faEnvelope,
 } from '@fortawesome/free-solid-svg-icons';
 import { fab, faLinkedin, faGithub } from '@fortawesome/free-brands-svg-icons';
@@ -16,7 +18,7 @@ import Footer from './footer';
 import Header from './header';
 import AuthProvider from '../../auth/AuthProvider';
 import { config } from '../../../auth-config';
-import { AppProvider } from '../AppProvider';
+import { AppProvider, AppContext } from '../AppProvider';
 
 library.add(
   faBars,
@@ -26,7 +28,8 @@ library.add(
   faCog,
   faEnvelope,
   faLinkedin,
-  faGithub
+  faGithub,
+  faUser
 );
 
 const Layout = (props) => {
@@ -34,17 +37,43 @@ const Layout = (props) => {
     // <Security {...config}>
     <AuthProvider>
       <AppProvider>
-        <Header siteTitle={props.title} />
-        <div id='blur'>
-          <main>{props.children}</main>
-        </div>
+        <Wrapper>
+          {typeof window !== 'undefined' &&
+            window.location.pathname !== '/signup' &&
+            window.location.pathname !== '/login' && (
+              <Header siteTitle={props.title} />
+            )}
 
-        <Footer />
+          <div id='blur'>
+            {typeof window !== 'undefined' &&
+            window.location.pathname !== '/signup' &&
+            window.location.pathname !== '/login' ? (
+              <ContentWrapper>{props.children}</ContentWrapper>
+            ) : (
+              <>{props.children}</>
+            )}
+          </div>
+
+          {typeof window !== 'undefined' &&
+            window.location.pathname !== '/signup' &&
+            window.location.pathname !== '/login' && <Footer />}
+        </Wrapper>
       </AppProvider>
     </AuthProvider>
     // </Security>
   );
 };
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+`;
+
+const ContentWrapper = styled.div`
+  padding-top: ${(props) => (props.scrolled ? '50px' : '60px')};
+`;
 
 Layout.propTypes = {
   children: PropTypes.node.isRequired,

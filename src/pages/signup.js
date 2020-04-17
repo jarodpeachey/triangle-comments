@@ -4,11 +4,13 @@ import styled from 'styled-components';
 import TextField from '@material-ui/core/TextField';
 import { withStyles, LinearProgress } from '@material-ui/core';
 import { Link } from 'gatsby';
+import headerImage from '../images/hero.png';
 import Button from '../components/Button';
 import Row from '../components/grid/row';
 import { AuthContext } from '../auth/AuthProvider';
 import Layout from '../components/layout/layout';
 import Section from '../components/layout/Section';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // Instantiate the GoTrue auth client with an optional configuration
 
@@ -18,6 +20,9 @@ const SignupPage = () => {
   const [showForm, setShowForm] = useState(true);
   const [message, setMessage] = useState('Processing...');
   const [error, setError] = useState(false);
+  const [activeTab, setActiveTab] = useState(
+    window.location.pathname.replace('/', '')
+  );
 
   if (signedIn) {
     setMessage('Success. Redirecting to the homepage.');
@@ -44,7 +49,7 @@ const SignupPage = () => {
     setEmail(e.target.value);
   };
 
-  const onSubmit = (e) => {
+  const handleSignup = (e) => {
     e.preventDefault();
 
     const data = {
@@ -79,6 +84,38 @@ const SignupPage = () => {
     // }, 1500);
   };
 
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    setLoading(true);
+    setShowForm(false);
+    setMessage('Processing...');
+
+    auth
+      .login(email, password, true)
+      .then((response) => {
+        console.log(response);
+
+        setTimeout(() => {
+          setMessage('Success! Redirecting to your dashboard...');
+        }, 1250);
+        setTimeout(() => {
+          window.location.pathname = '/';
+        }, 750);
+      })
+      .catch((err) => {
+        console.log('Error: ', err);
+        setLoading(false);
+        setShowForm(true);
+        setError(true);
+        setMessage('Incorrect username or password.');
+      });
+
+    // setTimeout(() => {
+    //   window.location.pathname = '/';
+    // }, 1500);
+  };
+
   // if (error) {
   //   return (
   //     <Wrapper className='container section'>
@@ -90,118 +127,196 @@ const SignupPage = () => {
   // }
 
   return (
-    <Layout>
-      <Section>
-        {!showForm ? (
-          <Card>
-            <RedirectText>{message}</RedirectText>
-            {loading && (
-              <>
-                {/* <span>{message}</span> */}
-                <Loader color='primary' />
-              </>
-            )}
-          </Card>
-        ) : (
-          <>
-            {signedIn ? (
-              <Card>
-                <h2>You're already signed in! 🎉</h2>
-                <p>Click the button to start exploring!</p>
-                <Button variant='contained' color='primary'>
-                  Let's Go
-                </Button>
-              </Card>
-            ) : (
-              <>
-                <h1 className='mb-sm'>Sign Up</h1>
+    <>
+      <div
+        style={{
+          backgroundImage: `url(${headerImage})`,
+          position: 'absolute',
+          top: 0,
+          transform: 'rotate(180deg)',
+          zIndex: -1,
+          height: '100vh',
+          width: '100%',
+          opacity: 1,
+          backgroundRepeat: 'repeat',
+        }}
+      />
+      {/* <div
+        style={{
+          background: '#e8e8e820',
+          position: 'absolute',
+          top: 0,
+          transform: 'rotate(180deg)',
+          zIndex: -1,
+          height: '100vh',
+          width: '100%',
+          opacity: 1,
+          backgroundRepeat: 'repeat',
+        }}
+      /> */}
+      <Layout>
+        <Section fullHeight background='transparent'>
+          {!showForm ? (
+            <Card>
+              <RedirectText>{message}</RedirectText>
+              {loading && (
+                <>
+                  {/* <span>{message}</span> */}
+                  <Loader color='primary' />
+                </>
+              )}
+            </Card>
+          ) : (
+            <>
+              {signedIn ? (
                 <Card>
-                  {error && <ErrorText>{message}</ErrorText>}
-                  <Form onSubmit={onSubmit}>
-                    <Row breakpoints={[769]} spacing={[12]}>
-                      <div widths={[12]}>
-                        <Input
-                          id='name'
-                          type='text'
-                          fullWidth
-                          placeholder='Name'
-                          variant='outlined'
-                          margin='dense'
-                          label='Name'
-                          onChange={onNameInputChange}
-                        />
-                      </div>
-                      <div widths={[12]}>
-                        {' '}
-                        <Input
-                          id='email'
-                          type='text'
-                          fullWidth
-                          placeholder='Email'
-                          variant='outlined'
-                          margin='dense'
-                          label='Email'
-                          onChange={onEmailInputChange}
-                        />
-                      </div>
-                      <div widths={[12]}>
-                        {' '}
-                        <Input
-                          id='password'
-                          type='password'
-                          fullWidth
-                          placeholder='Password'
-                          variant='outlined'
-                          margin='dense'
-                          label='Password'
-                          onChange={onPasswordInputChange}
-                        />
-                      </div>
-                      <div widths={[12]}>
-                        {' '}
-                        <Input
-                          id='password-reenter'
-                          type='password'
-                          fullWidth
-                          placeholder='Verify Password'
-                          variant='outlined'
-                          margin='dense'
-                          label='Verify Password'
-                          onChange={onConfirmInputChange}
-                        />
-                      </div>
-                      <div widths={[12]}>
-                        {' '}
-                        <SubmitButton
-                          type='submit'
-                          color='primary'
-                          variant='contained'
-                          fullWidth
-                        >
-                          Sign Up
-                        </SubmitButton>
-                      </div>
-                    </Row>
-                  </Form>
+                  <h2>You're already signed in! 🎉</h2>
+                  <p>Click the button to start exploring!</p>
+                  <Button variant='contained' color='primary'>
+                    Let's Go
+                  </Button>
                 </Card>
-                <Info>
-                  Already have an account?
-                  <Link to='/login'>Login</Link>
-                </Info>
-              </>
-            )}
-          </>
-        )}
-      </Section>
-    </Layout>
+              ) : (
+                <>
+                  <Card>
+                    <Title>
+                      TRIANGLE
+                    </Title>
+                    <Tabs>
+                      <Tab
+                        onClick={() => setActiveTab('login')}
+                        active={activeTab === 'login'}
+                      >
+                        Login
+                      </Tab>
+                      <Tab
+                        onClick={() => setActiveTab('signup')}
+                        active={activeTab === 'signup'}
+                      >
+                        Signup
+                      </Tab>
+                    </Tabs>
+                    {error && <ErrorText>{message}</ErrorText>}
+                    <Form
+                      onSubmit={
+                        activeTab === 'signup' ? handleSignup : handleLogin
+                      }
+                    >
+                      <Row breakpoints={[769]} spacing={[12, 8]}>
+                        {activeTab === 'signup' && (
+                          <div widths={[12]}>
+                            <Input
+                              id='name'
+                              type='text'
+                              fullWidth
+                              placeholder='Name'
+                              variant='outlined'
+                              margin='dense'
+                              label='Name'
+                              value={name}
+                              onChange={onNameInputChange}
+                            />
+                          </div>
+                        )}
+                        <div widths={[12]}>
+                          {' '}
+                          <Input
+                            id='email'
+                            type='text'
+                            fullWidth
+                            placeholder='Email'
+                            variant='outlined'
+                            margin='dense'
+                            label='Email'
+                            value={email}
+                            onChange={onEmailInputChange}
+                          />
+                        </div>
+                        <div widths={[12]}>
+                          {' '}
+                          <Input
+                            id='password'
+                            type='password'
+                            fullWidth
+                            placeholder='Password'
+                            variant='outlined'
+                            margin='dense'
+                            label='Password'
+                            value={password}
+                            onChange={onPasswordInputChange}
+                          />
+                        </div>
+                        {activeTab === 'signup' && (
+                          <div widths={[12]}>
+                            {' '}
+                            <Input
+                              id='password-reenter'
+                              type='password'
+                              fullWidth
+                              placeholder='Verify Password'
+                              variant='outlined'
+                              margin='dense'
+                              label='Verify Password'
+                              value={confirm}
+                              onChange={onConfirmInputChange}
+                            />
+                          </div>
+                        )}
+                        <div widths={[12]}>
+                          {' '}
+                          <SubmitButton right type='submit'>
+                            {activeTab === 'signup' ? 'Sign Up' : 'Log In'}
+                          </SubmitButton>
+                        </div>
+                      </Row>
+                    </Form>
+                  </Card>
+                </>
+              )}
+            </>
+          )}
+        </Section>
+      </Layout>
+    </>
   );
 };
 
 const Card = styled.div`
-  padding: 24px;
-  background: white;
+  padding: 18px 24px;
+  width: 100%;
   border-radius: 3px;
-  box-shadow: 1px 1px 0px 0px #ddd, 2px 2px 5px 0px #eee;
+  box-shadow: 1px 0px 80px -5px #e8e8e8;
+  backdrop-filter: blur(6px);
+  background: white;
+  border: 1px solid #e8e8e8;
+  margin: 0 auto;
+  max-width: 360px;
+`;
+
+const Title = styled.h1`
+  color: rgb(81, 160, 249);
+  margin: 16px auto;
+  text-align: center;
+  font-size: 36px;
+`;
+
+const Tabs = styled.div`
+  width: 100%;
+  display: flex;
+`;
+
+const Tab = styled.div`
+  width: 50%;
+  dipslay: inline-block;
+  text-align: center;
+  padding: 16px;
+  :hover {
+    border-bottom: 2px solid
+      ${(props) => (props.active ? 'rgb(25, 48, 92)' : '#e8e8e8')};
+    cursor: pointer;
+  }
+  border-bottom: 2px solid
+    ${(props) => (props.active ? 'rgb(25, 48, 92)' : '#f7f7f7')};
 `;
 
 const RedirectText = styled.h2`
@@ -223,6 +338,7 @@ const ErrorText = styled.p`
 
 const Form = styled.form`
   margin: 0;
+  padding-top: 24px;
 `;
 
 const SubmitButton = styled(Button)``;

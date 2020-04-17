@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const Button = ({
   children,
@@ -11,11 +11,17 @@ const Button = ({
   outlined,
   solid,
   onClick,
+  right,
+  left,
+  center,
 }) => {
   return (
     <StyledButton
       small={small}
       className={className ? className : ''}
+      right={right}
+      left={left}
+      center={center}
       margin={margin}
       secondary={secondary}
       outlined={outlined}
@@ -126,6 +132,24 @@ const StyledButton = styled.button`
         ? 'white'
         : 'white'} !important;
   }
+  display: block;
+  ${(props) =>
+    props.right &&
+    css`
+      margin: 0 !important;
+      margin-left: auto !important;
+    `}
+  ${(props) =>
+    props.left &&
+    css`
+      margin: 0 !important;
+      margin-right: auto !important;
+    `}
+  ${(props) =>
+    props.center &&
+    css`
+      margin: 0 auto !important;
+    `}
 `;
 
 export default Button;

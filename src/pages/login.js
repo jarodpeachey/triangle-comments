@@ -2,9 +2,10 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
 import { withStyles, LinearProgress } from '@material-ui/core';
 import { Link } from 'gatsby';
+import headerImage from '../images/hero.png';
+import Button from '../components/Button';
 import Row from '../components/grid/row';
 import { AuthContext } from '../auth/AuthProvider';
 import Layout from '../components/layout/layout';
@@ -67,6 +68,18 @@ const LoginPage = () => {
   return (
     <Layout>
       <Section>
+        <div
+          style={{
+            backgroundImage: `url(${headerImage})`,
+            position: 'absolute',
+            top: 0,
+            zIndex: -5,
+            height: '100vh',
+            width: '100%',
+            opacity: 1,
+            backgroundRepeat: 'repeat',
+          }}
+        />
         {!showForm ? (
           <Card>
             <RedirectText>{message}</RedirectText>
@@ -122,14 +135,7 @@ const LoginPage = () => {
                     </div>
                     <div widths={[12]}>
                       {' '}
-                      <SubmitButton
-                        type='submit'
-                        color='primary'
-                        variant='contained'
-                        fullWidth
-                      >
-                        Login
-                      </SubmitButton>
+                      <SubmitButton type='submit'>Log In</SubmitButton>
                     </div>
                   </Row>
                 </Form>
