@@ -15,8 +15,8 @@ import {
 import { fab, faLinkedin, faGithub } from '@fortawesome/free-brands-svg-icons';
 import Footer from './footer';
 import Header from './header';
-import { AuthProvider } from '../../auth/AuthProvider';
-import { AppProvider } from '../AppProvider';
+import { AuthProvider } from '../../providers/AuthProvider';
+import { AppProvider } from '../../providers/AppProvider';
 import { pathnameIncludes } from '../../utils/pathnameIncludes';
 
 library.add(

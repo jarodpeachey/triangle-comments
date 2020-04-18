@@ -6,7 +6,7 @@ import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import { Link } from 'gatsby';
 import Menu from './Menu';
 import MobileMenu from './MobileMenu';
-import { AppContext } from '../AppProvider';
+import { AppContext } from '../../providers/AppProvider';
 
 const Header = ({ siteTitle }) => {
   const { scrolled } = useContext(AppContext);

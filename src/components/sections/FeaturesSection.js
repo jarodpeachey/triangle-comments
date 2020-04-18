@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import Section from '../Section';
-import Row from '../../grid/row';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Section from '../layout/Section';
+import Row from '../grid/row';
 
 const FeaturesSection = ({ data }) => {
   return (

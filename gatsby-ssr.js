@@ -1,9 +1,9 @@
 import React from 'react';
-import { StyleWrapper } from './src/components/layout/StyleWrapper';
+import { StylesProvider } from './src/providers/StylesProvider';
 import Layout from './src/components/layout/layout';
 
 export const wrapRootElement = ({ element }) => {
-  return <StyleWrapper>{element}</StyleWrapper>;
+  return <StylesProvider>{element}</StylesProvider>;
 };
 
 export const wrapPageElement = ({ element }) => {

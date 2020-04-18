@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { graphql, StaticQuery } from 'gatsby';
 import styled from 'styled-components';
-import Button from './Button';
-import heroImage from '../images/hero.png';
+import Button from '../Button';
+import heroImage from '../../images/hero.png';
 
 const Hero = ({ children }) => {
   const [scrollValue, setScrollValue] = useState(0);

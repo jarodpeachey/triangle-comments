@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Link } from 'gatsby';
 import Button from '../Button';
-import { AuthContext } from '../../auth/AuthProvider';
+import { AuthContext } from '../../providers/AuthProvider';
 
 const Menu = ({ scrolled }) => {
   const { signedIn } = useContext(AuthContext);
