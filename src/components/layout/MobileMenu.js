@@ -162,6 +162,7 @@ const MobileMenu = styled.div`
   left: 0;
   top: 0;
   min-height: 100vh;
+max-height: 99999999999999999px !important;
   transform: ${(props) => (props.open ? 'translateY(0)' : 'translateY(-150%)')};
   opacity: ${(props) => (props.open ? 1 : 1)};
   background: rgba(255, 255, 255, 0.5);

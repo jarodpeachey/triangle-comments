@@ -76,7 +76,7 @@ const MainWrapper = styled.div`
   overflow: hidden;
   & *::before {
     transform: scale(
-      ${props => (props.scroll !== 0 ? 1 + (props.scroll * 0.01) / 10 : 1)}
+      ${(props) => (props.scroll !== 0 ? 1 + (props.scroll * 0.01) / 10 : 1)}
     );
   }
 `;
@@ -85,6 +85,7 @@ const HeroContainer = styled.div`
   display: flex;
   align-items: center;
   min-height: 100vh;
+  max-height: 99999999999999999px !important;
   box-shadow: inset 0 0 0 2000px rgba(37, 56, 72, 0.3);
   text-align: center;
   overflow: hidden;
@@ -93,7 +94,7 @@ const HeroContainer = styled.div`
 
 const ChildContainer = styled.div`
   margin-top: 0;
-  margin-top: ${props => props.scrollValue * 1.1}px;
+  margin-top: ${(props) => props.scrollValue * 1.1}px;
 `;
 
 export default HeroImage;

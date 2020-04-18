@@ -56,7 +56,7 @@ library.add(
 const IndexPage = ({ data }) => {
   return (
     <Layout title={data.title}>
-      <SEO title='Home' />
+      {/* <SEO title='Home' /> */}
       <HeroImage id='home'>
         <h1 className='hero_title'>Hi. I'm Jarod</h1>
         <h4 className='hero_subtitle'>

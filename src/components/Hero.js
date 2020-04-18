@@ -76,11 +76,13 @@ const MainWrapper = styled.div`
 
 const Background = styled.div`
   min-height: 100vh;
+max-height: 99999999999999999px !important;
   background-image: url('../images/hero.png');
   position: absolute;
   top: 0;
   z-index: -5;
   min-height: 100vh;
+max-height: 99999999999999999px !important;
   width: 100vw;
   opacity: 0.5;
 `;

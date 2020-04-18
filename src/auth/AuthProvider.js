@@ -4,7 +4,7 @@ import GoTrue from 'gotrue-js';
 
 export const AuthContext = React.createContext({});
 
-const AuthProvider = ({ children }) => {
+export const AuthProvider = ({ children }) => {
   const [signedIn, setSignedInState] = useState(false);
   const [user, setUser] = useState(false);
 
@@ -47,5 +47,3 @@ const AuthProvider = ({ children }) => {
 AuthProvider.propTypes = {
   children: PropTypes.any.isRequired
 };
-
-export default AuthProvider;

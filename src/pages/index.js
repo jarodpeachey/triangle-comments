@@ -10,7 +10,6 @@ import Button from '../components/Button';
 import FeaturesSection from '../components/layout/sections/FeaturesSection';
 import Section from '../components/layout/Section';
 import GetStartedSection from '../components/layout/sections/GetStartedSection';
-import '../components/style.css';
 
 const IndexPage = ({ data }) => {
   return (

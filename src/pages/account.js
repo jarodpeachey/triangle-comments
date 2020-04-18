@@ -5,7 +5,6 @@ import { Link } from 'gatsby';
 import styled from 'styled-components';
 import Layout from '../components/layout/layout';
 import Section from '../components/layout/Section';
-import '../components/style.css';
 
 const Home = () => <p>Home</p>;
 const Settings = () => <p>Settings</p>;

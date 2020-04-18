@@ -11,7 +11,6 @@ import { AuthContext } from '../auth/AuthProvider';
 import Layout from '../components/layout/layout';
 import Section from '../components/layout/Section';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import '../components/style.css';
 
 // Instantiate the GoTrue auth client with an optional configuration
 
@@ -180,7 +179,11 @@ const SignupPage = () => {
               ) : (
                 <>
                   <Card>
-                    <Title>{typeof window !== 'undefined' ? window.location.pathname : 'NO WINDOW'}</Title>
+                    <Title>
+                      {typeof window !== 'undefined'
+                        ? window.location.pathname
+                        : 'NO WINDOW'}
+                    </Title>
                     <Tabs>
                       <Tab
                         onClick={() => setActiveTab('login')}

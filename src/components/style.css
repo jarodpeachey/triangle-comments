@@ -6,6 +6,7 @@
 #blur {
   transition: all 0.25s ease-in-out;
   min-height: 100vh;
+  max-height: 99999999999999999px !important;
 }
 
 .blur {
@@ -23,16 +24,6 @@ button a:hover {
 
 * {
   box-sizing: border-box;
-}
-
-code {
-  background: #ddd;
-  border-radius: 2px;
-  padding: 1px 4px;
-}
-
-body, html {
-  min-height: 100vh;
 }
 
 :root {
@@ -67,13 +58,17 @@ body {
   padding: 0;
   overflow-y: auto;
   color: #3e4348;
+  font-family: 'Montserrat';
+  font-weight: 400;
 }
 
 html {
   box-sizing: border-box;
   /* overflow-y: hidden; */
   scroll-behavior: smooth;
-  height: 100%;
+  font-family: 'Montserrat';
+  font-weight: 400;
+  width: 100%;
   color: #3e4348;
 }
 
@@ -111,6 +106,7 @@ html {
   }
 }
 
+/*
 .col {
   padding: 8px 0px;
   margin: 0;
@@ -197,7 +193,7 @@ html {
   flex: 1 1 0;
 }
 
-/* mobile-lg */
+// mobile-lg
 @media (min-width: 540px) {
   .row.mobile-lg {
     display: flex;
@@ -375,7 +371,7 @@ html {
   }
 }
 
-/* Tablet */
+// Tablet
 @media (min-width: 769px) {
   .row.tablet,
   .row {
@@ -606,7 +602,7 @@ html {
   }
 }
 
-/* Desktop */
+// Desktop
 @media (min-width: 1024px) {
   .row.desktop {
     display: flex;
@@ -875,7 +871,7 @@ html {
   }
 }
 
-/* Widescreen */
+// Widescreen
 @media (min-width: 1220px) {
   .row.widescreen {
     display: flex;
@@ -1182,17 +1178,11 @@ html {
     flex: none;
     width: 100%;
   }
-}
+} */
 
 /* TYPOGRAPHY
  ---------------------------------------------------------------
  ---------------------------------------------------------------*/
-
-html,
-body {
-  font-family: 'Montserrat';
-  font-weight: 400;
-}
 
 * {
   font-family: 'Montserrat';

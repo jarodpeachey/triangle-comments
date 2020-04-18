@@ -107,7 +107,7 @@
   opacity: 0;
   z-index: -1;
   visibility: hidden;
-  height: 100vh;
+  min-height: 100vh;
   transform-origin: 0 0;
   transform: translateX(-120%);
   width: 100%;
