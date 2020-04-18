@@ -17,7 +17,7 @@ const Menu = ({ scrolled }) => {
           <MenuItem>
             <Link to='/account'>Account</Link>
           </MenuItem>
-          <MenuItem noColor>
+          <MenuItem button>
             <Button small outlined>
               Log Out
             </Button>
@@ -25,14 +25,14 @@ const Menu = ({ scrolled }) => {
         </>
       ) : (
         <>
-          <MenuItem noColor>
-            <Button small outlined>
-              <Link to='/signup'>Sign Up</Link>
+          <MenuItem button>
+            <Button link='/signup' small outlined>
+              Sign Up
             </Button>
           </MenuItem>
-          <MenuItem noColor>
-            <Button margin small>
-              <Link to='/login'>Log In</Link>
+          <MenuItem button>
+            <Button link='/login' margin small>
+              Log In
             </Button>
           </MenuItem>
         </>
@@ -58,14 +58,14 @@ const MenuItem = styled.div`
   a {
     height: 100%;
     display: block;
-    padding: 8px 16px;
+    padding: ${(props) => (props.button ? '0' : '8px 16px')};
     font-weight: 500;
     transition-duration: 0.25s;
   }
   :hover a {
     transition-duration: 0.25s;
     color: ${(props) =>
-      props.noColor
+      props.button
         ? ''
         : props.scrolled
         ? 'rgba(81, 160, 249, 1)'

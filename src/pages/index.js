@@ -21,14 +21,10 @@ const IndexPage = ({ data }) => {
           website.
         </SubTitle>
         <ButtonWrapper>
-          <Button>
-            <Link to='/signup'>Get Started</Link>
-          </Button>
+          <Button link='/signup'>Get Started</Button>
         </ButtonWrapper>
         <ButtonWrapper>
-          <Button>
-            <Link to='/'>Learn More</Link>
-          </Button>
+          <Button link='/'>Learn More</Button>
         </ButtonWrapper>
       </Hero>
       <FeaturesSection />

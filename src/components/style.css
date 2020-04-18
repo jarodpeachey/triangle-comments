@@ -13,9 +13,8 @@
   transition: all 0.25s ease-in-out;
 }
 
-button a {
-  color: inherit !important;
-  text-decoration: none !important;
+a.no-styling {
+  text-decoration: none;
 }
 
 button a:hover {
@@ -30,6 +29,10 @@ code {
   background: #ddd;
   border-radius: 2px;
   padding: 1px 4px;
+}
+
+body, html {
+  min-height: 100vh;
 }
 
 :root {

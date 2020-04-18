@@ -48,8 +48,8 @@ const Title = styled.div`
 `;
 
 const Container = styled.div`
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
 `;
 
 const Menu = styled.div`

@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import { Link } from 'gatsby';
 
 const Button = ({
   children,
@@ -14,21 +15,43 @@ const Button = ({
   right,
   left,
   center,
+  link,
 }) => {
   return (
-    <StyledButton
-      small={small}
-      className={className ? className : ''}
-      right={right}
-      left={left}
-      center={center}
-      margin={margin}
-      secondary={secondary}
-      outlined={outlined}
-      onClick={onClick || null}
-    >
-      {children}
-    </StyledButton>
+    <>
+      {link ? (
+        <Link className='no-styling' to={link}>
+          <StyledButton
+            small={small}
+            className={className ? className : ''}
+            right={right}
+            left={left}
+            center={center}
+            margin={margin}
+            secondary={secondary}
+            outlined={outlined}
+            onClick={onClick || null}
+            link
+          >
+            {children}
+          </StyledButton>
+        </Link>
+      ) : (
+        <StyledButton
+          small={small}
+          className={className ? className : ''}
+          right={right}
+          left={left}
+          center={center}
+          margin={margin}
+          secondary={secondary}
+          outlined={outlined}
+          onClick={onClick || null}
+        >
+          {children}
+        </StyledButton>
+      )}
+    </>
   );
 };
 
