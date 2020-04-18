@@ -37,14 +37,16 @@ const Layout = (props) => {
     // <Security {...config}>
     <Wrapper>
       <AppProvider>
-        <Header siteTitle={props.title} />
-        <div id='blur'>
-          {!pathnameIncludes('/signup') && !pathnameIncludes('/login') && (
-            <ContentWrapper />
-          )}
-          {props.children}
-          <Footer />
-        </div>
+        <AuthProvider>
+          <Header siteTitle={props.title} />
+          <div id='blur'>
+            {!pathnameIncludes('/signup') && !pathnameIncludes('/login') && (
+              <ContentWrapper />
+            )}
+            {props.children}
+            <Footer />
+          </div>
+        </AuthProvider>
       </AppProvider>
     </Wrapper>
   );
@@ -60,8 +62,7 @@ const Wrapper = styled.div`
 
 const ContentWrapper = styled.div`
   height: 100%;
-  padding-top: ${(props) =>
-    props.scrolled ? '50px' : '60px'};
+  padding-top: ${(props) => (props.scrolled ? '50px' : '60px')};
 `;
 
 Layout.propTypes = {

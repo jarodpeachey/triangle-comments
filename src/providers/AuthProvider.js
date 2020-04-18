@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
   });
 
   const auth = new GoTrue({
-    APIUrl: 'https://trianglecomments.netlify.com/.netlify/identity',
+    APIUrl: 'http://trianglecomments.netlify.app/.netlify/identity',
     audience: '',
     setCookie: true
   });
