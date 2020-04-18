@@ -72,12 +72,16 @@ const Hero = ({ children }) => {
 
 const MainWrapper = styled.div`
   // padding-top: 64px;
-  padding: 24px 0 36px;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  margin-top: -60px;
 `;
 
 const HeroContainer = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   overflow: hidden;
   min-height: 420px !important;
 `;
