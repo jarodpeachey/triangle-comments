@@ -22,18 +22,19 @@
   "author": "Jarod Peachey",
   "license": "ISC",
   "devDependencies": {
-    "prettier": "^2.0.4",
-    "babel-preset-gatsby": "^0.2.20",
+    "babel-preset-gatsby": "^0.2.36",
     "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-gatsby-standard": "^2.2.0",
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.12.4",
-    "eslint-plugin-react-hooks": "^3.0.0"
+    "eslint-plugin-react-hooks": "^3.0.0",
+    "prettier": "^2.0.4"
   },
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.7.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.9.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.25",
     "@fortawesome/free-brands-svg-icons": "^5.11.2",
     "@fortawesome/free-solid-svg-icons": "^5.11.2",
