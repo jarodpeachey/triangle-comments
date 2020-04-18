@@ -73,36 +73,36 @@ html {
 }
 
 .container {
-  margin: 0 auto !important;
-  width: 95% !important;
-  max-width: 1350px !important;
-  padding: 60px 12px !important;
+  margin: 0 auto;
+  width: 95%;
+  max-width: 1350px;
+  padding: 60px 12px;
 }
 
 @media (min-width: 540px) {
   .container {
-    margin: 0 auto !important;
-    padding-left: 18px !important;
-    padding-right: 18px !important;
+    margin: 0 auto;
+    padding-left: 18px;
+    padding-right: 18px;
   }
 }
 
 @media (min-width: 769px) {
   .container {
-    padding-left: 28px !important;
-    padding-right: 28px !important;
+    padding-left: 28px;
+    padding-right: 28px;
   }
 
   .container.wide {
-    margin: 0 auto !important;
-    width: 90% !important;
+    margin: 0 auto;
+    width: 90%;
   }
 }
 
 @media (min-width: 1220px) {
   .container {
-    padding-left: 48px !important;
-    padding-right: 48px !important;
+    padding-left: 48px;
+    padding-right: 48px;
   }
 }
 

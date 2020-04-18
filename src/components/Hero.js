@@ -85,6 +85,8 @@ const HeroContainer = styled.div`
   justify-content: center;
   overflow: hidden;
   min-height: 420px !important;
+  margin: 0 auto;
+  width: 100%;
 `;
 
 const ChildContainer = styled.div`
