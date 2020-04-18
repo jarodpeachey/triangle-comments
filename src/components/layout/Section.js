@@ -22,7 +22,7 @@ const Section = ({
 
 const Title = styled.h2`
   font-weight: 800;
-  font-family: 'overpass', sans-serif !important;
+  // font-family: 'overpass', sans-serif !important;
   // margin-bottom: 16px;
   margin-top: 0;
 `;

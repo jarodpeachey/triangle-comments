@@ -75,12 +75,12 @@ const MainWrapper = styled.div`
 `;
 
 const Background = styled.div`
-  height: 100vh;
+  min-height: 100vh;
   background-image: url('../images/hero.png');
   position: absolute;
   top: 0;
   z-index: -5;
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
   opacity: 0.5;
 `;

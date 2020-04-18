@@ -84,7 +84,7 @@ const MainWrapper = styled.div`
 const HeroContainer = styled.div`
   display: flex;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   box-shadow: inset 0 0 0 2000px rgba(37, 56, 72, 0.3);
   text-align: center;
   overflow: hidden;

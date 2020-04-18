@@ -179,9 +179,7 @@ const SignupPage = () => {
               ) : (
                 <>
                   <Card>
-                    <Title>
-                      TRIANGLE
-                    </Title>
+                    <Title>TRIANGLE</Title>
                     <Tabs>
                       <Tab
                         onClick={() => setActiveTab('login')}
@@ -298,6 +296,7 @@ const Title = styled.h1`
   margin: 16px auto;
   text-align: center;
   font-size: 36px;
+  font-family: 'overpass', sans-serif !important;
 `;
 
 const Tabs = styled.div`

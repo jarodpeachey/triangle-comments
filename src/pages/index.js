@@ -1,8 +1,8 @@
 import React from 'react';
-// import { Link } from 'gatsby';
 // import Image from '../components/image';
 // import BackgroundImage from 'gatsby-background-image';
 import styled from 'styled-components';
+import { Link } from 'gatsby';
 import Layout from '../components/layout/layout';
 import SEO from '../components/seo';
 import Hero from '../components/Hero';
@@ -13,7 +13,7 @@ import GetStartedSection from '../components/layout/sections/GetStartedSection';
 
 const IndexPage = ({ data }) => {
   return (
-   <Layout> 
+    <Layout>
       <Hero>
         <Title>COMMENTS DONE RIGHT</Title>
         <SubTitle>
@@ -21,14 +21,14 @@ const IndexPage = ({ data }) => {
           website.
         </SubTitle>
         <ButtonWrapper>
-          <a href='#contact'>
-            <Button>Get Started</Button>
-          </a>
+          <Button>
+            <Link to='/signup'>Get Started</Link>
+          </Button>
         </ButtonWrapper>
         <ButtonWrapper>
-          <a href='#about'>
-            <Button outlined>Learn More</Button>
-          </a>
+          <Button>
+            <Link to='/'>Learn More</Link>
+          </Button>
         </ButtonWrapper>
       </Hero>
       <FeaturesSection />

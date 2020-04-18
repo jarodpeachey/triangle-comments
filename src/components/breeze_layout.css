@@ -5,7 +5,7 @@
 
 #blur {
   transition: all 0.25s ease-in-out;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .blur {
@@ -15,6 +15,7 @@
 
 button a {
   color: inherit !important;
+  text-decoration: none !important;
 }
 
 button a:hover {
@@ -1206,6 +1207,15 @@ small {
 
 .full-width {
   width: 100% !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  /* font-family: 'overpass', sans-serif !important; */
 }
 
 h1,
