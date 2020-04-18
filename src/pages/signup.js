@@ -11,6 +11,7 @@ import { AuthContext } from '../auth/AuthProvider';
 import Layout from '../components/layout/layout';
 import Section from '../components/layout/Section';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import '../components/style.css';
 
 // Instantiate the GoTrue auth client with an optional configuration
 

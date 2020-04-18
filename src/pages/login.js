@@ -10,6 +10,7 @@ import Row from '../components/grid/row';
 import { AuthContext } from '../auth/AuthProvider';
 import Layout from '../components/layout/layout';
 import Section from '../components/layout/Section';
+import '../components/style.css';
 
 const LoginPage = () => {
   const { signedIn, auth } = useContext(AuthContext);

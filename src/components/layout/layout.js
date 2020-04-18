@@ -2,7 +2,6 @@ import React, { useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useStaticQuery, graphql } from 'gatsby';
 import styled from 'styled-components';
-import '../style.css';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faBolt,
