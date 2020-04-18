@@ -155,7 +155,13 @@ const SignupPage = () => {
         }}
       /> */}
       <>
-        <Section fullHeight background='transparent'>
+        <Section customStyles={`
+          height: 100vh;
+          padding-top: 60px;
+          @media (max-height: 769px) {
+            padding-top: 0;
+          }
+        `} background='transparent'>
           {!showForm ? (
             <Card>
               <RedirectText>{message}</RedirectText>

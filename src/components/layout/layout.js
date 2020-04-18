@@ -17,6 +17,7 @@ import Footer from './footer';
 import Header from './header';
 import { AuthProvider } from '../../auth/AuthProvider';
 import { AppProvider } from '../AppProvider';
+import { pathnameIncludes } from '../../utils/pathnameIncludes';
 
 library.add(
   faBars,
@@ -38,7 +39,10 @@ const Layout = (props) => {
       <AppProvider>
         <Header siteTitle={props.title} />
         <div id='blur'>
-          <ContentWrapper>{props.children}</ContentWrapper>
+          {!pathnameIncludes('/signup') && !pathnameIncludes('/login') && (
+            <ContentWrapper />
+          )}
+          {props.children}
           <Footer />
         </div>
       </AppProvider>
@@ -55,7 +59,9 @@ const Wrapper = styled.div`
 `;
 
 const ContentWrapper = styled.div`
-  padding-top: ${(props) => (props.scrolled ? '50px' : '60px')};
+  height: 100%;
+  padding-top: ${(props) =>
+    props.scrolled ? '50px' : '60px'};
 `;
 
 Layout.propTypes = {

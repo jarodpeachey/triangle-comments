@@ -8,9 +8,10 @@ const Section = ({
   title,
   subtitle,
   center,
+  customStyles
 }) => {
   return (
-    <StyledSection fullHeight={fullHeight} center={center} color={background}>
+    <StyledSection customStyles={customStyles} fullHeight={fullHeight} center={center} color={background}>
       <div className='container'>
         {title && <Title>{title}</Title>}
         {subtitle && <SubTitle>{subtitle}</SubTitle>}
@@ -36,6 +37,8 @@ const StyledSection = styled.section`
     props.fullHeight &&
     css`
       height: 100%;
+      display: block;
+      height: 100%;
       padding-top: 32px;
       .container {
         height: 100%;
@@ -45,6 +48,7 @@ const StyledSection = styled.section`
         align-items: center;
       }
     `}
+  ${props => props.customStyles}
 `;
 
 export default Section;
