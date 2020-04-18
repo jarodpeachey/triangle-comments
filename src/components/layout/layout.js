@@ -15,6 +15,8 @@ import {
 import { fab, faLinkedin, faGithub } from '@fortawesome/free-brands-svg-icons';
 import Footer from './footer';
 import Header from './header';
+import { AuthProvider } from '../../auth/AuthProvider';
+import { AppProvider } from '../AppProvider';
 
 library.add(
   faBars,
@@ -29,26 +31,17 @@ library.add(
 );
 
 const Layout = (props) => {
+  console.log(props.children);
   return (
     // <Security {...config}>
     <Wrapper>
-      {typeof window !== 'undefined' &&
-        window.location.pathname !== '/signup' &&
-        window.location.pathname !== '/login' && (
-          <Header siteTitle={props.title} />
-        )}
-      <div id='blur'>
-        {typeof window !== 'undefined' &&
-        window.location.pathname !== '/signup' &&
-        window.location.pathname !== '/login' ? (
+      <AppProvider>
+        <Header siteTitle={props.title} />
+        <div id='blur'>
           <ContentWrapper>{props.children}</ContentWrapper>
-        ) : (
-          <>{props.children}</>
-        )}
-        {typeof window !== 'undefined' &&
-          window.location.pathname !== '/signup' &&
-          window.location.pathname !== '/login' && <Footer />}
-      </div>
+          <Footer />
+        </div>
+      </AppProvider>
     </Wrapper>
   );
 };

@@ -11,20 +11,18 @@ const Settings = () => <p>Settings</p>;
 const Billing = () => <p>Billing</p>;
 
 const Account = () => (
-  <Layout>
-    <Section>
-      <AccountTabs>
-        <Link to='/account'>Home</Link>{' '}
-        <Link to='/account/settings'>Settings</Link>{' '}
-        <Link to='/account/billing'>Billing</Link>{' '}
-      </AccountTabs>
-      <Router>
-        <Home path='/account' />
-        <Settings path='/account/settings' />
-        <Billing path='/account/billing' />
-      </Router>
-    </Section>
-  </Layout>
+  <Section>
+    <AccountTabs>
+      <Link to='/account'>Home</Link>{' '}
+      <Link to='/account/settings'>Settings</Link>{' '}
+      <Link to='/account/billing'>Billing</Link>{' '}
+    </AccountTabs>
+    <Router>
+      <Home path='/account' />
+      <Settings path='/account/settings' />
+      <Billing path='/account/billing' />
+    </Router>
+  </Section>
 );
 
 const AccountTabs = styled.div`

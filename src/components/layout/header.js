@@ -30,16 +30,22 @@ const Header = ({ siteTitle }) => {
   });
 
   return (
-    <Wrapper scrolled={scrolled}>
-      <div className='container'>
-        {' '}
-        <Flex>
-          <SiteTitle scrolled={scrolled}>Triangle</SiteTitle>
-          <Menu scrolled={scrolled} />
-          <MobileMenu scrolled={scrolled} />
-        </Flex>
-      </div>
-    </Wrapper>
+    <>
+      {typeof window !== 'undefined' &&
+      !window.location.pathname.includes('/signup') &&
+      !window.location.pathname.includes('/login') ? (
+        <Wrapper scrolled={scrolled}>
+          <div className='container'>
+            {' '}
+            <Flex>
+              <SiteTitle scrolled={scrolled}>Triangle</SiteTitle>
+              <Menu scrolled={scrolled} />
+              <MobileMenu scrolled={scrolled} />
+            </Flex>
+          </div>
+        </Wrapper>
+      ) : null}
+    </>
   );
 };
 

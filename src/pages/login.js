@@ -66,7 +66,7 @@ const LoginPage = () => {
   };
 
   return (
-    <Layout>
+    <>
       <Section>
         <div
           style={{
@@ -148,7 +148,7 @@ const LoginPage = () => {
           </>
         )}
       </Section>
-    </Layout>
+    </>
   );
 };
 

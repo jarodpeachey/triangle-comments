@@ -1,20 +1,8 @@
+/* eslint-disable react/jsx-fragments */
 import React, { useState, useEffect } from 'react';
 import { graphql, StaticQuery } from 'gatsby';
 import styled from 'styled-components';
-// import Img from 'gatsby-image';
-import headerImage from '../images/hero.png';
-
-// import BackgroundImage from 'gatsby-background-image';
-// Use the following to support legacy browsers like IE11:
-// import BackgroundImage from 'gatsby-background-image-es5'
-
-/**
- * In this functional component a <BackgroundImage />  is compared to an <Img />.
- * @param className   string    className(s) from styled-components.
- * @param children    nodes     Child-components from index.js / page-2.js.
- * @return {*}
- * @constructor
- */
+import Button from './Button';
 
 const Hero = ({ children }) => {
   const [scrollValue, setScrollValue] = useState(0);
@@ -45,7 +33,7 @@ const Hero = ({ children }) => {
       {/* return ( */}
       <div
         style={{
-          backgroundImage: `url(${headerImage})`,
+          backgroundImage: 'url(../images/hero.png)',
           position: 'absolute',
           top: 0,
           zIndex: -5,
@@ -55,10 +43,20 @@ const Hero = ({ children }) => {
           backgroundRepeat: 'repeat',
         }}
       />
-      <MainWrapper scroll={scrollValue}>
+      <MainWrapper>
         <HeroContainer>
-          <ChildContainer scrollValue={scrollValue} className='container'>
-            {children}
+          <ChildContainer className='container'>
+            <Title>COMMENTS DONE RIGHT</Title>
+            <SubTitle>
+              The simplest, easiest and best way to add comments to a static
+              website.
+            </SubTitle>
+            <ButtonWrapper>
+              <Button link='/signup'>Get Started</Button>
+            </ButtonWrapper>
+            <ButtonWrapper>
+              <Button outlined link='/'>Learn More</Button>
+            </ButtonWrapper>
           </ChildContainer>
         </HeroContainer>
         {/* </BackgroundImage> */}
@@ -74,19 +72,6 @@ const MainWrapper = styled.div`
   padding-top: 64px;
 `;
 
-const Background = styled.div`
-  min-height: 100vh;
-max-height: 99999999999999999px !important;
-  background-image: url('../images/hero.png');
-  position: absolute;
-  top: 0;
-  z-index: -5;
-  min-height: 100vh;
-max-height: 99999999999999999px !important;
-  width: 100vw;
-  opacity: 0.5;
-`;
-
 const HeroContainer = styled.div`
   display: flex;
   align-items: center;
@@ -96,6 +81,32 @@ const HeroContainer = styled.div`
 
 const ChildContainer = styled.div`
   margin-top: 0;
+`;
+
+const Title = styled.h1`
+  font-weight: 900;
+  font-size: 48px;
+  font-family: 'overpass', sans-serif !important;
+  margin-bottom: 16px;
+`;
+
+const SubTitle = styled.h2`
+  color: rgba(81, 160, 249, 0.4);
+`;
+
+const ButtonWrapper = styled.div`
+  @media (max-width: 520px) {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+  }
+  padding: 8px 18px !important;
+  margin-left: -18px;
+  width: fit-content;
+  display: inline-block;
+  button {
+    margin: 0 !important;
+  }
 `;
 
 export default Hero;

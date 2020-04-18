@@ -154,7 +154,7 @@ const SignupPage = () => {
           backgroundRepeat: 'repeat',
         }}
       /> */}
-      <Layout>
+      <>
         <Section fullHeight background='transparent'>
           {!showForm ? (
             <Card>
@@ -278,7 +278,7 @@ const SignupPage = () => {
             </>
           )}
         </Section>
-      </Layout>
+      </>
     </>
   );
 };

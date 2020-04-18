@@ -1,14 +1,11 @@
-const React = require('react');
-const { StyleWrapper } = require('./src/components/layout/StyleWrapper');
-const { AuthProvider } = require('./src/auth/AuthProvider');
-const { AppProvider } = require('./src/components/AppProvider');
+import React from 'react';
+import { StyleWrapper } from './src/components/layout/StyleWrapper';
+import Layout from './src/components/layout/layout';
 
-exports.wrapRootElement = ({ element }) => {
-  return (
-    <AuthProvider>
-      <AppProvider>
-        <StyleWrapper>{element}</StyleWrapper>
-      </AppProvider>
-    </AuthProvider>
-  );
+export const wrapRootElement = ({ element }) => {
+  return <StyleWrapper>{element}</StyleWrapper>;
+};
+
+export const wrapPageElement = ({ element }) => {
+  return <Layout>{element}</Layout>;
 };

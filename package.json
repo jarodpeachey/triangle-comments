@@ -5,10 +5,10 @@
   "scripts": {
     "lint": "eslint \"./packages/**/*{.js,.jsx}\"",
     "build": "gatsby build",
-    "serve": "gatsby serve",
     "lerna-bootstrap": "lerna bootstrap --hoist --reject-cycles --force-local",
     "link": "lerna link",
     "clean": "lerna clean",
+    "serve": "gatsby clean && gatsby build && gatsby serve",
     "publish": "lerna publish",
     "dev": "lerna run dev --reject-cycles",
     "nuke": "./scripts/nuke.sh",

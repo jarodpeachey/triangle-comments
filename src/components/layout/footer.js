@@ -1,42 +1,54 @@
+/* eslint-disable react/jsx-fragments */
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 import Row from '../grid/row';
 
-const Footer = () => (
-  <Wrapper>
-    <Container className='container'>
-      <Row spacing={[12, 0]} breakpoints={[1]}>
-        <div widths={[6]}>
-          <Title>
-            <h2>Triangle</h2>
-          </Title>
-        </div>
-        <Menu widths={[6]}>
-          <MenuLink href='mailto:jwpeachey107@aol.com'>
-            <FontAwesomeIcon icon='envelope' />
-          </MenuLink>
+const Footer = () => {
+  return (
+    <>
+      {typeof window !== 'undefined' &&
+      !window.location.pathname.includes('/signup') &&
+      !window.location.pathname.includes('/login') ? (
+        <FooterWrapper>
+          <FooterContainer className='container'>
+            <Row spacing={[12, 0]} breakpoints={[1]}>
+              <div widths={[6]}>
+                <FooterTitle>
+                  <h2>Triangle</h2>
+                </FooterTitle>
+              </div>
+              <FooterMenu widths={[6]}>
+                <FooterMenuLink href='mailto:jwpeachey107@aol.com'>
+                  <FontAwesomeIcon icon='envelope' />
+                </FooterMenuLink>
 
-          <MenuLink href='https://github.com/jarodpeachey'>
-            <FontAwesomeIcon icon={['fab', 'github']} id='menu-toggle' />
-          </MenuLink>
+                <FooterMenuLink href='https://github.com/jarodpeachey'>
+                  <FontAwesomeIcon icon={['fab', 'github']} id='menu-toggle' />
+                </FooterMenuLink>
 
-          <MenuLink href='https://linkedin.com/in/jarod-peachey'>
-            <FontAwesomeIcon icon={['fab', 'linkedin']} id='menu-toggle' />
-          </MenuLink>
-        </Menu>
-      </Row>
-    </Container>
-  </Wrapper>
-);
+                <FooterMenuLink href='https://linkedin.com/in/jarod-peachey'>
+                  <FontAwesomeIcon
+                    icon={['fab', 'linkedin']}
+                    id='menu-toggle'
+                  />
+                </FooterMenuLink>
+              </FooterMenu>
+            </Row>
+          </FooterContainer>
+        </FooterWrapper>
+      ) : null}
+    </>
+  );
+};
 
-const Wrapper = styled.div`
+const FooterWrapper = styled.div`
   width: 100%;
   background: rgb(81, 160, 249);
   color: white;
 `;
 
-const Title = styled.div`
+const FooterTitle = styled.div`
   display: flex;
   height: 100%;
   align-items: center;
@@ -47,18 +59,18 @@ const Title = styled.div`
   }
 `;
 
-const Container = styled.div`
+const FooterContainer = styled.div`
   padding-top: 10px !important;
   padding-bottom: 10px !important;
 `;
 
-const Menu = styled.div`
+const FooterMenu = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
 `;
 
-const MenuLink = styled.a`
+const FooterMenuLink = styled.a`
   padding: 12px !important;
   font-size: 26px !important;
   text-decoration: none;
