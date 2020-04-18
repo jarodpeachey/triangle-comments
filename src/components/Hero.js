@@ -55,7 +55,9 @@ const Hero = ({ children }) => {
               <Button link='/signup'>Get Started</Button>
             </ButtonWrapper>
             <ButtonWrapper>
-              <Button outlined link='/'>Learn More</Button>
+              <Button outlined link='/'>
+                Learn More
+              </Button>
             </ButtonWrapper>
           </ChildContainer>
         </HeroContainer>
@@ -69,7 +71,8 @@ const Hero = ({ children }) => {
 };
 
 const MainWrapper = styled.div`
-  padding-top: 64px;
+  // padding-top: 64px;
+  padding: 24px 0 36px;
 `;
 
 const HeroContainer = styled.div`
