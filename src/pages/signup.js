@@ -179,11 +179,7 @@ const SignupPage = () => {
               ) : (
                 <>
                   <Card>
-                    <Title>
-                      {typeof window !== 'undefined'
-                        ? window.location.pathname
-                        : 'NO WINDOW'}
-                    </Title>
+                    <Title className='logo'>TRIANGLE</Title>
                     <Tabs>
                       <Tab
                         onClick={() => setActiveTab('login')}

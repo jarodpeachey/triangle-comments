@@ -15,7 +15,7 @@ const Footer = () => {
             <Row spacing={[12, 0]} breakpoints={[1]}>
               <div widths={[6]}>
                 <FooterTitle>
-                  <h2>Triangle</h2>
+                  <h2 className='logo'>Triangle</h2>
                 </FooterTitle>
               </div>
               <FooterMenu widths={[6]}>

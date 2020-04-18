@@ -38,7 +38,9 @@ const Header = ({ siteTitle }) => {
           <div className='container'>
             {' '}
             <Flex>
-              <SiteTitle scrolled={scrolled}>Triangle</SiteTitle>
+              <SiteTitle className='logo' scrolled={scrolled}>
+                Triangle
+              </SiteTitle>
               <Menu scrolled={scrolled} />
               <MobileMenu scrolled={scrolled} />
             </Flex>
@@ -84,9 +86,7 @@ const Flex = styled.div`
 
 const SiteTitle = styled.h1`
   margin: 0;
-  font-weight: 700;
   text-transform: uppercase;
-  font-family: 'overpass', sans-serif !important;
   margin-bottom: -8px;
   font-size: ${(props) => (props.scrolled ? '32px' : '40px')};
   transition-duration: 0.25s;
