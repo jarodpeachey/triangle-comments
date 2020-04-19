@@ -19,8 +19,10 @@ const AuthForm = () => {
   const [message, setMessage] = useState('Processing...');
   const [error, setError] = useState(false);
   const [activeTab, setActiveTab] = useState(
-    typeof window !== 'undefined' && window.location.pathname.replace('/', '')
+    typeof window !== 'undefined' && window.location.pathname.replace(/\//g, '')
   );
+
+  console.log(activeTab);
 
   if (signedIn) {
     setMessage('Success. Redirecting to the homepage.');
@@ -191,7 +193,7 @@ const AuthForm = () => {
                       <Tab
                         onClick={() => {
                           setActiveTab('login');
-                          window.history.pushState('/login');
+                          window.history.pushState({}, '', '/login');
                         }}
                         active={activeTab === 'login'}
                       >
@@ -200,7 +202,7 @@ const AuthForm = () => {
                       <Tab
                         onClick={() => {
                           setActiveTab('signup');
-                          window.history.pushState('/signup');
+                          window.history.pushState({}, '', '/signup');
                         }}
                         active={activeTab === 'signup'}
                       >
