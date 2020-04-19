@@ -153,13 +153,16 @@ const AuthForm = () => {
         }}
       /> */}
       <>
-        <Section customStyles={`
+        <Section
+          customStyles={`
           height: 100vh;
           padding-top: 60px;
           @media (max-height: 769px) {
             padding-top: 0;
           }
-        `} background='transparent'>
+        `}
+          background='transparent'
+        >
           {!showForm ? (
             <Card>
               <RedirectText>{message}</RedirectText>
@@ -186,13 +189,19 @@ const AuthForm = () => {
                     <Title className='logo'>TRIANGLE</Title>
                     <Tabs>
                       <Tab
-                        onClick={() => setActiveTab('login')}
+                        onClick={() => {
+                          setActiveTab('login');
+                          window.history.pushState('/login');
+                        }}
                         active={activeTab === 'login'}
                       >
                         Login
                       </Tab>
                       <Tab
-                        onClick={() => setActiveTab('signup')}
+                        onClick={() => {
+                          setActiveTab('signup');
+                          window.history.pushState('/signup');
+                        }}
                         active={activeTab === 'signup'}
                       >
                         Signup
