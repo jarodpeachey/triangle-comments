@@ -31,19 +31,30 @@ library.add(
   faUser
 );
 
+window.MemberfulOptions = { site: 'https://trianglecomments.memberful.com' };
+
+(function () {
+  const s = document.createElement('script');
+
+  s.type = 'text/javascript';
+  s.async = true;
+  s.src = 'https://d35xxde4fgg0cx.cloudfront.net/assets/embedded.js';
+
+  const setup = function () {
+    window.MemberfulEmbedded.setup();
+  };
+
+  s.addEventListener('load', setup, false);
+
+  (
+    document.getElementsByTagName('head')[0] ||
+    document.getElementsByTagName('body')[0]
+  ).appendChild(s);
+})();
+
 const Layout = (props) => {
   console.log(props.children);
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.async = true;
-    script.defer = true;
-    script.src = 'https://api.memberstack.io/static/memberstack.js?custom';
-    script.setAttribute(
-      'data-memberstack-id',
-      'f5238fb5d6746610e16ad3ceaf0ab619'
-    );
-    document.querySelector('body').appendChild(script);
-  }, []);
+
   return (
     // <Security {...config}>
     <Wrapper>

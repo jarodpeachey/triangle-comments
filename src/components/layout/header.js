@@ -197,11 +197,12 @@ const SiteTitle = styled.h1`
 `;
 
 const MobileMenuToggle = styled.div`
+  display: none;
   z-index: 9999;
   width: 35px;
   height: 35px;
-  @media (min-width: 769px) {
-    display: none;
+  @media (max-width: 769px) {
+    display: block;
   }
   transform: rotate(0deg);
   transition: 0.5s ease-out;
@@ -252,6 +253,7 @@ const MobileMenuRotate = styled.div`
 
 const MobileMenu = styled.div`
   line-height: 1;
+  display: ${(props) => (props.open ? 'block' : 'none')};
   position: fixed;
   overflow: hidden;
   top: ${(props) => (props.open ? '0' : '-100%')};
