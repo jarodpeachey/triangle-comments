@@ -70,7 +70,7 @@ const Header = ({ siteTitle }) => {
   };
 
   return (
-    <>
+    <div>
       {typeof window !== 'undefined' &&
       !window.location.pathname.includes('/signup') &&
       !window.location.pathname.includes('/login') ? (
@@ -144,7 +144,7 @@ const Header = ({ siteTitle }) => {
           </MobileMenu>
         </>
       ) : null}
-    </>
+    </div>
   );
 };
 
@@ -252,8 +252,12 @@ const MobileMenuRotate = styled.div`
 `;
 
 const MobileMenu = styled.div`
+  display: none;
+  @media (max-width: 769px) {
+    display: block;
+  }
   line-height: 1;
-  display: ${(props) => (props.open ? 'block' : 'none')};
+  // display: ${(props) => (props.open ? 'block' : 'none')};
   position: fixed;
   overflow: hidden;
   top: ${(props) => (props.open ? '0' : '-100%')};
