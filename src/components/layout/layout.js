@@ -36,7 +36,7 @@ if (typeof window !== 'undefined') {
 }
 
 (function () {
-  const s = document.createElement('script');
+  const s = typeof document !== 'undefined' && document.createElement('script');
 
   s.type = 'text/javascript';
   s.async = true;
@@ -49,8 +49,10 @@ if (typeof window !== 'undefined') {
   s.addEventListener('load', setup, false);
 
   (
-    document.getElementsByTagName('head')[0] ||
-    document.getElementsByTagName('body')[0]
+    (typeof document !== 'undefined' &&
+      document.getElementsByTagName('head')[0]) ||
+    (typeof document !== 'undefined' &&
+      document.getElementsByTagName('body')[0])
   ).appendChild(s);
 })();
 
