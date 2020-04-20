@@ -31,34 +31,8 @@ library.add(
   faUser
 );
 
-if (typeof window !== 'undefined') {
-  window.MemberfulOptions = { site: 'https://trianglecomments.memberful.com' };
-}
-
 const Layout = (props) => {
   console.log(props.children);
-
-  useEffect(() => {
-    const s =
-      typeof document !== 'undefined' && document.createElement('script');
-
-    s.type = 'text/javascript';
-    s.async = true;
-    s.src = 'https://d35xxde4fgg0cx.cloudfront.net/assets/embedded.js';
-
-    const setup = function () {
-      typeof window !== 'undefined' && window.MemberfulEmbedded.setup();
-    };
-
-    s.addEventListener('load', setup, false);
-
-    (
-      (typeof document !== 'undefined' &&
-        document.getElementsByTagName('head')[0]) ||
-      (typeof document !== 'undefined' &&
-        document.getElementsByTagName('body')[0])
-    ).appendChild(s);
-  });
 
   return (
     // <Security {...config}>
