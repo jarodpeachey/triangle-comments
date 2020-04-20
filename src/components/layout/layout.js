@@ -31,7 +31,9 @@ library.add(
   faUser
 );
 
-window.MemberfulOptions = { site: 'https://trianglecomments.memberful.com' };
+if (typeof window !== 'undefined') {
+  window.MemberfulOptions = { site: 'https://trianglecomments.memberful.com' };
+}
 
 (function () {
   const s = document.createElement('script');
@@ -41,7 +43,7 @@ window.MemberfulOptions = { site: 'https://trianglecomments.memberful.com' };
   s.src = 'https://d35xxde4fgg0cx.cloudfront.net/assets/embedded.js';
 
   const setup = function () {
-    window.MemberfulEmbedded.setup();
+    typeof window !== 'undefined' && window.MemberfulEmbedded.setup();
   };
 
   s.addEventListener('load', setup, false);
