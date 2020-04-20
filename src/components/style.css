@@ -20,7 +20,7 @@
 }
 
 .blur {
-  filter: blur(14px);
+  filter: blur(3px);
   transition: all 0.25s ease-in-out;
 }
 

@@ -53,9 +53,9 @@ const Header = ({ siteTitle }) => {
 
   const toggleFunction = () => {
     if (open) {
-      // document.getElementById('blur').classList.remove('blur');
+      document.getElementById('blur').classList.remove('blur');
     } else {
-      // document.getElementById('blur').classList.add('blur');
+      document.getElementById('blur').classList.add('blur');
     }
 
     setOpen(!open);
@@ -262,8 +262,8 @@ const MobileMenu = styled.div`
   transition: ${(props) =>
     props.open ? 'all 0.25s ease-out' : 'all 0.6s ease-out'};
   border-top: ${(props) => (props.open ? '2px solid #f7f7f7' : 'none')};
-  box-shadow: 1px 0px 15px -5px rgba(81, 160, 249, 0.4),
-    1px 0px 30px -5px rgba(81, 160, 249, 0.2);
+  box-shadow: none;
+  border-bottom: 1px solid #e8e8e8;
 
   .container {
     padding: 12px 10vw;
