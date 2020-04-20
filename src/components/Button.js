@@ -15,6 +15,7 @@ const Button = ({
   right,
   left,
   center,
+  medium,
   link,
 }) => {
   return (
@@ -23,6 +24,7 @@ const Button = ({
         <Link className='no-styling' to={link}>
           <StyledButton
             small={small}
+            medium={medium}
             className={className ? className : ''}
             right={right}
             left={left}
@@ -39,6 +41,7 @@ const Button = ({
       ) : (
         <StyledButton
           small={small}
+          medium={medium}
           className={className ? className : ''}
           right={right}
           left={left}
@@ -61,6 +64,10 @@ const StyledButton = styled.button`
       ? props.outlined
         ? ' 6px 12px'
         : '7px 13px'
+      : props.medium
+      ? props.outlined
+        ? '8px 16px'
+        : '9px 17px'
       : props.outlined
       ? ' 13px 25px'
       : '14px 26px'} !important;

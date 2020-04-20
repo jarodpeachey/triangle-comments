@@ -1,8 +1,6 @@
 /* eslint-disable react/jsx-fragments */
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
-import TextField from '@material-ui/core/TextField';
-import { withStyles, LinearProgress } from '@material-ui/core';
 import { Link } from 'gatsby';
 import headerImage from '../../images/hero.png';
 import Button from '../Button';
@@ -357,8 +355,18 @@ const Form = styled.form`
 
 const SubmitButton = styled(Button)``;
 
-const Input = styled(TextField)`
+const Input = styled.input`
   margin: 0 !important;
+  padding: 13px 13px;
+  background: #f7f7f7;
+  border-radius: 5px;
+  width: 100%;
+  border: none;
+  border: 1.5px solid transparent;
+  outline: none;
+  :focus {
+    border: 1.5px solid rgb(25, 48, 92);
+  }
 `;
 
 const Info = styled.div`
@@ -368,7 +376,7 @@ const Info = styled.div`
   margin-top: 16px;
 `;
 
-const Loader = styled(LinearProgress)`
+const Loader = styled.div`
   margin-top: 24px;
 `;
 

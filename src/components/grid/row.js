@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Column from './column';
 
 const Row = ({
@@ -12,6 +12,7 @@ const Row = ({
   maxColumnSize = 2,
   demo,
   vertical,
+  flexDirections,
 }) => {
   console.log(breakpoints[0]);
   return (
@@ -19,9 +20,11 @@ const Row = ({
       standardWidth={standardWidth}
       className={className || ''}
       breakpoint={breakpoints[0]}
+      breakpointTwo={breakpoints[1] || breakpoints[0]}
       spacingX={spacing[0]}
       spacingY={typeof spacing[1] === 'number' ? spacing[1] : spacing[0]}
       vertical={vertical}
+      flexDirections={flexDirections || null}
     >
       {React.Children.toArray(children).map((item) => {
         return item ? (
@@ -55,6 +58,8 @@ const Wrapper = styled.div`
   width: ${(props) =>
     props.standardWidth ? '100%' : `calc(100% + ${props.spacingX * 2})`};
   @media (min-width: ${(props) => props.breakpoint}px) {
+    flex-direction: ${(props) =>
+      props.flexDirections ? props.flexDirections[0] || 'row' : 'row'};
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap;
@@ -62,6 +67,25 @@ const Wrapper = styled.div`
       props.standardWidth
         ? '0'
         : `0 -${props.spacingX}px 0 -${props.spacingX}px`};
+
+  ${(props) =>
+    props.flexDirections &&
+    props.flexDirections[1] &&
+    css`
+  @media (min-width: ${props.breakpointTwo}px) {
+    flex-direction: ${
+      props.flexDirections ? props.flexDirections[1] || 'row' : 'row'
+    };
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin: ${
+      props.standardWidth
+        ? '0'
+        : `0 -${props.spacingX}px 0 -${props.spacingX}px`
+    };
+  `};
+  
 `;
 
 Row.propTypes = {

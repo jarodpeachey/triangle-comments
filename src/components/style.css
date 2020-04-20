@@ -3,6 +3,16 @@
 
 @import url('https://overpass-30e2.kxcdn.com/overpass.css');
 
+#header.solid {
+  background: orange !important;
+}
+
+#header {
+  z-index: 999999;
+  display: block;
+  will-change: width, height;
+}
+
 #blur {
   transition: all 0.25s ease-in-out;
   min-height: 100vh;

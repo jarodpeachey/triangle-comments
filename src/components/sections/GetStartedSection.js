@@ -10,7 +10,7 @@ const GetStartedSection = ({ data }) => {
       subtitle='Triangle is the simplest, most intuive commenting system built specifically with static websites in mind.'
     >
       <br />
-      <Button>Get Started</Button>
+      <Button center>Get Started</Button>
     </Section>
   );
 };
