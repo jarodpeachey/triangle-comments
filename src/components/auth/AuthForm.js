@@ -62,12 +62,10 @@ const AuthForm = () => {
       .then((response) => {
         console.log(response);
 
-        setTimeout(() => {
-          setMessage(
-            "We've sent a confirmation email to you. Please open it and click the link to verify your account."
-          );
-          setLoading(false);
-        }, 1250);
+        setLoading(false);
+        setMessage(
+          "We've sent a confirmation email to you. Please open it and click the link to verify your account."
+        );
       })
       .catch((err) => {
         console.log('Error: ', err);

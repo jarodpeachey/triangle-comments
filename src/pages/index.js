@@ -27,7 +27,7 @@ const IndexPage = ({ data }) => {
     auth
       .confirm(parsedHash.confirmation_token)
       .then((user) => {
-        window.location.href = '/account/home';
+        window.location.href = '/account';
       })
       .catch((err) => {
         console.log(err);
