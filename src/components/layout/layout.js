@@ -18,6 +18,7 @@ import Header from './header';
 import { AuthProvider } from '../../providers/AuthProvider';
 import { AppProvider } from '../../providers/AppProvider';
 import { pathnameIncludes } from '../../utils/pathnameIncludes';
+import Helmet from 'react-helmet';
 
 library.add(
   faBars,
@@ -38,6 +39,12 @@ const Layout = (props) => {
     <Wrapper>
       <AppProvider>
         <AuthProvider>
+          <Helmet>
+            <script
+              src='https://api.memberstack.io/static/memberstack.js?custom'
+              data-memberstack-id='f5238fb5d6746610e16ad3ceaf0ab619'
+            ></script>
+          </Helmet>
           <Header siteTitle={props.title} />
           <div id='blur'>
             {!pathnameIncludes('/signup') && !pathnameIncludes('/login') && (
