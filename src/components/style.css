@@ -84,6 +84,13 @@ html {
   color: #3e4348;
 }
 
+@media (max-width: 576px) {
+  html,
+  body {
+    font-size: 17px;
+  }
+}
+
 .container {
   margin: 0 auto;
   width: 95%;
