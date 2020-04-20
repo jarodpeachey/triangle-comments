@@ -18,7 +18,7 @@ import Header from './header';
 import { AuthProvider } from '../../providers/AuthProvider';
 import { AppProvider } from '../../providers/AppProvider';
 import { pathnameIncludes } from '../../utils/pathnameIncludes';
-import Helmet from 'react-helmet';
+import { Helmet } from 'react-helmet';
 
 library.add(
   faBars,
