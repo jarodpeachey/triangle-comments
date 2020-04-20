@@ -19,9 +19,11 @@
   max-height: 99999999999999999px !important;
 }
 
-.blur {
-  filter: blur(3px);
-  transition: all 0.25s ease-in-out;
+@media (max-width: 769px) {
+  .blur {
+    filter: blur(3px);
+    transition: all 0.25s ease-in-out;
+  }
 }
 
 a.no-styling {
