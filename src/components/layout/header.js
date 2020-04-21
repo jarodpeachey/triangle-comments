@@ -184,7 +184,6 @@ const Wrapper = styled.header`
   right: 0;
   bottom: auto;
   z-index: 999;
-  max-height: 80px;
 `;
 
 const Flex = styled.div`
@@ -277,7 +276,7 @@ const MobileMenu = styled.div`
   position: fixed;
   overflow: hidden;
   top: ${(props) => (props.open ? '0' : '-100%')};
-  margin-top: ${(props) => (props.scrolled ? '51px' : '80px')};
+  margin-top: ${(props) => (props.scrolled ? '66px' : '94px')};
   background: white;
   z-index: 999;
   width: 100%;
