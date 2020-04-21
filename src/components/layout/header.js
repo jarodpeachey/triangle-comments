@@ -194,6 +194,7 @@ const Flex = styled.div`
 
 const SiteTitle = styled.h1`
   margin: 0;
+  margin-bottom: -1px;
   transition: all 0.25s ease-in;
   letter-spacing: 3px;
   text-transform: uppercase;

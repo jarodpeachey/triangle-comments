@@ -83,7 +83,7 @@ const BackgroundImage = styled.div`
   background-image: url(${(props) => props.heroImage});
   position: absolute;
   top: 0;
-  z-index: -5;
+  z-index: -500;
   height: 110%;
   width: 100%;
   opacity: 1;

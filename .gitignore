@@ -9,3 +9,5 @@ packages/cli/forestry/.env
 .DS_Store
 **/docs/
 .idea/
+public
+**/public
