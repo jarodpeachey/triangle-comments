@@ -24,6 +24,11 @@ export const theme = {
       main: '#f9853a',
       dark: '#f76b2b',
     },
+    gray: {
+      one: '#f6faff',
+      two: '#f3f3f3',
+      three: '#e9e9e9',
+    },
   },
 };
 

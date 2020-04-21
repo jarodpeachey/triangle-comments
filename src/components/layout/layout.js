@@ -12,6 +12,8 @@ import {
   faUser,
   faEnvelope,
   faShapes,
+  faHome,
+  faDollarSign,
 } from '@fortawesome/free-solid-svg-icons';
 import { fab, faLinkedin, faGithub } from '@fortawesome/free-brands-svg-icons';
 import Footer from './footer';
@@ -30,7 +32,9 @@ library.add(
   faLinkedin,
   faGithub,
   faUser,
-  faShapes
+  faShapes,
+  faHome,
+  faDollarSign
 );
 
 const Layout = (props) => {
@@ -38,7 +42,12 @@ const Layout = (props) => {
 
   return (
     // <Security {...config}>
-    <Wrapper>
+    <Wrapper
+      gray={
+        typeof window !== 'undefined' &&
+        window.location.pathname.includes('account')
+      }
+    >
       <AppProvider>
         <AuthProvider>
           <Header siteTitle={props.title} />
@@ -61,6 +70,7 @@ const Wrapper = styled.div`
   justify-content: space-between;
   min-height: 100vh;
   max-height: 99999999999999999px !important;
+  background: ${(props) => (props.gray ? props.theme.color.gray.one : 'white')};
 `;
 
 const ContentWrapper = styled.div`

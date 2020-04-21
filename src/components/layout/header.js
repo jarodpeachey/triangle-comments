@@ -11,27 +11,13 @@ import Menu from './Menu';
 import { AppContext } from '../../providers/AppProvider';
 import Button from '../Button';
 import Row from '../grid/row';
+import { AuthContext } from '../../providers/AuthProvider';
 
 const Header = ({ siteTitle }) => {
   const { scrolled, setScrolled } = useContext(AppContext);
+  const { signedIn, user } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const [width, setWidth] = useState(0);
-
-  // const closeMobileMenu = () => {
-  //   setOpen(false);
-  // };
-
-  // const openMobileMenu = () => {
-  //   setOpen(true);
-  // };
-
-  // const mobileMenuToggle = () => {
-  //   if (open) {
-  //     closeMobileMenu();
-  //   } else {
-  //     openMobileMenu();
-  //   }
-  // };
 
   useEffect(() => {
     window.addEventListener('scroll', onScroll);
@@ -108,42 +94,47 @@ const Header = ({ siteTitle }) => {
           >
             <div className='container'>
               <Row spacing={[8]} breakpoints={[576]} flexDirections={['row']}>
-                <div widths={[8]}>
+                <div widths={signedIn && user ? [12] : [8]}>
                   <MobileMenuItems open={open}>
                     <MobileMenuItem to='/'>Home</MobileMenuItem>
+                    {signedIn && user && (
+                      <MobileMenuItem to='/account'>Account</MobileMenuItem>
+                    )}
                     <MobileMenuItem to='https://github.com/jarodpeachey/triangle-comments'>
                       Docs
                     </MobileMenuItem>
                   </MobileMenuItems>
                 </div>
-                <div widths={[4]}>
-                  <Row
-                    spacing={[8]}
-                    breakpoints={[0, 576]}
-                    flexDirections={['row', 'column']}
-                  >
-                    <div widths={[6, 12]}>
-                      <Button
-                        link='/signup'
-                        medium
-                        className='full-width'
-                        outlined
-                      >
-                        Sign Up
-                      </Button>
-                    </div>
-                    <div widths={[6, 12]}>
-                      <Button
-                        link='/login'
-                        medium
-                        className='full-width'
-                        outlined
-                      >
-                        Log In
-                      </Button>
-                    </div>
-                  </Row>
-                </div>
+                {!signedIn && !user && (
+                  <div widths={[4]}>
+                    <Row
+                      spacing={[8]}
+                      breakpoints={[0, 576]}
+                      flexDirections={['row', 'column']}
+                    >
+                      <div widths={[6, 12]}>
+                        <Button
+                          link='/signup'
+                          medium
+                          className='full-width'
+                          outlined
+                        >
+                          Sign Up
+                        </Button>
+                      </div>
+                      <div widths={[6, 12]}>
+                        <Button
+                          link='/login'
+                          medium
+                          className='full-width'
+                          outlined
+                        >
+                          Log In
+                        </Button>
+                      </div>
+                    </Row>
+                  </div>
+                )}
               </Row>
             </div>
           </MobileMenu>
@@ -163,11 +154,12 @@ Header.defaultProps = {
 
 const Wrapper = styled.header`
   .container {
-    padding-top: ${props => props.scrolled ? '18px' : '32px'};
-    padding-bottom: ${props => props.scrolled ? '18px' : '32px'};
+    padding-top: ${(props) => (props.scrolled ? '18px' : '32px')};
+    padding-bottom: ${(props) => (props.scrolled ? '18px' : '32px')};
     transition: all 0.25s ease-in;
   }
-  background: ${(props) => (props.open ? 'white' : props.scrolled ? 'white' : 'transparent')};
+  background: ${(props) =>
+    props.open ? 'white' : props.scrolled ? 'white' : 'transparent'};
   color: ${(props) =>
     props.scrolled
       ? props.theme.color.primary.light
@@ -206,13 +198,13 @@ const SiteTitle = styled.h1`
   letter-spacing: 3px;
   text-transform: uppercase;
   font-size: 22px;
-  @media(min-width: 769px) {
+  @media (min-width: 769px) {
     font-size: 26px;
   }
   z-index: 999;
   svg {
-    color: ${props => props.theme.color.primary.main} !important;
-    fill: ${props => props.theme.color.primary.main} !important;
+    color: ${(props) => props.theme.color.primary.main} !important;
+    fill: ${(props) => props.theme.color.primary.main} !important;
     margin-right: 8px;
     position: relative;
     top: -1px;

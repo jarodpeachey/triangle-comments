@@ -5,7 +5,7 @@ import Button from '../Button';
 import { AuthContext } from '../../providers/AuthProvider';
 
 const Menu = ({ scrolled }) => {
-  const { signedIn } = useContext(AuthContext);
+  const { signedIn, user } = useContext(AuthContext);
 
   return (
     <MenuWrapper scrolled={scrolled}>
@@ -25,6 +25,9 @@ const Menu = ({ scrolled }) => {
         </>
       ) : (
         <>
+          <MenuItem>
+            <Link to='/'>Home</Link>
+          </MenuItem>
           <MenuItem button>
             <Button link='/signup' small outlined>
               Sign Up
@@ -57,10 +60,12 @@ const MenuItem = styled.div`
   transition-duration: 0.25s;
   a {
     height: 100%;
+    text-decoration: none;
     display: block;
-    padding: ${(props) => (props.button ? '0' : '8px 16px')};
+    padding: ${(props) => (props.button ? '0' : '8px 24px')};
     font-weight: 500;
     transition-duration: 0.25s;
+    color: ${props => props.theme.color.text.heading};
   }
   :hover a {
     transition-duration: 0.25s;

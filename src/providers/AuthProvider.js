@@ -21,9 +21,11 @@ export const AuthProvider = ({ children }) => {
       setUser(auth.currentUser());
       setSignedInState(true);
 
-      // localStorage.setItem('signedIn', true);
+      typeof localStorage !== 'undefined' && localStorage.setItem('signedIn', true);
+      typeof localStorage !== 'undefined' && localStorage.setItem('user', auth.currentUser());
     } else {
-      // localStorage.setItem('signedIn', false);
+      typeof localStorage !== 'undefined' && localStorage.setItem('signedIn', false);
+      typeof localStorage !== 'undefined' && localStorage.setItem('user', false);
     }
   });
 

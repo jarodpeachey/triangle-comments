@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { Link } from 'gatsby';
@@ -9,6 +10,7 @@ const Button = ({
   small,
   margin,
   secondary,
+  gray,
   outlined,
   solid,
   onClick,
@@ -31,6 +33,7 @@ const Button = ({
             center={center}
             margin={margin}
             secondary={secondary}
+            gray={gray}
             outlined={outlined}
             onClick={onClick || null}
             link
@@ -48,6 +51,7 @@ const Button = ({
           center={center}
           margin={margin}
           secondary={secondary}
+          gray={gray}
           outlined={outlined}
           onClick={onClick || null}
         >
@@ -72,12 +76,12 @@ const StyledButton = styled.button`
       ? '13px 25px'
       : '14px 26px'} !important;
   border: none !important;
-  text-transform: uppercase !important;
+  text-transform: ${props => !props.gray && 'uppercase'} !important;
   cursor: pointer !important;
   transition-duration: 0.5s !important;
   letter-spacing: 1.1px !important;
   font-size: ${(props) => (props.small ? '13px' : '16px')} !important;
-  font-weight: 500 !important;
+  font-weight: 600 !important;
   z-index: 999 !important;
   display: block;
   overflow: hidden !important;
@@ -88,6 +92,8 @@ const StyledButton = styled.button`
   background: ${(props) =>
     props.outlined
       ? 'transparent'
+      : props.gray
+      ? props.theme.color.gray.two
       : props.secondary
       ? `linear-gradient(
     to right top,
@@ -100,11 +106,17 @@ const StyledButton = styled.button`
     ${props.theme.color.primary.dark}
   )`} !important;
   color: ${(props) =>
-    props.outlined ? 'black' : props.secondary ? 'white' : 'white'} !important;
+    props.outlined || props.gray
+      ? props.theme.color.text.heading
+      : props.secondary
+      ? 'white'
+      : 'white'} !important;
   border: 2px solid
     ${(props) =>
       props.outlined
-        ? props.secondary
+        ? props.gray
+          ? props.theme.color.gray.two
+          : props.secondary
           ? props.theme.color.secondary.main
           : props.theme.color.primary.main
         : props.secondary
@@ -120,8 +132,14 @@ const StyledButton = styled.button`
   )`} !important;
 
   :hover {
-    box-shadow: 2px 4px 22px -10px ${props => props.secondary ? `${props.theme.color.secondary.main}90` : `${props.theme.color.primary.main}90`};
-    transform: scale(1.03);
+    box-shadow: 2px 4px 22px -10px ${(props) =>
+      props.gray
+        ? 'transparent'
+        : props.secondary
+        ? `${props.theme.color.secondary.main}90`
+        : `${props.theme.color.primary.main}90`};
+    background: ${props => props.gray && props.theme.color.gray.three} !important;
+    transform: ${(props) => (props.gray ? 'none' : 'scale(1.03)')};
   }
   // :active ::before {
   //   right: 0 !important;

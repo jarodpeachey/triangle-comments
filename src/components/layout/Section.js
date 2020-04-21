@@ -22,7 +22,7 @@ const Section = ({
       center={center}
       dark={dark}
       light={light}
-      color={dark ? theme.color.primary.backgroundDark : light ? theme.color.primary.backgroundLight : background || 'white'}
+      color={dark ? theme.color.primary.backgroundDark : light ? theme.color.primary.backgroundLight : background || 'transparent'}
     >
       <div className='container'>
         {title && <Title dark={dark}>{title}</Title>}
