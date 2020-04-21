@@ -11,6 +11,7 @@ import {
   faCog,
   faUser,
   faEnvelope,
+  faShapes,
 } from '@fortawesome/free-solid-svg-icons';
 import { fab, faLinkedin, faGithub } from '@fortawesome/free-brands-svg-icons';
 import Footer from './footer';
@@ -28,7 +29,8 @@ library.add(
   faEnvelope,
   faLinkedin,
   faGithub,
-  faUser
+  faUser,
+  faShapes
 );
 
 const Layout = (props) => {

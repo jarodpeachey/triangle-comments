@@ -304,11 +304,10 @@ const Card = styled.div`
 `;
 
 const Title = styled.h1`
-  color: rgb(81, 160, 249);
+  color: ${props => props.theme.color.primary.main};
   margin: 16px auto;
   text-align: center;
   font-size: 36px;
-  font-family: 'overpass', sans-serif !important;
 `;
 
 const Tabs = styled.div`
@@ -323,11 +322,11 @@ const Tab = styled.div`
   padding: 16px;
   :hover {
     border-bottom: 2px solid
-      ${(props) => (props.active ? 'rgb(25, 48, 92)' : '#e8e8e8')};
+      ${(props) => (props.active ? props.theme.color.primary.dark : '#e8e8e8')};
     cursor: pointer;
   }
   border-bottom: 2px solid
-    ${(props) => (props.active ? 'rgb(25, 48, 92)' : '#f7f7f7')};
+    ${(props) => (props.active ? props.theme.color.primary.dark : '#f7f7f7')};
 `;
 
 const RedirectText = styled.h2`

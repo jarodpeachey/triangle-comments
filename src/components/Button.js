@@ -69,7 +69,7 @@ const StyledButton = styled.button`
         ? '8px 16px'
         : '9px 17px'
       : props.outlined
-      ? ' 13px 25px'
+      ? '13px 25px'
       : '14px 26px'} !important;
   border: none !important;
   text-transform: uppercase !important;
@@ -78,11 +78,12 @@ const StyledButton = styled.button`
   letter-spacing: 1.1px !important;
   font-size: ${(props) => (props.small ? '13px' : '16px')} !important;
   font-weight: 500 !important;
-  z-index: 1 !important;
+  z-index: 999 !important;
+  display: block;
   overflow: hidden !important;
   position: relative !important;
   outline: none !important;
-  border-radius: 50px !important;
+  border-radius: 4px !important;
   margin: ${(props) => (props.margin ? '0 8px' : 0)};
   background: ${(props) =>
     props.outlined
@@ -90,13 +91,13 @@ const StyledButton = styled.button`
       : props.secondary
       ? `linear-gradient(
     to right top,
-    rgb(249, 170, 80),
-    rgb(241, 116, 58)
+    ${props.theme.color.secondary.light},
+    ${props.theme.color.secondary.dark}
   )`
       : `linear-gradient(
     to right top,
-    rgb(80, 202, 249),
-    rgb(83, 104, 241)
+    ${props.theme.color.primary.light},
+    ${props.theme.color.primary.dark}
   )`} !important;
   color: ${(props) =>
     props.outlined ? 'black' : props.secondary ? 'white' : 'white'} !important;
@@ -104,46 +105,20 @@ const StyledButton = styled.button`
     ${(props) =>
       props.outlined
         ? props.secondary
-          ? 'rgb(253, 99, 71)'
-          : 'rgb(81, 160, 249)'
+          ? props.theme.color.secondary.main
+          : props.theme.color.primary.main
         : props.secondary
         ? `linear-gradient(
     to right top,
-    rgb(249, 170, 80),
-    rgb(241, 116, 58)
+    ${props.theme.color.secondary.light},
+    ${props.theme.color.secondary.dark}
   )`
         : `linear-gradient(
-    to right top,
-    rgb(80, 202, 249),
-    rgb(83, 104, 241)
+            to right top,
+    ${props.theme.color.primary.light},
+    ${props.theme.color.primary.dark},
   )`} !important;
-  ::before {
-    clip: none !important;
-    z-index: -100 !important;
-    transform: scale(1) !important;
-    content: '' !important;
-    position: absolute !important;
-    background: ${(props) =>
-      props.outlined
-        ? props.secondary
-          ? `linear-gradient(
-    to right top,
-    rgb(249, 170, 80),
-    rgb(241, 116, 58)
-  )`
-          : `linear-gradient(
-    to right top,
-    rgba(80, 202, 249, 0.2),
-    rgba(83, 104, 241, 0.2)
-  )`
-        : 'rgba(255, 255, 255, 0.2)'} !important;
-    top: 0 !important;
-    right: 100% !important;
-    z-index: -1 !important;
-    transition: 0.2s ease-in-out !important;
-    width: 101% !important;
-    height: 101% !important;
-  }
+
   :hover {
     box-shadow: 2px 4px 22px -10px rgba(81, 160, 249, 1);
     transform: scale(1.03);

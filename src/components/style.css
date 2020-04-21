@@ -44,21 +44,39 @@ button a:hover {
   --space-lg: 48px;
   --space-xl: 64px;
   --space-xxl: 72px;
+  /* 
+  --main: rgb(48, 155, 255);
+  --main: rgb(21, 146, 196);
 
   --primary-light: rgb(246, 250, 255);
-  --primary: rgb(81, 160, 249);
+  --primary: rgb(81, 182, 249);
   --primary-dark: rgb(45, 67, 92);
   --secondary: rgb(253, 99, 71);
   --button-color: linear-gradient(
-    /* to right top, */
-    rgba(81, 159, 249, 0.671),
-    rgb(81, 160, 249)
+        to right top,
+    rgb(48, 214, 255),
+    rgb(48, 155, 255),
+    rgb(48, 100, 255)
   );
+  */
   --button-color-secondary: linear-gradient(
     to right top,
     rgb(249, 170, 80),
-    rgb(241, 116, 58)
+    rgb(247, 107, 43)
   );
+  --button-color-primary: linear-gradient(
+    to right top,
+    rgb(249, 170, 80),
+    rgb(247, 107, 43)
+  );
+
+  --light: rgb(48, 140, 255);
+  --main: rgb(23, 88, 209);
+  --dark: rgb(18, 60, 190);
+
+  --light: #fab86c;
+  --main: #f9853a;
+  --dark: #f76b2b;
 }
 
 body {
@@ -120,7 +138,8 @@ html {
 /* TYPOGRAPHY
 ---------------------------------------- */
 
-html, body {
+html,
+body {
   color: #3a3e44;
   font-family: 'Heebo', sans-serif;
 }
@@ -153,7 +172,9 @@ small {
 .center {
   text-align: center;
   width: 100%;
-  margin: initial auto;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 650px;
 }
 
 h1,

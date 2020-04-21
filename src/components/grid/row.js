@@ -56,7 +56,7 @@ const Row = ({
 const Wrapper = styled.div`
   margin: 0 -${(props) => props.spacingX}px 0 -${(props) => props.spacingX}px;
   width: ${(props) =>
-    props.standardWidth ? '100%' : `calc(100% + ${props.spacingX * 2})`};
+    props.standardWidth ? '100%' : `calc(100% + ${props.spacingX * 2}px)`};
   @media (min-width: ${(props) => props.breakpoint}px) {
     flex-direction: ${(props) =>
       props.flexDirections ? props.flexDirections[0] || 'row' : 'row'};

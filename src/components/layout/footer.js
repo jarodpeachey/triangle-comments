@@ -44,7 +44,7 @@ const Footer = () => {
 
 const FooterWrapper = styled.div`
   width: 100%;
-  background: rgb(81, 160, 249);
+  background: ${props => props.theme.color.primary.main};
   color: white;
 `;
 

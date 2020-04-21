@@ -55,7 +55,7 @@ const Hero = ({ children }) => {
               website.
             </SubTitle>
             <ButtonWrapper>
-              <Button link='/signup'>Get Started</Button>
+              <Button secondary link='/signup'>Get Started</Button>
             </ButtonWrapper>
             <ButtonWrapper>
               <Button outlined link='/'>

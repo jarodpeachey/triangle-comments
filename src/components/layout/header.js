@@ -78,7 +78,10 @@ const Header = ({ siteTitle }) => {
           <Wrapper id='header' open={open} scrolled={scrolled}>
             <div className='container'>
               <Flex>
-                <SiteTitle scrolled={scrolled}>Triangle</SiteTitle>
+                <SiteTitle scrolled={scrolled}>
+                  <FontAwesomeIcon icon='shapes' />
+                  Triangle
+                </SiteTitle>
                 <Menu scrolled={scrolled} />
                 {/* <MobileMenu scrolled={scrolled} /> */}
                 <MobileMenuToggle
@@ -160,20 +163,28 @@ Header.defaultProps = {
 
 const Wrapper = styled.header`
   .container {
-    padding-top: ${(props) => (props.scrolled ? '8px' : '20px')};
-    padding-bottom: ${(props) => (props.scrolled ? '8px' : '20px')};
+    padding-top: 20px;
+    padding-bottom: 20px;
+    transition: all 0.25s ease-out;
   }
-  background: ${(props) =>
-    props.scrolled ? 'rgb(81, 160, 249)' : 'transparent'};
+  background: ${(props) => (props.scrolled ? 'white' : 'transparent')};
   color: ${(props) =>
-    props.scrolled ? 'white' : 'rgb(81, 160, 249)'} !important;
+    props.scrolled
+      ? props.theme.color.primary.main
+      : props.theme.color.primary.main} !important;
   transition-duration: 0.25s;
   transition: all 0.25s ease-out;
   box-shadow: ${(props) =>
     props.open
       ? 'none'
       : props.scrolled
-      ? '1px 0px 60px -5px rgba(81, 160, 249, 0.4)'
+      ? `0 5px 60px -20px ${props.theme.color.primary.light}60`
+      : ''};
+  border-bottom: ${(props) =>
+    props.open
+      ? 'none'
+      : props.scrolled
+      ? `2px solid #e8e8e8`
       : ''};
   position: fixed;
   left: 0;
@@ -191,23 +202,30 @@ const Flex = styled.div`
 
 const SiteTitle = styled.h1`
   margin: 0;
-  text-transform: uppercase;
+    transition: all 0.25s ease-out;
 
-  font-size: ${(props) => (props.scrolled ? '30px' : '36px')};
-  transition-duration: 0.25s;
+  text-transform: uppercase;
+  font-size: ${(props) => (props.scrolled ? '24px' : '30px')};
   z-index: 999;
+  svg {
+    color: ${props => props.theme.color.primary.main} !important;
+    fill: ${props => props.theme.color.primary.main} !important;
+    margin-right: 8px;
+    position: relative;
+    top: -1px;
+  }
 `;
 
 const MobileMenuToggle = styled.div`
   display: none;
   z-index: 9999;
-  width: 35px;
-  height: 35px;
+  width: 30px;
+  height: 30px;
   @media (max-width: 769px) {
     display: block;
   }
   transform: rotate(0deg);
-  transition: 0.5s ease-out;
+  transition:  0.5s ease-out;
   cursor: pointer;
   margin-left: auto;
   position: ${(props) => (props.open ? 'relative' : 'static')};
@@ -215,9 +233,10 @@ const MobileMenuToggle = styled.div`
   span {
     display: block;
     position: absolute;
-    height: 6px;
+    height: 4px;
     width: 100%;
-    background: ${(props) => (props.scrolled ? 'white' : '#3a3e44')} !important;
+    background: ${(props) =>
+      props.scrolled ? props.theme.color.primary.dark : '#3a3e44'} !important;
     border-radius: 9px;
     opacity: 1;
     left: 0;
@@ -227,18 +246,18 @@ const MobileMenuToggle = styled.div`
   }
 
   span:nth-child(1) {
-    top: ${(props) => (props.open ? 'calc(50% - 3px)' : '10%')};
+    top: ${(props) => (props.open ? 'calc(50% - 2px)' : '10%')};
     transform-origin: left center;
   }
   span:nth-child(2) {
-    top: ${(props) => (props.open ? 0 : 'calc(50% - 3px)')};
-    left: ${(props) => (props.open ? 'calc(50% - 3px)' : null)};
-    width: ${(props) => (props.open ? '6px' : null)};
+    top: ${(props) => (props.open ? 0 : 'calc(50% - 2px)')};
+    left: ${(props) => (props.open ? 'calc(50% - 2px)' : null)};
+    width: ${(props) => (props.open ? '4px' : null)};
     height: ${(props) => (props.open ? '100%' : null)};
     transform-origin: left center;
   }
   span:nth-child(3) {
-    top: calc(90% - 6px);
+    top: calc(90% - 4px);
     transform-origin: left center;
     width: ${(props) => (props.open ? 0 : null)};
     opacity: ${(props) => (props.open ? 0 : 1)};

@@ -1,19 +1,22 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Section from '../layout/Section';
 import Row from '../grid/row';
+import { ThemeContext } from '../theme';
 
 const FeaturesSection = ({ data }) => {
+  const theme = useContext(ThemeContext);
+
   return (
-    <Section background='rgb(246, 250, 255)'>
+    <Section>
       <h1 className='center'>Why Triangle?</h1>
       <p className='center'>
         Triangle makes it easy to add comments to a static site, and comes with some awesome features!
       </p>
-      <Row spacing={[12]} breakpoints={[520, 769]}>
-        <Feature widths={[6, 3]}>
-          <FeatureIcon>
+      <Row spacing={[12]} breakpoints={[576, 769, 960]}>
+        <Feature widths={[6, 4, 3]}>
+          <FeatureIcon offsetY={-2} offsetX={4}>
             <FontAwesomeIcon icon='puzzle-piece' />
           </FeatureIcon>
           <FeatureTitle>Drop-in Forms</FeatureTitle>
@@ -21,8 +24,8 @@ const FeaturesSection = ({ data }) => {
             Simply add a form to your site and Triangle takes care of the rest!
           </FeatureSubtitle>
         </Feature>
-        <Feature widths={[6, 3]}>
-          <FeatureIcon>
+        <Feature widths={[6, 4, 3]}>
+          <FeatureIcon offsetY={0} offsetX={1}>
             <FontAwesomeIcon icon='bolt' />
           </FeatureIcon>
           <FeatureTitle>Blazing Fast</FeatureTitle>
@@ -31,7 +34,7 @@ const FeaturesSection = ({ data }) => {
             doesn't slow down your page.
           </FeatureSubtitle>
         </Feature>
-        <Feature widths={[6, 3]}>
+        <Feature widths={[6, 4, 3]}>
           <FeatureIcon>
             <FontAwesomeIcon icon='desktop' />
           </FeatureIcon>
@@ -41,7 +44,7 @@ const FeaturesSection = ({ data }) => {
             settings.
           </FeatureSubtitle>
         </Feature>
-        <Feature widths={[6, 3]}>
+        <Feature widths={[6, 4, 3]}>
           <FeatureIcon>
             <FontAwesomeIcon icon='cog' />
           </FeatureIcon>
@@ -64,8 +67,21 @@ const Feature = styled.div`
 `;
 
 const FeatureIcon = styled.div`
-  font-size: 56px;
-  color: rgb(81, 160, 249);
+  font-size: 34px;
+  width: 70px;
+  height: 70px;
+  border-radius: 70px;
+  display: flex;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+  background: ${props => props.theme.color.primary.backgroundLight};
+  color: ${props => props.theme.color.primary.main};
+  * {
+    position: relative;
+    top: ${props => props.offsetY}px;
+    left: ${props => props.offsetX}px;
+  }
 `;
 
 const FeatureTitle = styled.h4`
