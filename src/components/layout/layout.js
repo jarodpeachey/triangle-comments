@@ -46,7 +46,7 @@ const Layout = (props) => {
       <AppProvider>
         <AuthProvider>
           <Header siteTitle={props.title} />
-          <div id='blur'>
+          <div>
             {!pathnameIncludes('/signup') && !pathnameIncludes('/login') && (
               <ContentWrapper />
             )}

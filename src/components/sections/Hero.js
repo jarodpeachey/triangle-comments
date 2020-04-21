@@ -46,32 +46,34 @@ const Hero = ({ children }) => {
         }}
       /> */}
       <BackgroundImage heroImage={heroImageTwo} />
-      <MainWrapper>
-        <HeroContainer>
-          <ChildContainer className='container'>
-            <Title>
-              The simplest way to add comments to your static website.
-            </Title>
-            <SubTitle>
-              The simplest, easiest and best way to add comments to a static
-              website.
-            </SubTitle>
-            <ButtonFlex>
-              <ButtonWrapper>
-                <Button secondary link='/signup'>
-                  Get Started
-                </Button>
-              </ButtonWrapper>
-              <ButtonWrapper>
-                <Button outlined link='/'>
-                  Learn More
-                </Button>
-              </ButtonWrapper>
-            </ButtonFlex>
-          </ChildContainer>
-        </HeroContainer>
-        {/* </BackgroundImage> */}
-      </MainWrapper>
+      <div id='blur'>
+        <MainWrapper>
+          <HeroContainer>
+            <ChildContainer className='container'>
+              <Title>
+                The simplest way to add comments to your static website.
+              </Title>
+              <SubTitle>
+                The simplest, easiest and best way to add comments to a static
+                website.
+              </SubTitle>
+              <ButtonFlex>
+                <ButtonWrapper>
+                  <Button secondary link='/signup'>
+                    Get Started
+                  </Button>
+                </ButtonWrapper>
+                <ButtonWrapper>
+                  <Button outlined link='/'>
+                    Learn More
+                  </Button>
+                </ButtonWrapper>
+              </ButtonFlex>
+            </ChildContainer>
+          </HeroContainer>
+          {/* </BackgroundImage> */}
+        </MainWrapper>
+      </div>
       {/* // ); */}
       {/* // }} */}
       {/* // /> */}

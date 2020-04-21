@@ -18,70 +18,72 @@ const Account = () => {
   const { signedIn, user } = useContext(AuthContext);
 
   return (
-    <Section>
-      {signedIn && user ? (
-        <Row breakpoints={[900]} spacing={[18, 18]}>
-          <div widths={[3]}>
-            <Tabs>
-              <Tab
-                active={
-                  (typeof window !== 'undefined' &&
-                    window.location.pathname === '/account') ||
-                  window.location.pathname === '/account/'
-                }
-                to='/account'
-              >
-                <FontAwesomeIcon icon='home' />
-                General
-              </Tab>
-              <Tab
-                active={
-                  typeof window !== 'undefined' &&
-                  window.location.pathname.includes('/account/settings')
-                }
-                to='/account/settings'
-              >
-                <FontAwesomeIcon icon='cog' />
-                Settings
-              </Tab>
-              <Tab
-                active={
-                  typeof window !== 'undefined' &&
-                  window.location.pathname.includes('/account/billing')
-                }
-                to='/account/billing'
-              >
-                <FontAwesomeIcon icon='dollar-sign' />
-                Billing
-              </Tab>
-            </Tabs>
-          </div>
-          <div widths={[9]}>
-            <Router>
-              <AccountHome path='/account' />
-              <AccountSettings path='/account/settings' />
-              <AccountBilling path='/account/billing' />
-            </Router>
-          </div>
-        </Row>
-      ) : (
-        <Card>
-          <h1>
-            This page is top-secret!
-            <span aria-label='Shushing Emoji' role='img'>
-              🤫
-            </span>
-          </h1>
-          <p>
-            This page is only available to Triangle users. You can join the club
-            by signing up for an account.
-          </p>
-          <Button link='/signup' secondary>
-            Let's Go!
-          </Button>
-        </Card>
-      )}
-    </Section>
+    <div id='blur'>
+      <Section>
+        {signedIn && user ? (
+          <Row breakpoints={[900]} spacing={[18, 18]}>
+            <div widths={[3]}>
+              <Tabs>
+                <Tab
+                  active={
+                    (typeof window !== 'undefined' &&
+                      window.location.pathname === '/account') ||
+                    window.location.pathname === '/account/'
+                  }
+                  to='/account'
+                >
+                  <FontAwesomeIcon icon='home' />
+                  General
+                </Tab>
+                <Tab
+                  active={
+                    typeof window !== 'undefined' &&
+                    window.location.pathname.includes('/account/settings')
+                  }
+                  to='/account/settings'
+                >
+                  <FontAwesomeIcon icon='cog' />
+                  Settings
+                </Tab>
+                <Tab
+                  active={
+                    typeof window !== 'undefined' &&
+                    window.location.pathname.includes('/account/billing')
+                  }
+                  to='/account/billing'
+                >
+                  <FontAwesomeIcon icon='dollar-sign' />
+                  Billing
+                </Tab>
+              </Tabs>
+            </div>
+            <div widths={[9]}>
+              <Router>
+                <AccountHome path='/account' />
+                <AccountSettings path='/account/settings' />
+                <AccountBilling path='/account/billing' />
+              </Router>
+            </div>
+          </Row>
+        ) : (
+          <Card>
+            <h1>
+              This page is top-secret!
+              <span aria-label='Shushing Emoji' role='img'>
+                🤫
+              </span>
+            </h1>
+            <p>
+              This page is only available to Triangle users. You can join the
+              club by signing up for an account.
+            </p>
+            <Button link='/signup' secondary>
+              Let's Go!
+            </Button>
+          </Card>
+        )}
+      </Section>
+    </div>
   );
 };
 
