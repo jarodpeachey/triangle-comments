@@ -56,6 +56,7 @@ const AuthForm = () => {
 
     setLoading(true);
     setShowForm(false);
+    setMessage('Processing...');
 
     auth
       .signup(email, password, data)

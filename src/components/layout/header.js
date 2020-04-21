@@ -78,12 +78,14 @@ const Header = ({ siteTitle }) => {
           <Wrapper id='header' open={open} scrolled={scrolled}>
             <div className='container'>
               <Flex>
-                <SiteTitle className='logo' scrolled={scrolled}>
-                  Triangle
-                </SiteTitle>
+                <SiteTitle scrolled={scrolled}>Triangle</SiteTitle>
                 <Menu scrolled={scrolled} />
                 {/* <MobileMenu scrolled={scrolled} /> */}
-                <MobileMenuToggle onClick={toggleFunction} open={open}>
+                <MobileMenuToggle
+                  scrolled={scrolled}
+                  onClick={toggleFunction}
+                  open={open}
+                >
                   <MobileMenuRotate open={open}>
                     <span />
                     <span />
@@ -161,9 +163,10 @@ const Wrapper = styled.header`
     padding-top: ${(props) => (props.scrolled ? '8px' : '20px')};
     padding-bottom: ${(props) => (props.scrolled ? '8px' : '20px')};
   }
-  background: ${(props) => (props.scrolled ? 'white' : 'transparent')};
+  background: ${(props) =>
+    props.scrolled ? 'rgb(81, 160, 249)' : 'transparent'};
   color: ${(props) =>
-    props.scrolled ? 'inherit' : 'rgb(81, 160, 249)'} !important;
+    props.scrolled ? 'white' : 'rgb(81, 160, 249)'} !important;
   transition-duration: 0.25s;
   transition: all 0.25s ease-out;
   box-shadow: ${(props) =>
@@ -179,7 +182,6 @@ const Wrapper = styled.header`
   bottom: auto;
   z-index: 999;
   max-height: 80px;
-  background: white !important;
 `;
 
 const Flex = styled.div`
@@ -190,8 +192,8 @@ const Flex = styled.div`
 const SiteTitle = styled.h1`
   margin: 0;
   text-transform: uppercase;
-  margin-bottom: -8px;
-  font-size: ${(props) => (props.scrolled ? '32px' : '40px')};
+
+  font-size: ${(props) => (props.scrolled ? '30px' : '36px')};
   transition-duration: 0.25s;
   z-index: 999;
 `;
@@ -215,7 +217,7 @@ const MobileMenuToggle = styled.div`
     position: absolute;
     height: 6px;
     width: 100%;
-    background: #3e4348;
+    background: ${(props) => (props.scrolled ? 'white' : '#3a3e44')} !important;
     border-radius: 9px;
     opacity: 1;
     left: 0;

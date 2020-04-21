@@ -19,7 +19,7 @@ const Button = ({
   link,
 }) => {
   return (
-    <>
+    <span>
       {link ? (
         <Link className='no-styling' to={link}>
           <StyledButton
@@ -54,7 +54,7 @@ const Button = ({
           {children}
         </StyledButton>
       )}
-    </>
+    </span>
   );
 };
 

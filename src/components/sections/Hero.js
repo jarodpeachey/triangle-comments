@@ -15,7 +15,7 @@ const Hero = ({ children }) => {
   // });
 
   return (
-    <>
+    <span>
       {/* // <StaticQuery */}
       {/* query={graphql`
         query {
@@ -47,7 +47,9 @@ const Hero = ({ children }) => {
       <MainWrapper>
         <HeroContainer>
           <ChildContainer className='container'>
-            <Title>COMMENTS DONE RIGHT</Title>
+            <Title>
+              The simplest way to add comments to your static website.
+            </Title>
             <SubTitle>
               The simplest, easiest and best way to add comments to a static
               website.
@@ -67,13 +69,13 @@ const Hero = ({ children }) => {
       {/* // ); */}
       {/* // }} */}
       {/* // /> */}
-    </>
+    </span>
   );
 };
 
 const MainWrapper = styled.div`
   // padding-top: 64px;
-  height: 100vh;
+  // height: 100vh;
   display: flex;
   align-items: center;
   margin-top: -60px;
@@ -91,17 +93,24 @@ const HeroContainer = styled.div`
 
 const ChildContainer = styled.div`
   margin-top: 0;
+  padding-top: 120px !important;
+  padding-bottom: 0px !important;
 `;
 
 const Title = styled.h1`
-  font-weight: 900;
-  font-size: 48px;
-  font-family: 'overpass', sans-serif !important;
+  font-size: 38px;
+  @media (min-width: 769px) {
+    font-size: 44px;
+  }
+  // font-family: 'overpass', sans-serif !important;
   margin-bottom: 16px;
+  max-width: 550px;
 `;
 
-const SubTitle = styled.h2`
-  color: rgba(81, 160, 249, 0.4);
+const SubTitle = styled.p`
+  // color: rgba(81, 160, 249, 0.4);
+  font-size: 26px;
+  max-width: 550px;
 `;
 
 const ButtonWrapper = styled.div`

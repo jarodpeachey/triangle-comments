@@ -55,7 +55,7 @@ const FooterTitle = styled.div`
   height: 50px;
   h2 {
     margin: 0;
-    margin-bottom: -8px;
+    
   }
 `;
 
