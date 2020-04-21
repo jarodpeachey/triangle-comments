@@ -12,7 +12,6 @@
 
 #blur {
   transition: all 0.25s ease-in-out;
-  min-height: 100vh;
   max-height: 99999999999999999px !important;
 }
 

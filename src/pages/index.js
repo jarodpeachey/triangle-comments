@@ -46,8 +46,8 @@ const IndexPage = ({ data }) => {
           style={{
             transform: 'scaleX(-1)',
             position: 'relative',
-            top: '-90px',
-            marginTop: 20,
+            top: 0,
+            // marginTop: 20,
             marginBottom: `-5vw`,
           }}
           xmlns='http://www.w3.org/2000/svg'
