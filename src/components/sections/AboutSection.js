@@ -9,7 +9,7 @@ const AboutSection = ({ data }) => {
   const theme = useContext(ThemeContext);
 
   return (
-    <div style={{ position: 'relative', top: '-90px' }}>
+    <div style={{ position: 'relative', top: '-90px', marginBottom: '-90px' }}>
       <Section background='white'>
         <h1 className='center'>
           Drop-in commenting system built for speed and customization.
