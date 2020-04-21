@@ -167,7 +167,7 @@ const Wrapper = styled.header`
     padding-bottom: ${props => props.scrolled ? '18px' : '32px'};
     transition: all 0.25s ease-in;
   }
-  background: ${(props) => (props.scrolled ? 'white' : 'transparent')};
+  background: ${(props) => (props.open ? 'white' : props.scrolled ? 'white' : 'transparent')};
   color: ${(props) =>
     props.scrolled
       ? props.theme.color.primary.light

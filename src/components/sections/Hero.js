@@ -33,7 +33,7 @@ const Hero = ({ children }) => {
     Extract imageData.
     const imageData = data.desktop.childImageSharp.fluid; */}
       {/* return ( */}
-      <div
+      {/* <div
         style={{
           backgroundImage: `url(${heroImage})`,
           position: 'absolute',
@@ -44,21 +44,8 @@ const Hero = ({ children }) => {
           opacity: 1,
           backgroundRepeat: 'repeat',
         }}
-      />
-      <div
-        style={{
-          backgroundImage: `url(${heroImageTwo})`,
-          position: 'absolute',
-          top: 0,
-          zIndex: -5,
-          height: '110%',
-          width: '100%',
-          opacity: 1,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-        }}
-      />
+      /> */}
+      <BackgroundImage heroImage={heroImageTwo} />
       <MainWrapper>
         <HeroContainer>
           <ChildContainer className='container'>
@@ -69,14 +56,18 @@ const Hero = ({ children }) => {
               The simplest, easiest and best way to add comments to a static
               website.
             </SubTitle>
-            <ButtonWrapper>
-              <Button secondary link='/signup'>Get Started</Button>
-            </ButtonWrapper>
-            <ButtonWrapper>
-              <Button outlined link='/'>
-                Learn More
-              </Button>
-            </ButtonWrapper>
+            <ButtonFlex>
+              <ButtonWrapper>
+                <Button secondary link='/signup'>
+                  Get Started
+                </Button>
+              </ButtonWrapper>
+              <ButtonWrapper>
+                <Button outlined link='/'>
+                  Learn More
+                </Button>
+              </ButtonWrapper>
+            </ButtonFlex>
           </ChildContainer>
         </HeroContainer>
         {/* </BackgroundImage> */}
@@ -87,6 +78,23 @@ const Hero = ({ children }) => {
     </span>
   );
 };
+
+const BackgroundImage = styled.div`
+  background-image: url(${(props) => props.heroImage});
+  position: absolute;
+  top: 0;
+  z-index: -5;
+  height: 110%;
+  width: 100%;
+  opacity: 1;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  @media (min-width: 769px) {
+    background-position: right center;
+  }
+  transition-duration: 0.5s;
+`;
 
 const MainWrapper = styled.div`
   // padding-top: 64px;
@@ -128,16 +136,19 @@ const SubTitle = styled.p`
   max-width: 550px;
 `;
 
-const ButtonWrapper = styled.div`
-  @media (max-width: 520px) {
-    width: 100%;
+const ButtonFlex = styled.div`
+  margin: 0 -8px;
+  @media (min-width: 520px) {
     display: flex;
+    align-items: center;
     justify-content: flex-start;
+    width: 100%;
   }
-  padding: 8px 18px !important;
-  margin-left: -18px;
-  width: fit-content;
-  display: inline-block;
+  padding-bottom: 12px;
+`;
+
+const ButtonWrapper = styled.div`
+  padding: 8px !important;
   button {
     margin: 0 !important;
   }

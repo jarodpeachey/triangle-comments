@@ -15,10 +15,10 @@ import { ThemeContext } from '../components/theme';
 
 const IndexPage = ({ data }) => {
   const { auth, user } = useContext(AuthContext);
-  
+
   const theme = useContext(ThemeContext);
 
-  console.log(theme);
+  console.log('User: ', user);
 
   const [parsedHash, setParsedHash] = useState('');
 
@@ -30,8 +30,8 @@ const IndexPage = ({ data }) => {
   if (parsedHash.confirmation_token) {
     auth
       .confirm(parsedHash.confirmation_token)
-      .then((user) => {
-        console.log(user);
+      .then((data) => {
+        console.log('Success! Data is: ', data);
         // window.location.href = '/account';
       })
       .catch((err) => {
@@ -46,6 +46,7 @@ const IndexPage = ({ data }) => {
           transform: 'scaleX(-1)',
           position: 'relative',
           top: '6px',
+          marginTop: 20,
           marginBottom: `-5vw`,
         }}
         xmlns='http://www.w3.org/2000/svg'

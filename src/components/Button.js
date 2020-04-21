@@ -120,7 +120,7 @@ const StyledButton = styled.button`
   )`} !important;
 
   :hover {
-    box-shadow: 2px 4px 22px -10px rgba(81, 160, 249, 1);
+    box-shadow: 2px 4px 22px -10px ${props => props.secondary ? `${props.theme.color.secondary.main}90` : `${props.theme.color.primary.main}90`};
     transform: scale(1.03);
   }
   // :active ::before {
