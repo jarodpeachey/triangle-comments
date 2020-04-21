@@ -4,6 +4,7 @@ import { graphql, StaticQuery } from 'gatsby';
 import styled from 'styled-components';
 import Button from '../Button';
 import heroImage from '../../images/hero.png';
+import heroImageTwo from '../../images/heroTwo.png';
 
 const Hero = ({ children }) => {
   const [scrollValue, setScrollValue] = useState(0);
@@ -42,6 +43,20 @@ const Hero = ({ children }) => {
           width: '100%',
           opacity: 1,
           backgroundRepeat: 'repeat',
+        }}
+      />
+      <div
+        style={{
+          backgroundImage: `url(${heroImageTwo})`,
+          position: 'absolute',
+          top: 0,
+          zIndex: -5,
+          height: '110%',
+          width: '100%',
+          opacity: 1,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
         }}
       />
       <MainWrapper>

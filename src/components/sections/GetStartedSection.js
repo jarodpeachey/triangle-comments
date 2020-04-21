@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Section from '../layout/Section';
 import Button from '../Button';
+import { ThemeContext } from '../theme';
 
 const GetStartedSection = ({ data }) => {
+  const theme = useContext(ThemeContext);
+
   return (
     <Section
+      dark
       center
       title='Try It Out'
       subtitle='Triangle is the simplest, most intuive commenting system built specifically with static websites in mind.'

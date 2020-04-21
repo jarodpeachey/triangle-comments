@@ -163,17 +163,17 @@ Header.defaultProps = {
 
 const Wrapper = styled.header`
   .container {
-    padding-top: 20px;
-    padding-bottom: 20px;
-    transition: all 0.25s ease-out;
+    padding-top: ${props => props.scrolled ? '18px' : '32px'};
+    padding-bottom: ${props => props.scrolled ? '18px' : '32px'};
+    transition: all 0.25s ease-in;
   }
   background: ${(props) => (props.scrolled ? 'white' : 'transparent')};
   color: ${(props) =>
     props.scrolled
-      ? props.theme.color.primary.main
-      : props.theme.color.primary.main} !important;
+      ? props.theme.color.primary.light
+      : props.theme.color.primary.light} !important;
   transition-duration: 0.25s;
-  transition: all 0.25s ease-out;
+  transition: all 0.25s ease-in;
   box-shadow: ${(props) =>
     props.open
       ? 'none'
@@ -182,10 +182,10 @@ const Wrapper = styled.header`
       : ''};
   border-bottom: ${(props) =>
     props.open
-      ? 'none'
+      ? '2px solid #e8e8e8'
       : props.scrolled
       ? `2px solid #e8e8e8`
-      : ''};
+      : '2px solid transparent'};
   position: fixed;
   left: 0;
   top: 0;
@@ -202,10 +202,13 @@ const Flex = styled.div`
 
 const SiteTitle = styled.h1`
   margin: 0;
-    transition: all 0.25s ease-out;
-
+  transition: all 0.25s ease-in;
+  letter-spacing: 3px;
   text-transform: uppercase;
-  font-size: ${(props) => (props.scrolled ? '24px' : '30px')};
+  font-size: 22px;
+  @media(min-width: 769px) {
+    font-size: 26px;
+  }
   z-index: 999;
   svg {
     color: ${props => props.theme.color.primary.main} !important;
@@ -225,7 +228,7 @@ const MobileMenuToggle = styled.div`
     display: block;
   }
   transform: rotate(0deg);
-  transition:  0.5s ease-out;
+  transition: all 0.25s ease-in;
   cursor: pointer;
   margin-left: auto;
   position: ${(props) => (props.open ? 'relative' : 'static')};
@@ -235,8 +238,7 @@ const MobileMenuToggle = styled.div`
     position: absolute;
     height: 4px;
     width: 100%;
-    background: ${(props) =>
-      props.scrolled ? props.theme.color.primary.dark : '#3a3e44'} !important;
+    background: ${(props) => props.theme.color.text.heading};
     border-radius: 9px;
     opacity: 1;
     left: 0;
@@ -288,7 +290,6 @@ const MobileMenu = styled.div`
   width: 100%;
   transition: ${(props) =>
     props.open ? 'all 0.25s ease-out' : 'all 0.6s ease-out'};
-  border-top: ${(props) => (props.open ? '2px solid #f7f7f7' : 'none')};
   box-shadow: none;
   border-bottom: 1px solid #e8e8e8;
 

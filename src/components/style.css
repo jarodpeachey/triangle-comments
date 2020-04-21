@@ -44,6 +44,7 @@ button a:hover {
   --space-lg: 48px;
   --space-xl: 64px;
   --space-xxl: 72px;
+
   /* 
   --main: rgb(48, 155, 255);
   --main: rgb(21, 146, 196);
@@ -69,6 +70,8 @@ button a:hover {
     rgb(249, 170, 80),
     rgb(247, 107, 43)
   );
+
+  
 
   --light: rgb(48, 140, 255);
   --main: rgb(23, 88, 209);

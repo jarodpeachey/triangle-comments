@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled, { css } from 'styled-components';
+import { ThemeContext } from '../theme';
 
 const Section = ({
   fullHeight,
@@ -8,13 +9,24 @@ const Section = ({
   title,
   subtitle,
   center,
-  customStyles
+  customStyles,
+  dark,
+  light,
 }) => {
+  const theme = useContext(ThemeContext);
+
   return (
-    <StyledSection customStyles={customStyles} fullHeight={fullHeight} center={center} color={background}>
+    <StyledSection
+      customStyles={customStyles}
+      fullHeight={fullHeight}
+      center={center}
+      dark={dark}
+      light={light}
+      color={dark ? theme.color.primary.backgroundDark : light ? theme.color.primary.backgroundLight : background || 'white'}
+    >
       <div className='container'>
-        {title && <Title>{title}</Title>}
-        {subtitle && <SubTitle>{subtitle}</SubTitle>}
+        {title && <Title dark={dark}>{title}</Title>}
+        {subtitle && <SubTitle dark={dark}>{subtitle}</SubTitle>}
         {children}
       </div>
     </StyledSection>
@@ -22,14 +34,16 @@ const Section = ({
 };
 
 const Title = styled.h2`
-  margin-top: 0;
+  color: ${props => props.dark ? 'white' : props.theme.color.text.heading};
 `;
 
-const SubTitle = styled.p``;
+const SubTitle = styled.p`
+  color: ${props => props.dark ? props.theme.color.text.light : props.theme.color.text.dark};
+`;
 
 const StyledSection = styled.section`
   text-align: ${(props) => (props.center ? 'center' : 'inherit')};
-  background: ${(props) => props.color || 'white'};
+  background: ${(props) => props.color};
   ${(props) =>
     props.fullHeight &&
     css`
@@ -45,7 +59,7 @@ const StyledSection = styled.section`
         align-items: center;
       }
     `}
-  ${props => props.customStyles}
+  ${(props) => props.customStyles}
 `;
 
 export default Section;

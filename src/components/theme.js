@@ -3,6 +3,11 @@ import React from 'react';
 
 export const theme = {
   color: {
+    text: {
+      light: '#989fa7',
+      dark: '#626f7f',
+      heading: '#3a3e44',
+    },
     primary: {
       backgroundLight: '#f6faff',
       text: '#0e3d69',

@@ -12,7 +12,8 @@ const FeaturesSection = ({ data }) => {
     <Section>
       <h1 className='center'>Why Triangle?</h1>
       <p className='center'>
-        Triangle makes it easy to add comments to a static site, and comes with some awesome features!
+        Triangle makes it easy to add comments to a static site, and comes with
+        some awesome features!
       </p>
       <Row spacing={[12]} breakpoints={[576, 769, 960]}>
         <Feature widths={[6, 4, 3]}>
@@ -75,12 +76,12 @@ const FeatureIcon = styled.div`
   margin: 0 auto;
   align-items: center;
   justify-content: center;
-  background: ${props => props.theme.color.primary.backgroundLight};
-  color: ${props => props.theme.color.primary.main};
+  background: ${(props) => props.theme.color.primary.backgroundLight};
+  color: ${(props) => props.theme.color.primary.main};
   * {
     position: relative;
-    top: ${props => props.offsetY}px;
-    left: ${props => props.offsetX}px;
+    top: ${(props) => props.offsetY}px;
+    left: ${(props) => props.offsetX}px;
   }
 `;
 

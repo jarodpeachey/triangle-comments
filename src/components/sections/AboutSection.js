@@ -9,7 +9,7 @@ const AboutSection = ({ data }) => {
   const theme = useContext(ThemeContext);
 
   return (
-    <Section background={theme.color.primary.backgroundLight}>
+    <Section>
       <h1 className='center'>
         Drop-in commenting system built for speed and customization.
       </h1>
