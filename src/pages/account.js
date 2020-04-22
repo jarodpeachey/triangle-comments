@@ -8,7 +8,7 @@ import Section from '../components/layout/Section';
 import AccountHome from '../components/account/AccountHome';
 import AccountSettings from '../components/account/AccountSettings';
 import AccountBilling from '../components/account/AccountBilling';
-import Row from '../components/grid/row';
+import Row from '../components/grid/Row';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AuthContext } from '../providers/AuthProvider';
 import Card from '../components/Card';

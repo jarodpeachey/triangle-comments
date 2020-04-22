@@ -16,8 +16,8 @@ import {
   faDollarSign,
 } from '@fortawesome/free-solid-svg-icons';
 import { fab, faLinkedin, faGithub } from '@fortawesome/free-brands-svg-icons';
-import Footer from './footer';
-import Header from './header';
+import Footer from './Footer';
+import Header from './Header';
 import { AuthProvider } from '../../providers/AuthProvider';
 import { AppProvider } from '../../providers/AppProvider';
 import { pathnameIncludes } from '../../utils/pathnameIncludes';

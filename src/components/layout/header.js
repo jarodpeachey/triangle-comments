@@ -10,7 +10,7 @@ import Menu from './Menu';
 // import MobileMenu from './MobileMenu';
 import { AppContext } from '../../providers/AppProvider';
 import Button from '../Button';
-import Row from '../grid/row';
+import Row from '../grid/Row';
 import { AuthContext } from '../../providers/AuthProvider';
 
 const Header = ({ siteTitle }) => {

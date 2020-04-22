@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Link } from 'gatsby';
 import headerImage from '../../images/hero.png';
 import Button from '../Button';
-import Row from '../grid/row';
+import Row from '../grid/Row';
 import { AuthContext } from '../../providers/AuthProvider';
 import Section from '../layout/Section';
 

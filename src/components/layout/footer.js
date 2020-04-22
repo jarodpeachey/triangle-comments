@@ -2,7 +2,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
-import Row from '../grid/row';
+import Row from '../grid/Row';
 
 const Footer = () => {
   return (

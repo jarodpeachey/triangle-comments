@@ -9,7 +9,7 @@ const Column = ({
   breakpoints,
   widths,
   maxColumnSize,
-  demo
+  demo,
 }) => {
   return (
     <Wrapper
@@ -43,7 +43,7 @@ const Column = ({
 const Demo = styled.div`
   width: 100%;
   height: 100px;
-  background: ${props => props.theme.color.primary};
+  background: ${(props) => props.theme.color.primary};
   color: white;
   border-radius: 4px;
   display: flex;
@@ -55,16 +55,16 @@ const Demo = styled.div`
 const Info = styled.div``;
 
 const Wrapper = styled.div`
-  // min-width: ${props => (props.maxColumnSize / 12) * 100}% !important;
+  // min-width: ${(props) => (props.maxColumnSize / 12) * 100}% !important;
   width: 100%;
-  padding: ${props => props.spacingY}px ${props => props.spacingX}px;
+  padding: ${(props) => props.spacingY}px ${(props) => props.spacingX}px;
 
-  ${props =>
+  ${(props) =>
     props.widthOne !== 'auto'
       ? `
-    @media (min-width: ${
-      props.breakpointOne
-    }px) and (max-width: ${props.breakpointTwo || 9999}px) {
+    @media (min-width: ${props.breakpointOne}px) and (max-width: ${
+          props.breakpointTwo || 9999
+        }px) {
     width: ${(props.widthOne / 12) * 100}% !important;
     padding: ${props.spacingY}px ${props.spacingX}px !important;
     margin: 0 !important;
@@ -74,7 +74,7 @@ const Wrapper = styled.div`
   `
       : ''}
 
-  ${props =>
+  ${(props) =>
     props.widthTwo !== 'auto'
       ? `
         @media (min-width: ${props.breakpointTwo}px) {
@@ -87,7 +87,7 @@ const Wrapper = styled.div`
       `
       : ''}
 
-  ${props =>
+  ${(props) =>
     props.widthThree !== 'auto'
       ? `
         @media (min-width: ${props.breakpointThree}px) {
@@ -100,7 +100,7 @@ const Wrapper = styled.div`
       `
       : ''}
 
-  ${props =>
+  ${(props) =>
     props.widthOne === 'auto'
       ? `
     @media (min-width: ${props.breakpointOne}px) and (max-width: ${
@@ -113,7 +113,7 @@ const Wrapper = styled.div`
   `
       : ''}
 
-  ${props =>
+  ${(props) =>
     props.widthTwo === 'auto'
       ? `
     @media (min-width: ${props.breakpointTwo}px) {
@@ -127,7 +127,7 @@ const Wrapper = styled.div`
 
 Column.propTypes = {
   breakpoint: PropTypes.number,
-  spacing: PropTypes.number
+  spacing: PropTypes.number,
 };
 
 export default Column;

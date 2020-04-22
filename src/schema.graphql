@@ -1,0 +1,45 @@
+type User {
+  userID: ID
+  name: String
+  firstName: String
+  lastName: String
+  email: String
+  billing: BillingData
+  form: FormData
+  comments: [Comment]!
+}
+
+type BillingData  {
+  paidLastInvoice: Boolean
+  lastInvoiceDate: String
+  plan: PlanData
+}
+
+type PlanData {
+  planID: String
+  name: String
+  costPerMonth: Float
+}
+
+type FormData {
+  color: String
+  template: String
+  buttonCSS: String
+  inputCSS: String
+  commentCSS: String
+}
+
+type CommentData {
+  name: String
+  email: String
+  comment: String
+}
+
+type Comment {
+  commentID: ID
+  data: CommentData
+  date: String
+  path: String
+  parentCommentID: ID
+  userID: User
+}
