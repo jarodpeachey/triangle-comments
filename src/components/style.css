@@ -172,6 +172,7 @@ html,
 body {
   color: #3a3e44;
   font-family: 'Heebo', sans-serif;
+  overflow-x: hidden;
 }
 
 p,

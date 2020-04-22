@@ -2,7 +2,7 @@
 import React, { useContext } from 'react';
 import { Router } from '@reach/router';
 import { Link } from 'gatsby';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import Layout from '../components/layout/layout';
 import Section from '../components/layout/Section';
 import AccountHome from '../components/account/AccountHome';
@@ -115,7 +115,7 @@ const Tab = styled(Link)`
   svg {
     margin-right: 8px;
     color: ${(props) =>
-      props.active ? props.theme.color.primary.dark : 'inherit'};
+      props.active ? props.theme.color.primary.main : 'inherit'};
   }
   text-decoration: none;
   @media (min-width: 900px) {

@@ -2,7 +2,7 @@
 import React, { useContext } from 'react';
 import { Router } from '@reach/router';
 import { Link } from 'gatsby';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import Card from '../Card';
 import { AuthContext } from '../../providers/AuthProvider';
 import Button from '../Button';
@@ -12,7 +12,7 @@ const AccountHome = () => {
   const { user } = useContext(AuthContext);
 
   return (
-    <span>
+    <SlideWrapper>
       <h2 className='mt-none'>Account Info</h2>
       <Card title='Personal Info'>
         <p className='small m-none'>Name: {user.user_metadata.name}</p>
@@ -31,8 +31,23 @@ const AccountHome = () => {
           More
         </Button>
       </Card>
-    </span>
+    </SlideWrapper>
   );
 };
+
+
+const animation = keyframes`
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+`;
+
+const SlideWrapper = styled.div`
+  animation: ${animation} 250ms ease-out;
+`;
+
 
 export default AccountHome;
