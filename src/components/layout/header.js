@@ -66,7 +66,7 @@ const Header = ({ siteTitle }) => {
               <Flex>
                 <SiteTitle scrolled={scrolled}>
                   <FontAwesomeIcon icon='shapes' />
-                  Triangle
+                  StaticChat
                 </SiteTitle>
                 <Menu scrolled={scrolled} />
                 {/* <MobileMenu scrolled={scrolled} /> */}

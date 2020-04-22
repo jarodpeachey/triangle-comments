@@ -185,7 +185,7 @@ const AuthForm = () => {
               ) : (
                 <>
                   <Card>
-                    <Title className='logo'>TRIANGLE</Title>
+                    <Title className='logo'>StaticChat</Title>
                     <Tabs>
                       <Tab
                         onClick={() => {

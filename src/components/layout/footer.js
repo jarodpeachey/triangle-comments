@@ -15,7 +15,7 @@ const Footer = () => {
             <Row spacing={[12, 0]} breakpoints={[1]}>
               <div widths={[6]}>
                 <FooterTitle>
-                  <h2 className='logo'>Triangle</h2>
+                  <h2 className='logo'>StaticChat</h2>
                 </FooterTitle>
               </div>
               <FooterMenu widths={[6]}>
@@ -44,7 +44,7 @@ const Footer = () => {
 
 const FooterWrapper = styled.div`
   width: 100%;
-  background: ${props => props.theme.color.primary.main};
+  background: ${props => props.theme.color.primary.backgroundDark};
   color: white;
 `;
 

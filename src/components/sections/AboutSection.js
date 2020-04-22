@@ -15,7 +15,7 @@ const AboutSection = ({ data }) => {
           Drop-in commenting system built for speed and customization.
         </h1>
         <p className='center'>
-          Triangle takes care of everything. Simply customize your comment form,
+          StaticChat takes care of everything. Simply customize your comment form,
           copy the code and paste it wherever you want in your site.
         </p>
       </Section>

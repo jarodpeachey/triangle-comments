@@ -54,8 +54,7 @@ const Hero = ({ children }) => {
                 The simplest way to add comments to your static website.
               </Title>
               <SubTitle>
-                The simplest, easiest and best way to add comments to a static
-                website.
+                A uniquely different commenting system that lets you customize fast, and loads even faster.
               </SubTitle>
               <ButtonFlex>
                 <ButtonWrapper>
