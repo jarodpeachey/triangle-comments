@@ -3,12 +3,17 @@ import { StylesProvider } from './src/providers/StylesProvider';
 import Layout from './src/components/layout/layout';
 import { DatabaseProvider } from './src/providers/DatabaseProvider';
 import { AuthProvider } from './src/providers/AuthProvider';
+import { AppProvider } from './src/providers/AppProvider';
 
 export const wrapRootElement = ({ element }) => {
+  console.log(element);
+
   return (
     <AuthProvider>
       <DatabaseProvider>
-        <StylesProvider>{element}</StylesProvider>
+        <AppProvider>
+          <StylesProvider>{element}</StylesProvider>
+        </AppProvider>
       </DatabaseProvider>
     </AuthProvider>
   );

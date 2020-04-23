@@ -6,6 +6,8 @@ import { AuthProvider } from './src/providers/AuthProvider';
 import { AppProvider } from './src/providers/AppProvider';
 
 export const wrapRootElement = ({ element }) => {
+  console.log(element);
+
   return (
     <AuthProvider>
       <DatabaseProvider>
