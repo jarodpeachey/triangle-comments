@@ -46,6 +46,8 @@ const FooterWrapper = styled.div`
   width: 100%;
   background: ${props => props.theme.color.primary.backgroundDark};
   color: white;
+  display: block;
+  margin-top: auto;
 `;
 
 const FooterTitle = styled.div`

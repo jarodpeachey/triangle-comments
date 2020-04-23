@@ -7,11 +7,15 @@ import Button from '../Button';
 import Row from '../grid/Row';
 import { AuthContext } from '../../providers/AuthProvider';
 import Section from '../layout/Section';
+import { DatabaseContext } from '../../providers/DatabaseProvider';
+import { ThemeContext } from '../theme';
 
 // Instantiate the GoTrue auth client with an optional configuration
 
 const AuthForm = () => {
   const { signedIn, auth } = useContext(AuthContext);
+  const { q, serverClient } = useContext(DatabaseContext);
+  const theme = useContext(ThemeContext);
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(true);
   const [message, setMessage] = useState('Processing...');
@@ -63,10 +67,50 @@ const AuthForm = () => {
       .then((response) => {
         console.log(response);
 
-        setLoading(false);
-        setMessage(
-          "We've sent a confirmation email to you. Please open it and click the link to verify your account."
-        );
+        serverClient
+          .query(
+            q.Create(q.Collection('users'), {
+              data: {
+                name: response.user_metadata.name,
+                email: response.email,
+                id: response.id,
+                // billing: {
+                //   paidLastInvoice: true,
+                //   lastInvoiceDate: '4/21/2020',
+                //   plan: {
+                //     id: '123hg3h3hg3',
+                //     name: 'Developer',
+                //     costPerMonth: 15,
+                //   },
+                // },
+                form: {
+                  color: theme.color.primary.main,
+                  template: 'default',
+                  buttonCSS: {},
+                  inputCSS: {},
+                  commentCSS: {},
+                },
+                comments: [],
+              },
+            })
+          )
+          .then((faunaResponse) => {
+            console.log(faunaResponse);
+
+            setLoading(false);
+            setMessage(
+              "We've sent a confirmation email to you. Please open it and click the link to verify your account."
+            );
+          })
+          .catch((faunaErr) => {
+            console.log('Error: ', faunaErr);
+            setLoading(false);
+            setShowForm(true);
+            setError(true);
+            setMessage(
+              "We're experiencing some issues now. Please try again later."
+            );
+          });
       })
       .catch((err) => {
         console.log('Error: ', err);
@@ -304,7 +348,7 @@ const Card = styled.div`
 `;
 
 const Title = styled.h1`
-  color: ${props => props.theme.color.primary.main};
+  color: ${(props) => props.theme.color.primary.main};
   margin: 16px auto;
   text-align: center;
   font-size: 36px;

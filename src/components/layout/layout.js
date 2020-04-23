@@ -14,13 +14,15 @@ import {
   faShapes,
   faHome,
   faDollarSign,
+  faTimes,
 } from '@fortawesome/free-solid-svg-icons';
 import { fab, faLinkedin, faGithub } from '@fortawesome/free-brands-svg-icons';
 import Footer from './Footer';
 import Header from './Header';
 import { AuthProvider } from '../../providers/AuthProvider';
-import { AppProvider } from '../../providers/AppProvider';
+import { AppProvider, AppContext } from '../../providers/AppProvider';
 import { pathnameIncludes } from '../../utils/pathnameIncludes';
+import EditPersonalInfoModal from '../account/EditPersonalInfoModal';
 
 library.add(
   faBars,
@@ -34,27 +36,26 @@ library.add(
   faUser,
   faShapes,
   faHome,
-  faDollarSign
+  faDollarSign,
+  faTimes
 );
 
 const Layout = (props) => {
-  console.log(props.children);
+  const { editModalOpen, userAccountInfo } = useContext(AppContext);
 
   return (
-    // <Security {...config}>
     <Wrapper>
-      <AppProvider>
-        <AuthProvider>
-          <Header siteTitle={props.title} />
-          <div>
-            {!pathnameIncludes('/signup') && !pathnameIncludes('/login') && (
-              <ContentWrapper />
-            )}
-            {props.children}
-            <Footer />
-          </div>
-        </AuthProvider>
-      </AppProvider>
+      <Header siteTitle={props.title} />
+      {!pathnameIncludes('/signup') && !pathnameIncludes('/login') && (
+        <ContentWrapper />
+      )}
+      {props.children}
+      <Footer />
+      {editModalOpen && (
+        <EditPersonalInfoModal
+          data={{ name: userAccountInfo.data.name, email: userAccountInfo.data.email }}
+        />
+      )}
     </Wrapper>
   );
 };
@@ -62,14 +63,14 @@ const Layout = (props) => {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   min-height: 100vh;
   max-height: 99999999999999999px !important;
 `;
 
 const ContentWrapper = styled.div`
   height: 100%;
-  padding-top: ${(props) => (props.scrolled ? '50px' : '60px')};
+  padding-top: ${(props) => (props.scrolled ? '66px' : '94px')};
 `;
 
 Layout.propTypes = {

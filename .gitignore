@@ -11,3 +11,4 @@ packages/cli/forestry/.env
 .idea/
 public
 **/public
+.faunarc
