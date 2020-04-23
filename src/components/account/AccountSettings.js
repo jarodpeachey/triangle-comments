@@ -4,10 +4,8 @@ import { Router } from '@reach/router';
 import { Link } from 'gatsby';
 import styled, { keyframes } from 'styled-components';
 import Card from '../Card';
-import { AuthContext } from '../../providers/AuthProvider';
 import Button from '../Button';
 import Spacer from '../Spacer';
-import { DatabaseContext } from '../../providers/DatabaseProvider';
 import Loader from '../Loader';
 import DelayedLoad from '../DelayedLoad';
 

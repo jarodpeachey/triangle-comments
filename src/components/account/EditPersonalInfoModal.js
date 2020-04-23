@@ -4,7 +4,7 @@ import Modal from '../Modal';
 import Spacer from '../Spacer';
 import Button from '../Button';
 import { AppContext } from '../../providers/AppProvider';
-import { DatabaseContext } from '../../providers/DatabaseProvider';
+import { DatabaseContext } from '../../providers/FirebaseProvider';
 import { AuthContext } from '../../providers/AuthProvider';
 
 const EditPersonalInfoModal = ({ data }) => {

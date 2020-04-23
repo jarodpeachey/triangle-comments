@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-fragments */
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
@@ -5,17 +6,17 @@ import { Link } from 'gatsby';
 import headerImage from '../../images/hero.png';
 import Button from '../Button';
 import Row from '../grid/Row';
-import { AuthContext } from '../../providers/AuthProvider';
+import Loader from '../Loader';
 import Section from '../layout/Section';
-import { DatabaseContext } from '../../providers/DatabaseProvider';
 import { ThemeContext } from '../theme';
+import { FirebaseContext } from '../../providers/FirebaseProvider';
 
 // Instantiate the GoTrue auth client with an optional configuration
 
 const AuthForm = () => {
-  const { signedIn, auth } = useContext(AuthContext);
-  const { q, serverClient } = useContext(DatabaseContext);
+  const { firebase, signedIn } = useContext(FirebaseContext);
   const theme = useContext(ThemeContext);
+
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(true);
   const [message, setMessage] = useState('Processing...');
@@ -54,70 +55,66 @@ const AuthForm = () => {
   const handleSignup = (e) => {
     e.preventDefault();
 
-    const data = {
-      name,
-    };
-
     setLoading(true);
-    setShowForm(false);
-    setMessage('Processing...');
 
-    auth
-      .signup(email, password, data)
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
       .then((response) => {
         console.log(response);
 
-        serverClient
-          .query(
-            q.Create(q.Collection('users'), {
-              data: {
-                name: response.user_metadata.name,
-                email: response.email,
-                id: response.id,
-                // billing: {
-                //   paidLastInvoice: true,
-                //   lastInvoiceDate: '4/21/2020',
-                //   plan: {
-                //     id: '123hg3h3hg3',
-                //     name: 'Developer',
-                //     costPerMonth: 15,
-                //   },
-                // },
-                form: {
-                  color: theme.color.primary.main,
-                  template: 'default',
-                  buttonCSS: {},
-                  inputCSS: {},
-                  commentCSS: {},
-                },
-                comments: [],
-              },
-            })
-          )
-          .then((faunaResponse) => {
-            console.log(faunaResponse);
+        // serverClient
+        //   .query(
+        //     q.Create(q.Collection('users'), {
+        //       data: {
+        //         name: response.user_metadata.name,
+        //         email: response.email,
+        //         id: response.id,
+        //         // billing: {
+        //         //   paidLastInvoice: true,
+        //         //   lastInvoiceDate: '4/21/2020',
+        //         //   plan: {
+        //         //     id: '123hg3h3hg3',
+        //         //     name: 'Developer',
+        //         //     costPerMonth: 15,
+        //         //   },
+        //         // },
+        //         form: {
+        //           color: theme.color.primary.main,
+        //           template: 'default',
+        //           buttonCSS: {},
+        //           inputCSS: {},
+        //           commentCSS: {},
+        //         },
+        //         comments: [],
+        //       },
+        //     })
+        //   )
+        //   .then((faunaResponse) => {
+        //     console.log(faunaResponse);
 
-            setLoading(false);
-            setMessage(
-              "We've sent a confirmation email to you. Please open it and click the link to verify your account."
-            );
-          })
-          .catch((faunaErr) => {
-            console.log('Error: ', faunaErr);
-            setLoading(false);
-            setShowForm(true);
-            setError(true);
-            setMessage(
-              "We're experiencing some issues now. Please try again later."
-            );
-          });
+        //     setLoading(false);
+        //     setMessage(
+        //       "We've sent a confirmation email to you. Please open it and click the link to verify your account."
+        //     );
+        //   })
+        //   .catch((faunaErr) => {
+        //     console.log('Error: ', faunaErr);
+        //     setLoading(false);
+        //     setShowForm(true);
+        //     setError(true);
+        //     setMessage(
+        //       "We're experiencing some issues now. Please try again later."
+        //     );
+        //   });
       })
       .catch((err) => {
         console.log('Error: ', err);
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+        }, 9999999);
         setShowForm(true);
-        setError(true);
-        setMessage('There is already an account associated with this email.');
+        setMessage(err.message);
       });
 
     // setTimeout(() => {
@@ -209,12 +206,6 @@ const AuthForm = () => {
           {!showForm ? (
             <Card>
               <RedirectText>{message}</RedirectText>
-              {loading && (
-                <>
-                  {/* <span>{message}</span> */}
-                  <Loader color='primary' />
-                </>
-              )}
             </Card>
           ) : (
             <>
@@ -229,7 +220,7 @@ const AuthForm = () => {
               ) : (
                 <>
                   <Card>
-                    <Title className='logo'>StaticChat</Title>
+                    <Title className='logo'>Staticbox</Title>
                     <Tabs>
                       <Tab
                         onClick={() => {
@@ -318,8 +309,21 @@ const AuthForm = () => {
                         )}
                         <div widths={[12]}>
                           {' '}
-                          <SubmitButton right type='submit'>
-                            {activeTab === 'signup' ? 'Sign Up' : 'Log In'}
+                          <SubmitButton disabled={loading} right type='submit'>
+                            {loading ? (
+                              <span>
+                                <HiddenText>
+                                  {activeTab === 'signup'
+                                    ? 'Sign Up'
+                                    : 'Log In'}
+                                </HiddenText>{' '}
+                                <Loader size={20} absolute color='#ffffff' />
+                              </span>
+                            ) : activeTab === 'signup' ? (
+                              'Sign Up'
+                            ) : (
+                              'Log In'
+                            )}
                           </SubmitButton>
                         </div>
                       </Row>
@@ -334,6 +338,12 @@ const AuthForm = () => {
     </>
   );
 };
+
+const HiddenText = styled.span`
+  color: transparent;
+  opacity: 0;
+  visibility: hidden;
+`;
 
 const Card = styled.div`
   padding: 18px 24px;
@@ -416,10 +426,6 @@ const Info = styled.div`
   align-items: center;
   justify-content: flex-end;
   margin-top: 16px;
-`;
-
-const Loader = styled.div`
-  margin-top: 24px;
 `;
 
 // const FormWrapper = styled.div`

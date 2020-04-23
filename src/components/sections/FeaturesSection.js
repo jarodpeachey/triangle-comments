@@ -10,9 +10,9 @@ const FeaturesSection = ({ data }) => {
 
   return (
     <Section>
-      <h1 className='center'>Why StaticChat?</h1>
+      <h1 className='center'>Why Staticbox?</h1>
       <p className='center'>
-        StaticChat makes it easy to add comments to a static site, and comes with
+        Staticbox makes it easy to add comments to a static site, and comes with
         some awesome features!
       </p>
       <Row spacing={[12]} breakpoints={[576, 769, 960]}>
@@ -22,7 +22,7 @@ const FeaturesSection = ({ data }) => {
           </FeatureIcon>
           <FeatureTitle>Drop-in Forms</FeatureTitle>
           <FeatureSubtitle>
-            Simply add a form to your site and StaticChat takes care of the rest!
+            Simply add a form to your site and Staticbox takes care of the rest!
           </FeatureSubtitle>
         </Feature>
         <Feature widths={[6, 4, 3]}>
@@ -31,7 +31,7 @@ const FeaturesSection = ({ data }) => {
           </FeatureIcon>
           <FeatureTitle>Blazing Fast</FeatureTitle>
           <FeatureSubtitle>
-            StaticChat takes advantage of serverless architecture to make sure it
+            Staticbox takes advantage of serverless architecture to make sure it
             doesn't slow down your page.
           </FeatureSubtitle>
         </Feature>
@@ -51,7 +51,7 @@ const FeaturesSection = ({ data }) => {
           </FeatureIcon>
           <FeatureTitle>Customizable</FeatureTitle>
           <FeatureSubtitle>
-            StaticChat lets you customize the color and style of your form. It
+            Staticbox lets you customize the color and style of your form. It
             even allows you to add custom CSS!
           </FeatureSubtitle>
         </Feature>

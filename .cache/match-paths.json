@@ -1,0 +1,6 @@
+[
+    {
+        "path": "/account/",
+        "matchPath": "/account/*"
+    }
+]

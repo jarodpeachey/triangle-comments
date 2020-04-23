@@ -19,12 +19,14 @@ const Button = ({
   center,
   medium,
   link,
+  disabled,
 }) => {
   return (
     <span>
       {link ? (
         <Link className='no-styling' to={link}>
           <StyledButton
+            disabled={disabled}
             small={small}
             medium={medium}
             className={className ? className : ''}
@@ -43,6 +45,7 @@ const Button = ({
         </Link>
       ) : (
         <StyledButton
+          disabled={disabled}
           small={small}
           medium={medium}
           className={className ? className : ''}
@@ -76,8 +79,8 @@ const StyledButton = styled.button`
       ? '13px 25px'
       : '14px 26px'} !important;
   border: none !important;
-  text-transform: ${props => !props.gray && 'uppercase'} !important;
-  cursor: pointer !important;
+  text-transform: ${(props) => !props.gray && 'uppercase'} !important;
+  cursor: ${(props) => (props.disabled ? 'initial' : 'pointer')} !important;
   transition-duration: 0.5s !important;
   letter-spacing: 1.1px !important;
   font-size: ${(props) => (props.small ? '13px' : '16px')} !important;
@@ -133,13 +136,16 @@ const StyledButton = styled.button`
 
   :hover {
     box-shadow: 2px 4px 22px -10px ${(props) =>
-      props.gray
+      props.disabled
+        ? 'none'
+        : props.gray
         ? 'transparent'
         : props.secondary
         ? `${props.theme.color.secondary.main}90`
         : `${props.theme.color.primary.main}90`};
-    background: ${props => props.gray && props.theme.color.gray.three} !important;
-    transform: ${(props) => (props.gray ? 'none' : 'scale(1.03)')};
+    background: ${(props) =>
+      props.gray && props.theme.color.gray.three} !important;
+    transform: ${(props) => (props.gray || props.disabled ? 'none' : 'scale(1.03)')};
   }
   // :active ::before {
   //   right: 0 !important;

@@ -15,7 +15,7 @@ const Footer = () => {
             <Row spacing={[12, 0]} breakpoints={[1]}>
               <div widths={[6]}>
                 <FooterTitle>
-                  <h2 className='logo'>StaticChat</h2>
+                  <h2 className='logo'>Staticbox</h2>
                 </FooterTitle>
               </div>
               <FooterMenu widths={[6]}>

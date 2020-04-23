@@ -11,19 +11,15 @@ import AccountSettings from '../components/account/AccountSettings';
 import AccountBilling from '../components/account/AccountBilling';
 import DelayedLoad from '../components/DelayedLoad';
 import Row from '../components/grid/Row';
-import { AuthContext } from '../providers/AuthProvider';
 import Card from '../components/Card';
 import Button from '../components/Button';
 import Loader from '../components/Loader';
-import { DatabaseContext } from '../providers/DatabaseProvider';
-import { AppContext } from '../providers/AppProvider';
+import { FirebaseContext } from '../providers/FirebaseProvider';
 
 const Account = () => {
-  const { signedIn, user } = useContext(AuthContext);
-  const { userAccountInfo, setUserAccountInfo } = useContext(AppContext);
   const [activeTab, setActiveTab] = useState('home');
   const [loading, setLoading] = useState(true);
-  const { q, serverClient } = useContext(DatabaseContext);
+  const firebase = useContext(FirebaseContext);
   const [state, setState] = useState({});
 
   useEffect(() => {

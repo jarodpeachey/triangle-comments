@@ -11,7 +11,7 @@ const GetStartedSection = ({ data }) => {
       dark
       center
       title='Try It Out'
-      subtitle='StaticChat is the simplest, most intuive commenting system built specifically with static websites in mind.'
+      subtitle='Staticbox is the simplest, most intuive commenting system built specifically with static websites in mind.'
     >
       <br />
       <Button
