@@ -1,6 +1,5 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { Link } from 'gatsby';
 
 const Spacer = ({ height }) => {
   return <StyledSpacer height={height || 16} />;
