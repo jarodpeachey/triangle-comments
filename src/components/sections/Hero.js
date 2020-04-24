@@ -86,12 +86,15 @@ const BackgroundImage = styled.div`
   position: absolute;
   top: 0;
   z-index: 0;
-  height: 110%;
+  height: 150%;
   width: 100%;
   opacity: 1;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  @media (min-width: 576px) {
+    height: 110%;
+  }
   @media (min-width: 769px) {
     background-position: right center;
   }
