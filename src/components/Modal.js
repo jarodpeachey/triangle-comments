@@ -2,14 +2,16 @@ import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const Modal = ({ children, title, toggleFunction }) => {
+const Modal = ({ children, title, toggleFunction, noClose, noHeader }) => {
   return (
     <ModalWrapper>
-      <StyledModal>
-        {title && <Title className='mt-none'>{title}</Title>}
-        <CloseButton onClick={toggleFunction}>
-          <FontAwesomeIcon icon='times' />
-        </CloseButton>
+      <StyledModal noHeader={noHeader}>
+        {title && !noHeader && <Title className='mt-none'>{title}</Title>}
+        {!noClose && (
+          <CloseButton onClick={toggleFunction}>
+            <FontAwesomeIcon icon='times' />
+          </CloseButton>
+        )}
         {children}
       </StyledModal>
     </ModalWrapper>
@@ -79,7 +81,7 @@ const StyledModal = styled.div`
   border-radius: 5px;
   z-index: 999;
   padding: 32px;
-  padding-top: 98px;
+  padding-top: ${(props) => (props.noHeader ? '32px' : '98px')};
   background: white;
   border-radius: 5px;
 `;

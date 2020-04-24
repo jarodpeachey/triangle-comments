@@ -3,6 +3,8 @@ import React from 'react';
 
 export const theme = {
   color: {
+    success: '#00ab66',
+    error: '#ff6347',
     text: {
       light: '#989fa7',
       dark: '#626f7f',
@@ -25,7 +27,7 @@ export const theme = {
       dark: '#f76b2b',
     },
     gray: {
-      one: '#f6faff',
+      one: '#f7f7f7',
       two: '#f3f3f3',
       three: '#e9e9e9',
     },

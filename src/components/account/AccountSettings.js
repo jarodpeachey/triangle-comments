@@ -8,19 +8,31 @@ import Button from '../Button';
 import Spacer from '../Spacer';
 import Loader from '../Loader';
 import DelayedLoad from '../DelayedLoad';
+import EditPersonalInfoModal from './EditPersonalInfoModal';
+import { AppContext } from '../../providers/AppProvider';
+import { FirebaseContext } from '../../providers/FirebaseProvider';
 
-const AccountSettings = ({ data }) => {
+const AccountSettings = () => {
+  const { setEditModalOpen } = useContext(AppContext);
+  const { firebase } = useContext(FirebaseContext);
+
+  const openEditModal = () => {
+    setEditModalOpen(true);
+  };
+
+  const currentUser = firebase.auth().currentUser;
+
   return (
     // <DelayedLoad>
       <SlideWrapper>
         <h2 className='mt-none'>Account Info</h2>
         <Card title='Personal Info'>
-          {data.name ? (
+          {currentUser ? (
             <>
-              <p className='small m-none'>Name: {data.name}</p>
-              <p className='small m-none'>Email: {data.email}</p>
+              <p className='small m-none'>Name: {currentUser.displayName || 'Anonymous'}</p>
+              <p className='small m-none'>Email: {currentUser.email}</p>
               <Spacer />
-              <Button gray small>
+              <Button onClick={() => openEditModal(true)} gray small>
                 Edit
               </Button>
             </>
@@ -29,7 +41,7 @@ const AccountSettings = ({ data }) => {
           )}
         </Card>
         <Card title='Billing Info'>
-          {data.name ? (
+          {currentUser ? (
             <>
               <p className='small m-none'>Plan: Developer</p>
               <p className='small m-none'>Last Payment Date: 10/07/01</p>

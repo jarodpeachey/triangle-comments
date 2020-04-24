@@ -2,17 +2,17 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Link } from 'gatsby';
 import Button from '../Button';
-import { AuthContext } from '../../providers/AuthProvider';
+import { FirebaseContext } from '../../providers/FirebaseProvider';
 
 const Menu = ({ scrolled }) => {
-  const { signedIn, user } = useContext(AuthContext);
+  const { firebase } = useContext(FirebaseContext);
 
   return (
     <MenuWrapper scrolled={scrolled}>
       {/* <MenuItem scrolled={scrolled}>
         <Link to='/'>Home</Link>
       </MenuItem> */}
-      {signedIn ? (
+      {firebase.auth().currentUser ? (
         <>
           <MenuItem>
             <Link to='/account'>Account</Link>

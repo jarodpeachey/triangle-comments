@@ -4,18 +4,27 @@ import Modal from '../Modal';
 import Spacer from '../Spacer';
 import Button from '../Button';
 import { AppContext } from '../../providers/AppProvider';
-import { DatabaseContext } from '../../providers/FirebaseProvider';
+import { FirebaseContext } from '../../providers/FirebaseProvider';
 import { AuthContext } from '../../providers/AuthProvider';
+import { isBrowser } from '../../utils/isBrowser';
+import Loader from '../Loader';
 
-const EditPersonalInfoModal = ({ data }) => {
-  const [stateName, setStateName] = useState(false);
-  const [stateEmail, setStateEmail] = useState(false);
+const EditPersonalInfoModal = () => {
+  let currentUser = isBrowser() ? localStorage.getItem('user') : null;
+  currentUser = JSON.parse(currentUser);
 
-  const { setEditModalOpen, userAccountInfo, setUserAccountInfo } = useContext(
-    AppContext
-  );
-  const { serverClient, q } = useContext(DatabaseContext);
-  const { user } = useContext(AuthContext);
+  const [stateName, setStateName] = useState(currentUser.displayName || '');
+  const [loading, setLoading] = useState(false);
+  const [stateEmail, setStateEmail] = useState(currentUser.email || '');
+  const { firebase } = useContext(FirebaseContext);
+
+  const {
+    setEditModalOpen,
+    setNotificationMessage,
+    setNotificationType,
+    setPasswordModalOpen,
+    setFunction
+  } = useContext(AppContext);
 
   const onNameChange = (e) => {
     setStateName(e.target.value);
@@ -26,41 +35,52 @@ const EditPersonalInfoModal = ({ data }) => {
   };
 
   const updateNameAndEmail = () => {
-    console.log(userAccountInfo.ref);
+    setLoading(true);
 
-    serverClient
-      .query(
-        q.Update(q.Ref(q.Collection('users'), userAccountInfo.ref.value.id), {
-          data: { tags: ['pet', 'cute'] },
-        })
-      )
+    firebase
+      .auth()
+      .currentUser.updateProfile({
+        displayName: `${stateName}`,
+      })
       .then((res) => {
-        console.log('FaunaDB response: ', res);
+        console.log('Success! ', res);
+        console.log(stateEmail, currentUser.email);
 
-        user
-          .update({
-            email: stateEmail,
-            user_metadata: {
-              name: stateName,
-            },
-          })
-          .then((userRes) => {
-            console.log('Netlify response: ', userRes);
-            setUserAccountInfo({
-              data: {
-                name: stateName,
-                email: stateEmail,
-                ...data,
-              },
-              ...userAccountInfo,
+        if (stateEmail !== currentUser.email) {
+          firebase
+            .auth()
+            .currentUser.updateEmail(`${stateEmail}`)
+            .then((resTwo) => {
+              console.log('Success! ', resTwo);
+
+              setEditModalOpen(false);
+              setNotificationMessage(
+                'Success! Please check your email for a confirmation link.'
+              );
+              setNotificationType('success');
+            })
+            .catch((errTwo) => {
+              console.log('Error: ', errTwo);
+              if (errTwo.code === 'auth/requires-recent-login') {
+                setPasswordModalOpen(true);
+                // setFunction()
+              } else {
+                setEditModalOpen(false);
+                setNotificationMessage('Something went wrong.');
+                setNotificationType('error');
+              }
             });
-          })
-          .catch((userErr) => {
-            console.log(userErr);
-          });
+        } else {
+          setEditModalOpen(false);
+          setNotificationMessage('Success!');
+          setNotificationType('success');
+        }
       })
       .catch((err) => {
-        console.log(err);
+        console.log('Error: ', err);
+        setEditModalOpen(false);
+        setNotificationMessage('Something went wrong.');
+        setNotificationType('error');
       });
   };
 
@@ -69,15 +89,28 @@ const EditPersonalInfoModal = ({ data }) => {
       toggleFunction={() => setEditModalOpen(false)}
       title='Edit Personal Info'
     >
-      <Input onChange={onNameChange} value={stateName || data.name} />
-      <Input onChange={onEmailChange} value={stateEmail || data.email} />
+      <Input onChange={onNameChange} value={stateName} />
+      <Input onChange={onEmailChange} value={stateEmail} />
       <Spacer height={16} />
       <Button onClick={updateNameAndEmail} right medium secondary>
-        Save
+        {loading ? (
+          <span>
+            <HiddenText>Save</HiddenText>{' '}
+            <Loader size={20} absolute color='#ffffff' />
+          </span>
+        ) : (
+          'Save'
+        )}
       </Button>
     </Modal>
   );
 };
+
+const HiddenText = styled.span`
+  color: transparent;
+  opacity: 0;
+  visibility: hidden;
+`;
 
 const Input = styled.input`
   margin: 0;

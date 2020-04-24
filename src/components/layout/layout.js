@@ -23,6 +23,8 @@ import { AuthProvider } from '../../providers/AuthProvider';
 import { AppProvider, AppContext } from '../../providers/AppProvider';
 import { pathnameIncludes } from '../../utils/pathnameIncludes';
 import EditPersonalInfoModal from '../account/EditPersonalInfoModal';
+import Notification from '../Notification';
+import PasswordModal from '../account/PasswordModal';
 
 library.add(
   faBars,
@@ -41,7 +43,7 @@ library.add(
 );
 
 const Layout = (props) => {
-  const { editModalOpen, userAccountInfo } = useContext(AppContext);
+  const { editModalOpen, passwordModalOpen, notificationMessage, notificationType } = useContext(AppContext);
 
   return (
     <Wrapper>
@@ -52,9 +54,13 @@ const Layout = (props) => {
       {props.children}
       <Footer />
       {editModalOpen && (
-        <EditPersonalInfoModal
-          data={{ name: userAccountInfo.data.name, email: userAccountInfo.data.email }}
-        />
+        <EditPersonalInfoModal />
+      )}
+      {passwordModalOpen && (
+        <PasswordModal />
+      )}
+      {notificationMessage && (
+        <Notification message={notificationMessage} type={notificationType} />
       )}
     </Wrapper>
   );

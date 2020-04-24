@@ -6,22 +6,18 @@ export const AppContext = React.createContext();
 
 export const AppProvider = ({ children }) => {
   const [scrolled, setScrolled] = useState();
-  const [userAccountInfo, setUserAccountInfo] = useState({});
+  const [notificationType, setNotificationType] = useState('info');
+  const [notificationMessage, setNotificationMessage] = useState(null);
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const [passwordModalOpen, setPasswordModalOpen] = useState(false);
+  const [returnFunction, setFunction] = useState(null);
 
-  console.log('Edit modal open: ', editModalOpen);
-
-  // useEffect(() => {
-  //   if (signedIn) {
-  //     serverClient
-  //       .query(q.Get(q.Match(q.Index('userByID'), user.id)))
-  //       .then((res) => {
-  //         console.log(res);
-
-  //         setUserAccountInfo(res);
-  //       });
-  //   }
-  // }, [user]);
+  useEffect(() => {
+    setTimeout(() => {
+      setNotificationMessage(null);
+      setNotificationType('info');
+    }, 3000);
+  }, [notificationMessage]);
 
   return (
     <AppContext.Provider
@@ -30,6 +26,14 @@ export const AppProvider = ({ children }) => {
         setScrolled,
         editModalOpen,
         setEditModalOpen,
+        passwordModalOpen,
+        setPasswordModalOpen,
+        notificationType,
+        setNotificationMessage,
+        setNotificationType,
+        notificationMessage,
+        returnFunction,
+        setFunction
         // userAccountInfo,
         // setUserAccountInfo
       }}

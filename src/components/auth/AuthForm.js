@@ -14,7 +14,7 @@ import { FirebaseContext } from '../../providers/FirebaseProvider';
 // Instantiate the GoTrue auth client with an optional configuration
 
 const AuthForm = () => {
-  const { firebase, signedIn } = useContext(FirebaseContext);
+  const { firebase } = useContext(FirebaseContext);
   const theme = useContext(ThemeContext);
 
   const [loading, setLoading] = useState(false);
@@ -27,7 +27,7 @@ const AuthForm = () => {
 
   console.log(activeTab);
 
-  if (signedIn) {
+  if (firebase.auth().currentUser) {
     setMessage('Success. Redirecting to the homepage.');
   }
 
@@ -112,9 +112,9 @@ const AuthForm = () => {
         console.log('Error: ', err);
         setTimeout(() => {
           setLoading(false);
-        }, 9999999);
-        setShowForm(true);
-        setMessage(err.message);
+          setError(true);
+          setMessage(err.message);
+        }, 1250);
       });
 
     // setTimeout(() => {
@@ -129,24 +129,64 @@ const AuthForm = () => {
     setShowForm(false);
     setMessage('Processing...');
 
-    auth
-      .login(email, password, true)
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
       .then((response) => {
         console.log(response);
 
-        setTimeout(() => {
-          setMessage('Success! Redirecting to your dashboard...');
-        }, 1250);
-        setTimeout(() => {
-          window.location.pathname = '/';
-        }, 750);
+        // serverClient
+        //   .query(
+        //     q.Create(q.Collection('users'), {
+        //       data: {
+        //         name: response.user_metadata.name,
+        //         email: response.email,
+        //         id: response.id,
+        //         // billing: {
+        //         //   paidLastInvoice: true,
+        //         //   lastInvoiceDate: '4/21/2020',
+        //         //   plan: {
+        //         //     id: '123hg3h3hg3',
+        //         //     name: 'Developer',
+        //         //     costPerMonth: 15,
+        //         //   },
+        //         // },
+        //         form: {
+        //           color: theme.color.primary.main,
+        //           template: 'default',
+        //           buttonCSS: {},
+        //           inputCSS: {},
+        //           commentCSS: {},
+        //         },
+        //         comments: [],
+        //       },
+        //     })
+        //   )
+        //   .then((faunaResponse) => {
+        //     console.log(faunaResponse);
+
+        //     setLoading(false);
+        //     setMessage(
+        //       "We've sent a confirmation email to you. Please open it and click the link to verify your account."
+        //     );
+        //   })
+        //   .catch((faunaErr) => {
+        //     console.log('Error: ', faunaErr);
+        //     setLoading(false);
+        //     setShowForm(true);
+        //     setError(true);
+        //     setMessage(
+        //       "We're experiencing some issues now. Please try again later."
+        //     );
+        //   });
       })
       .catch((err) => {
         console.log('Error: ', err);
-        setLoading(false);
-        setShowForm(true);
-        setError(true);
-        setMessage('Incorrect username or password.');
+        setTimeout(() => {
+          setLoading(false);
+          setError(true);
+          setMessage(err.message);
+        }, 1250);
       });
 
     // setTimeout(() => {
@@ -209,7 +249,7 @@ const AuthForm = () => {
             </Card>
           ) : (
             <>
-              {signedIn ? (
+              {firebase.auth().currentUser ? (
                 <Card>
                   <h2>You're already signed in! 🎉</h2>
                   <p>Click the button to start exploring!</p>

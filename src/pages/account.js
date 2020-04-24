@@ -15,11 +15,12 @@ import Card from '../components/Card';
 import Button from '../components/Button';
 import Loader from '../components/Loader';
 import { FirebaseContext } from '../providers/FirebaseProvider';
+import { isBrowser } from '../utils/isBrowser';
 
 const Account = () => {
   const [activeTab, setActiveTab] = useState('home');
   const [loading, setLoading] = useState(true);
-  const firebase = useContext(FirebaseContext);
+  const { firebase } = useContext(FirebaseContext);
   const [state, setState] = useState({});
 
   useEffect(() => {
@@ -27,24 +28,21 @@ const Account = () => {
       setLoading(false);
     }, 1500);
 
-    // console.log(user.id);
-    // serverClient
-    //   .query(q.Get(q.Match(q.Index('userByID'), user.id)))
-    //   .then((res) => {
-    //     console.log(res);
+    console.log(firebase.auth().currentUser);
+  }, firebase.auth().currentUser);
 
-    //     setState({ name: res.data.name, email: res.data.email, ...state });
-    //   });
-  }, []);
+  const currentUser = isBrowser() ? localStorage.getItem('user') : null;
+
+  console.log(JSON.parse(currentUser));
 
   return (
     <div id='blur'>
       <Section>
         <DelayedLoad>
-          {signedIn ? (
+          {currentUser ? (
             <span>
               {loading ? (
-                <Loader text='Preparing dashboard...' />
+                <Loader size={75} text='Preparing dashboard...' />
               ) : (
                 <Row breakpoints={[900]} spacing={[18, 18]}>
                   <div widths={[3]}>
@@ -87,7 +85,11 @@ const Account = () => {
                         }
                         onClick={() => {
                           if (typeof window !== 'undefined') {
-                            window.history.pushState({}, '', '/account/billing');
+                            window.history.pushState(
+                              {},
+                              '',
+                              '/account/billing'
+                            );
                           }
                           setActiveTab('billing');
                         }}
@@ -100,15 +102,9 @@ const Account = () => {
                   <div widths={[9]}>
                     {/* <Router>
                       <DelayedLoad> */}
-                    {activeTab === 'home' && (
-                      <AccountHome data={userAccountInfo.data} />
-                    )}
-                    {activeTab === 'settings' && (
-                      <AccountSettings data={userAccountInfo.data} />
-                    )}
-                    {activeTab === 'billing' && (
-                      <AccountBilling data={userAccountInfo.data} />
-                    )}
+                    {activeTab === 'home' && <AccountHome />}
+                    {activeTab === 'settings' && <AccountSettings />}
+                    {activeTab === 'billing' && <AccountBilling />}
                     {/* </DelayedLoad>
                     </Router> */}
                   </div>
