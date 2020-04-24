@@ -32,18 +32,7 @@ export const StylesProvider = (props) => {
   return (
     <CustomThemeProvider>
       <ThemeProvider theme={theme}>
-        <StyleWrapper
-          width={scrollbarWidth}
-          gray={
-            isBrowser()
-              ? window.location.pathname.includes('account')
-                ? theme.color.gray.one
-                : 'white'
-              : 'white'
-          }
-        >
-          {props.children}
-        </StyleWrapper>
+        <StyleWrapper width={scrollbarWidth}>{props.children}</StyleWrapper>
       </ThemeProvider>
     </CustomThemeProvider>
   );
@@ -54,6 +43,5 @@ const StyleWrapper = styled.div`
   overflow: hidden;
   height: auto;
   display: inline-block;
-  background: ${(props) => (props.gray ? props.gray : 'white')};
   padding-right: ${(props) => props.width}px;
 `;

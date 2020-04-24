@@ -15,9 +15,8 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     setTimeout(() => {
       setNotificationMessage(null);
-      setNotificationType('info');
     }, 3000);
-  }, [notificationMessage]);
+  }, [notificationType]);
 
   return (
     <AppContext.Provider

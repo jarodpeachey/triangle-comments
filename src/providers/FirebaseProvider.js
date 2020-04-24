@@ -10,14 +10,14 @@ export const FirebaseContext = React.createContext({});
 
 export const FirebaseProvider = ({ children }) => {
   if (isBrowser() && firebase.apps.length === 0) {
-    isBrowser() && firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(firebaseConfig);
   }
 
-  isBrowser() && isBrowser() && firebase.auth().onAuthStateChanged((user) => {
+  isBrowser() && firebase.auth().onAuthStateChanged((user) => {
     if (user) {
-      isBrowser() && localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('user', JSON.stringify(user));
     } else {
-      isBrowser() && localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('user', JSON.stringify(user));
     }
   });
 

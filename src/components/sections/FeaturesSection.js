@@ -11,8 +11,8 @@ const FeaturesSection = ({ data }) => {
   return (
     <Section
       customStyles={`
-        margin-bottom: -64px;
-        padding-bottom: 64px
+        margin-bottom: -76px;
+        padding-bottom: 76px
       `}
       background='#ffffff'
     >

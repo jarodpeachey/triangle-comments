@@ -10,7 +10,7 @@ import { isBrowser } from '../../utils/isBrowser';
 import Loader from '../Loader';
 
 const EditPersonalInfoModal = () => {
-  let currentUser = isBrowser() ? localStorage.getItem('user') : null;
+  let currentUser = isBrowser() && localStorage.getItem('user') !== null ? localStorage.getItem('user') : null;
   currentUser = JSON.parse(currentUser);
 
   const [stateName, setStateName] = useState(currentUser.displayName || '');

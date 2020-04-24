@@ -22,6 +22,7 @@ const Account = () => {
   const [loading, setLoading] = useState(true);
   const { firebase } = useContext(FirebaseContext);
   const [state, setState] = useState({});
+  let currentUser = null;
 
   useEffect(() => {
     setTimeout(() => {
@@ -31,9 +32,11 @@ const Account = () => {
     console.log(isBrowser() && firebase.auth().currentUser);
   }, isBrowser() && firebase.auth().currentUser);
 
-  const currentUser = isBrowser() ? localStorage.getItem('user') : null;
+  if (isBrowser()) {
+    currentUser = localStorage.getItem('user');
 
-  console.log(JSON.parse(currentUser));
+    currentUser = JSON.parse(currentUser);
+  }
 
   return (
     <div id='blur'>

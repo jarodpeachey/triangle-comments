@@ -19,8 +19,7 @@ import {
 import { fab, faLinkedin, faGithub } from '@fortawesome/free-brands-svg-icons';
 import Footer from './Footer';
 import Header from './Header';
-import { AuthProvider } from '../../providers/AuthProvider';
-import { AppProvider, AppContext } from '../../providers/AppProvider';
+import { AppContext } from '../../providers/AppProvider';
 import { pathnameIncludes } from '../../utils/pathnameIncludes';
 import EditPersonalInfoModal from '../account/EditPersonalInfoModal';
 import Notification from '../Notification';
@@ -52,14 +51,7 @@ const Layout = (props) => {
   } = useContext(AppContext);
 
   return (
-    <Wrapper
-      background={
-        typeof window !== 'undefined' &&
-        window.location.pathname.includes('account')
-          ? '#f7f7f7'
-          : 'white'
-      }
-    >
+    <Wrapper>
       <Header siteTitle={props.title} />
       {!pathnameIncludes('/signup') && !pathnameIncludes('/login') && (
         <ContentWrapper />

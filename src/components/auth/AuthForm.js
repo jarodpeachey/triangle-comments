@@ -12,8 +12,6 @@ import { ThemeContext } from '../theme';
 import { FirebaseContext } from '../../providers/FirebaseProvider';
 import { isBrowser } from '../../utils/isBrowser';
 
-// Instantiate the GoTrue auth client with an optional configuration
-
 const AuthForm = () => {
   const { firebase } = useContext(FirebaseContext);
   const theme = useContext(ThemeContext);
@@ -27,10 +25,6 @@ const AuthForm = () => {
   );
 
   console.log(activeTab);
-
-  if (isBrowser() && firebase.auth().currentUser) {
-    setMessage('Success. Redirecting to the homepage.');
-  }
 
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
@@ -62,52 +56,29 @@ const AuthForm = () => {
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then((response) => {
+        setShowForm(false);
+        setMessage('Processing...');
         console.log(response);
 
-        // serverClient
-        //   .query(
-        //     q.Create(q.Collection('users'), {
-        //       data: {
-        //         name: response.user_metadata.name,
-        //         email: response.email,
-        //         id: response.id,
-        //         // billing: {
-        //         //   paidLastInvoice: true,
-        //         //   lastInvoiceDate: '4/21/2020',
-        //         //   plan: {
-        //         //     id: '123hg3h3hg3',
-        //         //     name: 'Developer',
-        //         //     costPerMonth: 15,
-        //         //   },
-        //         // },
-        //         form: {
-        //           color: theme.color.primary.main,
-        //           template: 'default',
-        //           buttonCSS: {},
-        //           inputCSS: {},
-        //           commentCSS: {},
-        //         },
-        //         comments: [],
-        //       },
-        //     })
-        //   )
-        //   .then((faunaResponse) => {
-        //     console.log(faunaResponse);
+        window.location = '/account';
 
-        //     setLoading(false);
-        //     setMessage(
-        //       "We've sent a confirmation email to you. Please open it and click the link to verify your account."
-        //     );
-        //   })
-        //   .catch((faunaErr) => {
-        //     console.log('Error: ', faunaErr);
-        //     setLoading(false);
-        //     setShowForm(true);
-        //     setError(true);
-        //     setMessage(
-        //       "We're experiencing some issues now. Please try again later."
-        //     );
-        //   });
+        // firebase.firestore().collection('users').add({
+        //   userID: response.user.uid,
+        //   comments: [],
+        //   config: {
+        //     color: '#f7cdef',
+        //   }
+        // }).then(dbRes => {
+        //   console.log(dbRes);
+        //   window.location = '/account';
+        // })
+        // .catch(dbErr => {
+        //   console.log(dbErr);
+        //   setShowForm(true);
+        //   setLoading(false);
+        //   setError(true);
+        //   setMessage(dbErr.message);
+        // })
       })
       .catch((err) => {
         console.log('Error: ', err);
@@ -136,50 +107,7 @@ const AuthForm = () => {
       .then((response) => {
         console.log(response);
 
-        // serverClient
-        //   .query(
-        //     q.Create(q.Collection('users'), {
-        //       data: {
-        //         name: response.user_metadata.name,
-        //         email: response.email,
-        //         id: response.id,
-        //         // billing: {
-        //         //   paidLastInvoice: true,
-        //         //   lastInvoiceDate: '4/21/2020',
-        //         //   plan: {
-        //         //     id: '123hg3h3hg3',
-        //         //     name: 'Developer',
-        //         //     costPerMonth: 15,
-        //         //   },
-        //         // },
-        //         form: {
-        //           color: theme.color.primary.main,
-        //           template: 'default',
-        //           buttonCSS: {},
-        //           inputCSS: {},
-        //           commentCSS: {},
-        //         },
-        //         comments: [],
-        //       },
-        //     })
-        //   )
-        //   .then((faunaResponse) => {
-        //     console.log(faunaResponse);
-
-        //     setLoading(false);
-        //     setMessage(
-        //       "We've sent a confirmation email to you. Please open it and click the link to verify your account."
-        //     );
-        //   })
-        //   .catch((faunaErr) => {
-        //     console.log('Error: ', faunaErr);
-        //     setLoading(false);
-        //     setShowForm(true);
-        //     setError(true);
-        //     setMessage(
-        //       "We're experiencing some issues now. Please try again later."
-        //     );
-        //   });
+        window.location = '/account';
       })
       .catch((err) => {
         console.log('Error: ', err);
@@ -408,6 +336,7 @@ const Title = styled.h1`
 const Tabs = styled.div`
   width: 100%;
   display: flex;
+  margin-bottom: 24px;
 `;
 
 const Tab = styled.div`
@@ -438,12 +367,12 @@ const ErrorText = styled.p`
   color: white;
   font-weight: 500;
   font-size: 17px;
-  margin: 12px 0;
+  border-radius: 3px;
+  margin: 12px 0 24px;
 `;
 
 const Form = styled.form`
   margin: 0;
-  padding-top: 24px;
 `;
 
 const SubmitButton = styled(Button)``;
