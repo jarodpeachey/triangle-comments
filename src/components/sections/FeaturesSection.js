@@ -9,7 +9,7 @@ const FeaturesSection = ({ data }) => {
   const theme = useContext(ThemeContext);
 
   return (
-    <Section>
+    <Section background='#ffffff'>
       <h1 className='center'>Why Staticbox?</h1>
       <p className='center'>
         Staticbox makes it easy to add comments to a static site, and comes with

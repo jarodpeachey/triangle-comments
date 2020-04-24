@@ -9,11 +9,11 @@ import { isBrowser } from '../utils/isBrowser';
 export const FirebaseContext = React.createContext({});
 
 export const FirebaseProvider = ({ children }) => {
-  if (firebase.apps.length === 0) {
-    firebase.initializeApp(firebaseConfig);
+  if (isBrowser() && firebase.apps.length === 0) {
+    isBrowser() && firebase.initializeApp(firebaseConfig);
   }
 
-  firebase.auth().onAuthStateChanged((user) => {
+  isBrowser() && isBrowser() && firebase.auth().onAuthStateChanged((user) => {
     if (user) {
       isBrowser() && localStorage.setItem('user', JSON.stringify(user));
     } else {

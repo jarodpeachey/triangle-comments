@@ -13,6 +13,7 @@
 #blur {
   transition: all 0.25s ease-in-out;
   max-height: 99999999999999999px !important;
+  z-index: 1;
 }
 
 @media (max-width: 769px) {
@@ -20,6 +21,11 @@
     filter: blur(3px);
     transition: all 0.25s ease-in-out;
   }
+}
+
+.move-down {
+  margin-bottom: -36px;
+  padding-bottom: 36px;
 }
 
 a.no-styling {
@@ -96,6 +102,7 @@ body {
   margin: 0;
   padding: 0;
   overflow-y: auto;
+  background: #f7f7f7;
 }
 
 html {
@@ -103,6 +110,7 @@ html {
   /* overflow-y: hidden; */
   scroll-behavior: smooth;
   width: 100%;
+  background: #f7f7f7;
 }
 
 /* 

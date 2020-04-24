@@ -10,6 +10,7 @@ import Loader from '../Loader';
 import Section from '../layout/Section';
 import { ThemeContext } from '../theme';
 import { FirebaseContext } from '../../providers/FirebaseProvider';
+import { isBrowser } from '../../utils/isBrowser';
 
 // Instantiate the GoTrue auth client with an optional configuration
 
@@ -27,7 +28,7 @@ const AuthForm = () => {
 
   console.log(activeTab);
 
-  if (firebase.auth().currentUser) {
+  if (isBrowser() && firebase.auth().currentUser) {
     setMessage('Success. Redirecting to the homepage.');
   }
 
@@ -249,7 +250,7 @@ const AuthForm = () => {
             </Card>
           ) : (
             <>
-              {firebase.auth().currentUser ? (
+              {isBrowser() && firebase.auth().currentUser ? (
                 <Card>
                   <h2>You're already signed in! 🎉</h2>
                   <p>Click the button to start exploring!</p>

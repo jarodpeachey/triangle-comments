@@ -12,6 +12,7 @@ import { AppContext } from '../../providers/AppProvider';
 import Button from '../Button';
 import Row from '../grid/Row';
 import { FirebaseContext } from '../../providers/FirebaseProvider';
+import { isBrowser } from '../../utils/isBrowser';
 
 const Header = ({ siteTitle }) => {
   const { scrolled, setScrolled } = useContext(AppContext);
@@ -94,10 +95,10 @@ const Header = ({ siteTitle }) => {
           >
             <div className='container'>
               <Row spacing={[8]} breakpoints={[576]} flexDirections={['row']}>
-                <div widths={firebase.auth().currentUser ? [12] : [8]}>
+                <div widths={isBrowser() && firebase.auth().currentUser ? [12] : [8]}>
                   <MobileMenuItems open={open}>
                     <MobileMenuItem to='/'>Home</MobileMenuItem>
-                    {firebase.auth().currentUser && (
+                    {isBrowser() && firebase.auth().currentUser && (
                       <MobileMenuItem to='/account'>Account</MobileMenuItem>
                     )}
                     <MobileMenuItem to='https://github.com/jarodpeachey/triangle-comments'>
@@ -105,7 +106,7 @@ const Header = ({ siteTitle }) => {
                     </MobileMenuItem>
                   </MobileMenuItems>
                 </div>
-                {!firebase.auth().currentUser && (
+                {!isBrowser() && firebase.auth().currentUser && (
                   <div widths={[4]}>
                     <Row
                       spacing={[8]}

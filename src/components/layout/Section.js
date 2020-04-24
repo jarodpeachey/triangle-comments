@@ -43,6 +43,7 @@ const SubTitle = styled.p`
 
 const StyledSection = styled.section`
   text-align: ${(props) => (props.center ? 'center' : 'inherit')};
+  z-index: 1;
   background: ${(props) => props.color};
   ${(props) =>
     props.fullHeight &&

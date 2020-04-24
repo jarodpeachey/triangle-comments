@@ -11,6 +11,7 @@ import DelayedLoad from '../DelayedLoad';
 import EditPersonalInfoModal from './EditPersonalInfoModal';
 import { AppContext } from '../../providers/AppProvider';
 import { FirebaseContext } from '../../providers/FirebaseProvider';
+import { isBrowser } from '../../utils/isBrowser';
 
 const AccountSettings = () => {
   const { setEditModalOpen } = useContext(AppContext);
@@ -20,7 +21,7 @@ const AccountSettings = () => {
     setEditModalOpen(true);
   };
 
-  const currentUser = firebase.auth().currentUser;
+  const currentUser = isBrowser() && firebase.auth().currentUser;
 
   return (
     // <DelayedLoad>

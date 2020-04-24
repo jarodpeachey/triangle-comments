@@ -1,4 +1,8 @@
 /* eslint-disable import/prefer-default-export */
 export const isBrowser = () => {
-  return typeof window.location !== 'undefined';
+  if (typeof window !== 'undefined') {
+    return true;
+  }
+
+  return false;
 };

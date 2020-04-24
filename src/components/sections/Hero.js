@@ -54,7 +54,8 @@ const Hero = ({ children }) => {
                 The simplest way to add comments to your static website.
               </Title>
               <SubTitle>
-                A uniquely different commenting system that lets you customize fast, and loads even faster.
+                A uniquely different commenting system that lets you customize
+                fast, and loads even faster.
               </SubTitle>
               <ButtonFlex>
                 <ButtonWrapper>
@@ -84,7 +85,7 @@ const BackgroundImage = styled.div`
   background-image: url(${(props) => props.heroImage});
   position: absolute;
   top: 0;
-  z-index: -500;
+  z-index: 0;
   height: 110%;
   width: 100%;
   opacity: 1;
@@ -113,12 +114,14 @@ const HeroContainer = styled.div`
   min-height: 420px !important;
   margin: 0 auto;
   width: 100%;
+  z-index: 1;
 `;
 
 const ChildContainer = styled.div`
   margin-top: 0;
   padding-top: 120px !important;
   padding-bottom: 0px !important;
+  z-index: 1;
 `;
 
 const Title = styled.h1`

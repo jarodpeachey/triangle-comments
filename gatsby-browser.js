@@ -4,6 +4,7 @@ import Layout from './src/components/layout/layout';
 import { FirebaseProvider } from './src/providers/FirebaseProvider';
 // import { AuthProvider } from './src/providers/AuthProvider';
 import { AppProvider } from './src/providers/AppProvider';
+import { isBrowser } from './src/utils/isBrowser';
 
 export const wrapRootElement = ({ element }) => {
   console.log(element);
@@ -18,5 +19,15 @@ export const wrapRootElement = ({ element }) => {
 };
 
 export const wrapPageElement = ({ element }) => {
-  return <Layout>{element}</Layout>;
+  return (
+    <Layout
+      color={
+        isBrowser() && window.location.pathname.includes('account')
+          ? '#f7f7f7'
+          : 'white'
+      }
+    >
+      {element}
+    </Layout>
+  );
 };

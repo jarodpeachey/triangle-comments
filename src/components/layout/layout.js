@@ -25,6 +25,7 @@ import { pathnameIncludes } from '../../utils/pathnameIncludes';
 import EditPersonalInfoModal from '../account/EditPersonalInfoModal';
 import Notification from '../Notification';
 import PasswordModal from '../account/PasswordModal';
+import { isBrowser } from '../../utils/isBrowser';
 
 library.add(
   faBars,
@@ -43,22 +44,30 @@ library.add(
 );
 
 const Layout = (props) => {
-  const { editModalOpen, passwordModalOpen, notificationMessage, notificationType } = useContext(AppContext);
+  const {
+    editModalOpen,
+    passwordModalOpen,
+    notificationMessage,
+    notificationType,
+  } = useContext(AppContext);
 
   return (
-    <Wrapper>
+    <Wrapper
+      background={
+        typeof window !== 'undefined' &&
+        window.location.pathname.includes('account')
+          ? '#f7f7f7'
+          : 'white'
+      }
+    >
       <Header siteTitle={props.title} />
       {!pathnameIncludes('/signup') && !pathnameIncludes('/login') && (
         <ContentWrapper />
       )}
       {props.children}
       <Footer />
-      {editModalOpen && (
-        <EditPersonalInfoModal />
-      )}
-      {passwordModalOpen && (
-        <PasswordModal />
-      )}
+      {editModalOpen && <EditPersonalInfoModal />}
+      {passwordModalOpen && <PasswordModal />}
       {notificationMessage && (
         <Notification message={notificationMessage} type={notificationType} />
       )}

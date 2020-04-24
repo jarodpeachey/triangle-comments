@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'gatsby';
 import Button from '../Button';
 import { FirebaseContext } from '../../providers/FirebaseProvider';
+import { isBrowser } from '../../utils/isBrowser';
 
 const Menu = ({ scrolled }) => {
   const { firebase } = useContext(FirebaseContext);
@@ -12,7 +13,7 @@ const Menu = ({ scrolled }) => {
       {/* <MenuItem scrolled={scrolled}>
         <Link to='/'>Home</Link>
       </MenuItem> */}
-      {firebase.auth().currentUser ? (
+      {isBrowser() && firebase.auth().currentUser ? (
         <>
           <MenuItem>
             <Link to='/account'>Account</Link>

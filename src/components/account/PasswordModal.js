@@ -40,7 +40,7 @@ const PasswordModal = ({
     firebase
       .auth()
       .currentUser.reauthenticateWithCredential(
-        firebase.auth.EmailAuthProvider.credential(
+        isBrowser() && firebase.auth.EmailAuthProvider.credential(
           currentUser.email,
           statePassword
         )

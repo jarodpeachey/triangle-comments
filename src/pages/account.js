@@ -28,8 +28,8 @@ const Account = () => {
       setLoading(false);
     }, 1500);
 
-    console.log(firebase.auth().currentUser);
-  }, firebase.auth().currentUser);
+    console.log(isBrowser() && firebase.auth().currentUser);
+  }, isBrowser() && firebase.auth().currentUser);
 
   const currentUser = isBrowser() ? localStorage.getItem('user') : null;
 
