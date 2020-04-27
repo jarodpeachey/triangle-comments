@@ -5,24 +5,34 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import firebaseConfig from '../../firebaseConfig';
 import { isBrowser } from '../utils/isBrowser';
+import { AppContext } from './AppProvider';
 
 export const FirebaseContext = React.createContext({});
 
 export const FirebaseProvider = ({ children }) => {
+  const { setSignedIn, setShouldUpdate } = useContext(AppContext);
+  const [firebaseUser, setFirebaseUser] = useState(null);
+
   if (isBrowser() && firebase.apps.length === 0) {
     firebase.initializeApp(firebaseConfig);
   }
 
-  isBrowser() && firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      localStorage.setItem('user', JSON.stringify(user));
-    } else {
-      localStorage.setItem('user', JSON.stringify(user));
-    }
-  });
+  isBrowser() &&
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        setSignedIn(true);
+        localStorage.setItem('firebaseUser', JSON.stringify(user));
+        setFirebaseUser(user);
+      } else {
+        setSignedIn(false);
+        localStorage.removeItem('firebaseUser');
+        setFirebaseUser(null);
+      }
+    });
 
   const ctx = {
-    firebase
+    firebase,
+    firebaseUser,
   };
 
   return (

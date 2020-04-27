@@ -1,6 +1,6 @@
 // src/react-auth0-spa.js
 import React, { useState, useContext, useEffect } from 'react';
-import { FirebaseContext } from './FirebaseProvider';
+import { isBrowser } from '../utils/isBrowser';
 
 export const AppContext = React.createContext();
 
@@ -11,6 +11,7 @@ export const AppProvider = ({ children }) => {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [passwordModalOpen, setPasswordModalOpen] = useState(false);
   const [returnFunction, setFunction] = useState(null);
+  const [signedIn, setSignedIn] = useState(false);
 
   useEffect(() => {
     setTimeout(() => {
@@ -32,7 +33,9 @@ export const AppProvider = ({ children }) => {
         setNotificationType,
         notificationMessage,
         returnFunction,
-        setFunction
+        setFunction,
+        signedIn,
+        setSignedIn
         // userAccountInfo,
         // setUserAccountInfo
       }}

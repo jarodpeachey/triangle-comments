@@ -16,103 +16,83 @@ import Button from '../components/Button';
 import Loader from '../components/Loader';
 import { FirebaseContext } from '../providers/FirebaseProvider';
 import { isBrowser } from '../utils/isBrowser';
+import { DatabaseContext } from '../providers/DatabaseProvider';
 
 const Account = () => {
   const [activeTab, setActiveTab] = useState('home');
-  const [loading, setLoading] = useState(true);
-  const { firebase } = useContext(FirebaseContext);
+  const { firebase, firebaseUser } = useContext(FirebaseContext);
+  const { faunaUser } = useContext(DatabaseContext);
   const [state, setState] = useState({});
-  let currentUser = null;
 
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 1500);
-
-    console.log(isBrowser() && firebase.auth().currentUser);
-  }, isBrowser() && firebase.auth().currentUser);
-
-  if (isBrowser()) {
-    currentUser = localStorage.getItem('user');
-
-    currentUser = JSON.parse(currentUser);
-  }
+  useEffect(() => {}, [isBrowser() && firebase.auth().currentUser]);
 
   return (
     <div id='blur'>
       <Section>
-        <DelayedLoad>
-          {currentUser ? (
+        <DelayedLoad delay={1500}>
+          {firebaseUser && faunaUser ? (
             <span>
-              {loading ? (
-                <Loader size={75} text='Preparing dashboard...' />
-              ) : (
-                <Row breakpoints={[900]} spacing={[18, 18]}>
-                  <div widths={[3]}>
-                    <Tabs>
-                      <Tab
-                        active={
-                          (typeof window !== 'undefined' &&
-                            window.location.pathname === '/account') ||
-                          window.location.pathname === '/account/'
+              <Row breakpoints={[900]} spacing={[18, 18]}>
+                <div widths={[3]}>
+                  <Tabs>
+                    <Tab
+                      active={
+                        (typeof window !== 'undefined' &&
+                          window.location.pathname === '/account') ||
+                        window.location.pathname === '/account/'
+                      }
+                      onClick={() => {
+                        if (typeof window !== 'undefined') {
+                          window.history.pushState({}, '', '/account');
                         }
-                        onClick={() => {
-                          if (typeof window !== 'undefined') {
-                            window.history.pushState({}, '', '/account');
-                          }
-                          setActiveTab('home');
-                        }}
-                      >
-                        <FontAwesomeIcon icon='home' />
-                        General
-                      </Tab>
-                      <Tab
-                        active={
-                          typeof window !== 'undefined' &&
-                          window.location.pathname.includes('/account/settings')
+                        setActiveTab('home');
+                      }}
+                    >
+                      <FontAwesomeIcon icon='home' />
+                      General
+                    </Tab>
+                    <Tab
+                      active={
+                        typeof window !== 'undefined' &&
+                        window.location.pathname.includes('/account/settings')
+                      }
+                      onClick={() => {
+                        if (typeof window !== 'undefined') {
+                          window.history.pushState({}, '', '/settings');
                         }
-                        onClick={() => {
-                          if (typeof window !== 'undefined') {
-                            window.history.pushState({}, '', '/settings');
-                          }
-                          setActiveTab('settings');
-                        }}
-                      >
-                        <FontAwesomeIcon icon='cog' />
-                        Settings
-                      </Tab>
-                      <Tab
-                        active={
-                          typeof window !== 'undefined' &&
-                          window.location.pathname.includes('/account/settings')
+                        setActiveTab('settings');
+                      }}
+                    >
+                      <FontAwesomeIcon icon='cog' />
+                      Settings
+                    </Tab>
+                    <Tab
+                      active={
+                        typeof window !== 'undefined' &&
+                        window.location.pathname.includes('/account/settings')
+                      }
+                      onClick={() => {
+                        if (typeof window !== 'undefined') {
+                          window.history.pushState({}, '', '/account/billing');
                         }
-                        onClick={() => {
-                          if (typeof window !== 'undefined') {
-                            window.history.pushState(
-                              {},
-                              '',
-                              '/account/billing'
-                            );
-                          }
-                          setActiveTab('billing');
-                        }}
-                      >
-                        <FontAwesomeIcon icon='dollar-sign' />
-                        Billing
-                      </Tab>
-                    </Tabs>
-                  </div>
-                  <div widths={[9]}>
-                    {/* <Router>
+                        setActiveTab('billing');
+                      }}
+                    >
+                      <FontAwesomeIcon icon='dollar-sign' />
+                      Billing
+                    </Tab>
+                  </Tabs>
+                </div>
+                <div widths={[9]}>
+                  {/* <Router>
                       <DelayedLoad> */}
-                    {activeTab === 'home' && <AccountHome />}
-                    {activeTab === 'settings' && <AccountSettings />}
-                    {activeTab === 'billing' && <AccountBilling />}
-                    {/* </DelayedLoad>
+                  {activeTab === 'home' && <AccountHome />}
+                  {activeTab === 'settings' && <AccountSettings />}
+                  {activeTab === 'billing' && <AccountBilling />}
+                  {/* </DelayedLoad>
                     </Router> */}
-                  </div>
-                </Row>
-              )}
+                </div>
+              </Row>
             </span>
           ) : (
             <Card>

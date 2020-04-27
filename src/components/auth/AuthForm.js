@@ -14,8 +14,8 @@ import { DatabaseContext } from '../../providers/DatabaseProvider';
 import { isBrowser } from '../../utils/isBrowser';
 
 const AuthForm = () => {
-  const { firebase } = useContext(FirebaseContext);
-  const { q, serverClient } = useContext(DatabaseContext);
+  const { firebase, firebaseUser } = useContext(FirebaseContext);
+  const { q, serverClient, faunaUser } = useContext(DatabaseContext);
   const theme = useContext(ThemeContext);
 
   const [loading, setLoading] = useState(false);
@@ -25,8 +25,6 @@ const AuthForm = () => {
   const [activeTab, setActiveTab] = useState(
     typeof window !== 'undefined' && window.location.pathname.replace(/\//g, '')
   );
-
-  console.log(activeTab);
 
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
@@ -65,15 +63,15 @@ const AuthForm = () => {
             q.Map(
               [
                 [
-                  response.displayName,
-                  response.email,
-                  response.uid,
+                  name || 'Guest',
+                  response.user.email,
+                  response.user.uid,
                   [
                     {
-                      name: 'Jarod Peachey',
-                      date: new Date(),
-                      email: 'jwpeachey107@aol.com',
-                      comment: 'This is your first comment! Awesome sauce!',
+                      name: 'Staticboard Team',
+                      email: 'staticboard@gmai.com',
+                      comment:
+                        "This is your first comment! Awesome sauce!\n\n If you don't want this comment here, go to your dashboard to delete it: https://staticboard.com/dashboard",
                     },
                   ],
                 ],
@@ -84,9 +82,10 @@ const AuthForm = () => {
                   {
                     user: q.Create(q.Collection('users'), {
                       data: {
-                        name: q.Select(0, q.Var('data')) || 'Guest',
+                        name: q.Select(0, q.Var('data')),
                         email: q.Select(1, q.Var('data')),
                         id: q.Select(2, q.Var('data')),
+                        comments: q.Select(3, q.Var('data')),
                       },
                       credentials: {
                         password: `${response.uid}-${response.email}`,
@@ -103,37 +102,12 @@ const AuthForm = () => {
                 )
               )
             )
-
-            // q.Create(q.Collection('users'), {
-            //   data: {
-            //     name: response.displayName,
-            //     email: response.email,
-            //     id: response.uid,
-            //     form: {
-            //       color: theme.color.primary.main,
-            //       template: 'default',
-            //       buttonCSS: {},
-            //       inputCSS: {},
-            //       commentCSS: {},
-            //     },
-            //     comments: [
-            //       {
-            //         name: 'Jarod Peachey',
-            //         date: new Date(),
-            //         email: 'jwpeachey107@aol.com',
-            //         comment: 'This is your first comment! Awesome sauce!',
-            //       },
-            //     ],
-            //   },
-            //   credentials: {
-            //     password: `${response.uid}-${response.email}`
-            //   }
-            // })
           )
           .then((faunaResponse) => {
             console.log(faunaResponse);
 
             setLoading(false);
+            setShowForm(false);
             setMessage(
               "We've sent a confirmation email to you. Please open it and click the link to verify your account."
             );
@@ -246,7 +220,7 @@ const AuthForm = () => {
             </Card>
           ) : (
             <>
-              {isBrowser() && firebase.auth().currentUser !== null ? (
+              {firebaseUser && faunaUser ? (
                 <Card>
                   <h2>You're already signed in! 🎉</h2>
                   <p>Click the button to start exploring!</p>

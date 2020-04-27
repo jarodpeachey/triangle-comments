@@ -10,13 +10,13 @@ export const wrapRootElement = ({ element }) => {
   console.log(element);
 
   return (
-    <FirebaseProvider>
-      <DatabaseProvider>
-        <AppProvider>
+    <AppProvider>
+      <FirebaseProvider>
+        <DatabaseProvider>
           <StylesProvider>{element}</StylesProvider>
-        </AppProvider>
-      </DatabaseProvider>
-    </FirebaseProvider>
+        </DatabaseProvider>
+      </FirebaseProvider>
+    </AppProvider>
   );
 };
 

@@ -14,30 +14,8 @@ import AboutSection from '../components/sections/AboutSection';
 import { ThemeContext } from '../components/theme';
 
 const IndexPage = ({ data }) => {
-  const { auth, user } = useContext(AuthContext);
-
   const theme = useContext(ThemeContext);
 
-  console.log('User: ', user);
-
-  const [parsedHash, setParsedHash] = useState('');
-
-  useEffect(() => {
-    if (parsedHash === '')
-      setParsedHash(queryString.parse(window.location.hash));
-  });
-
-  if (parsedHash.confirmation_token) {
-    auth
-      .confirm(parsedHash.confirmation_token)
-      .then((data) => {
-        console.log('Success! Data is: ', data);
-        // window.location.href = '/account';
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
   return (
     <>
       <Hero />

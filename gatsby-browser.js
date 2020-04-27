@@ -1,7 +1,10 @@
 import React from 'react';
 import { StylesProvider } from './src/providers/StylesProvider';
 import Layout from './src/components/layout/layout';
-import { FirebaseProvider } from './src/providers/FirebaseProvider';
+import {
+  FirebaseProvider,
+  FirebaseContext,
+} from './src/providers/FirebaseProvider';
 import { DatabaseProvider } from './src/providers/DatabaseProvider';
 import { AppProvider } from './src/providers/AppProvider';
 import { isBrowser } from './src/utils/isBrowser';
@@ -10,13 +13,17 @@ export const wrapRootElement = ({ element }) => {
   console.log(element);
 
   return (
-    <FirebaseProvider>
-      <DatabaseProvider>
-        <AppProvider>
-          <StylesProvider>{element}</StylesProvider>
-        </AppProvider>
-      </DatabaseProvider>
-    </FirebaseProvider>
+    <AppProvider>
+      <FirebaseProvider>
+        <FirebaseContext.Consumer>
+          {(firebase) => (
+            <DatabaseProvider firebase={firebase}>
+              <StylesProvider>{element}</StylesProvider>
+            </DatabaseProvider>
+          )}
+        </FirebaseContext.Consumer>
+      </FirebaseProvider>
+    </AppProvider>
   );
 };
 

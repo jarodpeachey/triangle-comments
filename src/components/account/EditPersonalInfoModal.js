@@ -8,22 +8,24 @@ import { FirebaseContext } from '../../providers/FirebaseProvider';
 // import { AuthContext } from '../../providers/DatabaseProvider';
 import { isBrowser } from '../../utils/isBrowser';
 import Loader from '../Loader';
+import { DatabaseContext } from '../../providers/DatabaseProvider';
 
 const EditPersonalInfoModal = () => {
-  let currentUser = isBrowser() && localStorage.getItem('user') !== null ? localStorage.getItem('user') : null;
-  currentUser = JSON.parse(currentUser);
+  const { firebase, firebaseUser } = useContext(FirebaseContext);
+  const { q, serverClient, faunaUser } = useContext(DatabaseContext);
 
-  const [stateName, setStateName] = useState(currentUser.displayName || '');
+  const [stateName, setStateName] = useState(faunaUser.data.name || '');
   const [loading, setLoading] = useState(false);
-  const [stateEmail, setStateEmail] = useState(currentUser.email || '');
-  const { firebase } = useContext(FirebaseContext);
+  const [stateEmail, setStateEmail] = useState(faunaUser.data.email || '');
+
+  console.log(faunaUser);
 
   const {
     setEditModalOpen,
     setNotificationMessage,
     setNotificationType,
     setPasswordModalOpen,
-    setFunction
+    setFunction,
   } = useContext(AppContext);
 
   const onNameChange = (e) => {
@@ -44,14 +46,43 @@ const EditPersonalInfoModal = () => {
       })
       .then((res) => {
         console.log('Success! ', res);
-        console.log(stateEmail, currentUser.email);
 
-        if (stateEmail !== currentUser.email) {
+        serverClient
+          .query(
+            q.Update(q.Ref(q.Collection('users'), faunaUser.ref.value.id), {
+              data: {
+                name: stateName,
+              },
+            })
+          )
+          .then((faunaResponse) => {
+            console.log(faunaResponse);
+          })
+          .catch((faunaError) => console.log(faunaError));
+
+        if (
+          stateEmail !== firebaseUser.email ||
+          stateEmail !== faunaUser.data.email ||
+          firebaseUser.email !== faunaUser.data.email
+        ) {
           firebase
             .auth()
             .currentUser.updateEmail(`${stateEmail}`)
             .then((resTwo) => {
               console.log('Success! ', resTwo);
+
+              serverClient
+                .query(
+                  q.Update(q.Ref(q.Collection('users'), faunaUser.ref.value), {
+                    data: {
+                      email: stateEmail,
+                    },
+                  })
+                )
+                .then((faunaResponse) => {
+                  console.log(faunaResponse);
+                })
+                .catch((faunaError) => console.log(faunaError));
 
               setEditModalOpen(false);
               setNotificationMessage(
