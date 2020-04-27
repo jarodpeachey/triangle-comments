@@ -10,10 +10,12 @@ import Loader from '../Loader';
 import Section from '../layout/Section';
 import { ThemeContext } from '../theme';
 import { FirebaseContext } from '../../providers/FirebaseProvider';
+import { DatabaseContext } from '../../providers/DatabaseProvider';
 import { isBrowser } from '../../utils/isBrowser';
 
 const AuthForm = () => {
   const { firebase } = useContext(FirebaseContext);
+  const { q, serverClient } = useContext(DatabaseContext);
   const theme = useContext(ThemeContext);
 
   const [loading, setLoading] = useState(false);
@@ -56,29 +58,95 @@ const AuthForm = () => {
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then((response) => {
-        setShowForm(false);
-        setMessage('Processing...');
         console.log(response);
 
-        window.location = '/account';
+        serverClient
+          .query(
+            q.Map(
+              [
+                [
+                  response.displayName,
+                  response.email,
+                  response.uid,
+                  [
+                    {
+                      name: 'Jarod Peachey',
+                      date: new Date(),
+                      email: 'jwpeachey107@aol.com',
+                      comment: 'This is your first comment! Awesome sauce!',
+                    },
+                  ],
+                ],
+              ],
+              q.Lambda(
+                'data',
+                q.Let(
+                  {
+                    user: q.Create(q.Collection('users'), {
+                      data: {
+                        name: q.Select(0, q.Var('data')) || 'Guest',
+                        email: q.Select(1, q.Var('data')),
+                        id: q.Select(2, q.Var('data')),
+                      },
+                      credentials: {
+                        password: `${response.uid}-${response.email}`,
+                      },
+                    }),
+                    comments: q.Select(3, q.Var('data')),
+                  },
+                  q.Create(q.Collection('comments'), {
+                    data: {
+                      user: q.Select('ref', q.Var('user')),
+                      comments: q.Var('comments'),
+                    },
+                  })
+                )
+              )
+            )
 
-        // firebase.firestore().collection('users').add({
-        //   userID: response.user.uid,
-        //   comments: [],
-        //   config: {
-        //     color: '#f7cdef',
-        //   }
-        // }).then(dbRes => {
-        //   console.log(dbRes);
-        //   window.location = '/account';
-        // })
-        // .catch(dbErr => {
-        //   console.log(dbErr);
-        //   setShowForm(true);
-        //   setLoading(false);
-        //   setError(true);
-        //   setMessage(dbErr.message);
-        // })
+            // q.Create(q.Collection('users'), {
+            //   data: {
+            //     name: response.displayName,
+            //     email: response.email,
+            //     id: response.uid,
+            //     form: {
+            //       color: theme.color.primary.main,
+            //       template: 'default',
+            //       buttonCSS: {},
+            //       inputCSS: {},
+            //       commentCSS: {},
+            //     },
+            //     comments: [
+            //       {
+            //         name: 'Jarod Peachey',
+            //         date: new Date(),
+            //         email: 'jwpeachey107@aol.com',
+            //         comment: 'This is your first comment! Awesome sauce!',
+            //       },
+            //     ],
+            //   },
+            //   credentials: {
+            //     password: `${response.uid}-${response.email}`
+            //   }
+            // })
+          )
+          .then((faunaResponse) => {
+            console.log(faunaResponse);
+
+            setLoading(false);
+            setMessage(
+              "We've sent a confirmation email to you. Please open it and click the link to verify your account."
+            );
+          })
+          .catch((faunaErr) => {
+            console.log('Error: ', faunaErr);
+            setLoading(false);
+            setShowForm(true);
+            setError(true);
+            setMessage(
+              "We're experiencing some issues now. Please try again later."
+            );
+          });
       })
       .catch((err) => {
         console.log('Error: ', err);
@@ -178,7 +246,7 @@ const AuthForm = () => {
             </Card>
           ) : (
             <>
-              {isBrowser() && firebase.auth().currentUser ? (
+              {isBrowser() && firebase.auth().currentUser !== null ? (
                 <Card>
                   <h2>You're already signed in! 🎉</h2>
                   <p>Click the button to start exploring!</p>

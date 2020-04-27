@@ -5,7 +5,7 @@ import Spacer from '../Spacer';
 import Button from '../Button';
 import { AppContext } from '../../providers/AppProvider';
 import { FirebaseContext } from '../../providers/FirebaseProvider';
-import { AuthContext } from '../../providers/AuthProvider';
+// import { AuthContext } from '../../providers/DatabaseProvider';
 import { isBrowser } from '../../utils/isBrowser';
 import Loader from '../Loader';
 

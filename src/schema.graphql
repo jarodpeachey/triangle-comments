@@ -1,45 +1,40 @@
 type User {
-  userID: ID
-  name: String
-  firstName: String
-  lastName: String
-  email: String
-  billing: BillingData
-  form: FormData
-  comments: [Comment]!
+  name: String!
+  id: ID! @unique
+  email: String! @unique
 }
 
-type BillingData  {
-  paidLastInvoice: Boolean
-  lastInvoiceDate: String
-  plan: PlanData
-}
-
-type PlanData {
-  planID: String
-  name: String
-  costPerMonth: Float
-}
-
-type FormData {
-  color: String
-  template: String
-  buttonCSS: String
-  inputCSS: String
-  commentCSS: String
-}
-
-type CommentData {
-  name: String
-  email: String
-  comment: String
+input CreateUserInput {
+  name: String!
+  id: ID! @unique
+  email: String! @unique
 }
 
 type Comment {
-  commentID: ID
-  data: CommentData
-  date: String
-  path: String
-  parentCommentID: ID
-  userID: User
+  userID: String!
+  id: ID! @unique
+  comment: String!
+  name: String!
+  email: String!
+  date: String!
+}
+
+input CreateCommentInput {
+  userID: String!
+  id: ID! @unique
+  comment: String!
+  name: String!
+  email: String!
+  date: String!
+  path: String!
+  parentCommentID: String!
+}
+
+type Query {
+  allComments: [Comment!]!
+}
+
+type Mutation {
+  createUser(input: CreateUserInput): User! @resolver(name: "create_user")
+  createComment(input: CreateCommentnput): User! @resolver(name: "create_user")
 }

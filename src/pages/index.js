@@ -9,7 +9,7 @@ import Button from '../components/Button';
 import FeaturesSection from '../components/sections/FeaturesSection';
 import Section from '../components/layout/Section';
 import GetStartedSection from '../components/sections/GetStartedSection';
-import { AuthContext } from '../providers/AuthProvider';
+// import { AuthContext } from '../providers/AuthProvider';
 import AboutSection from '../components/sections/AboutSection';
 import { ThemeContext } from '../components/theme';
 
