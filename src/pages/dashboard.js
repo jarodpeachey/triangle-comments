@@ -70,9 +70,10 @@ const Account = () => {
                 <Tabs>
                   <Tab
                     active={
-                      (typeof window !== 'undefined' &&
+                      (isBrowser() &&
                         window.location.pathname === '/dashboard') ||
-                      window.location.pathname === '/dashboard/'
+                      (isBrowser() &&
+                        window.location.pathname === '/dashboard/')
                     }
                     onClick={() => {
                       if (typeof window !== 'undefined') {
@@ -86,11 +87,11 @@ const Account = () => {
                   </Tab>
                   <Tab
                     active={
-                      typeof window !== 'undefined' &&
+                      isBrowser() &&
                       window.location.pathname.includes('/settings')
                     }
                     onClick={() => {
-                      if (typeof window !== 'undefined') {
+                      if (isBrowser()) {
                         window.history.pushState({}, '', '/settings');
                       }
                       setActiveTab('settings');
@@ -124,7 +125,7 @@ const Account = () => {
       `}
           >
             <span>
-              <Spacer height={36}/>
+              <Spacer height={36} />
               {/* <Router>
                       <DelayedLoad> */}
               {activeTab === 'home' && <Profile />}
