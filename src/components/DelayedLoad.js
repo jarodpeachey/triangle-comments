@@ -7,11 +7,16 @@ import Loader from './Loader';
 
 const DelayedLoad = ({ fullHeight, condition, delay, render, fail }) => {
   const [state, setState] = useState('load');
+  const [passedMin, setPassedMin] = useState(false);
   const [globalState, setGlobalState] = useState('');
 
   console.log(condition);
 
   const callback = () => {};
+
+  setTimeout(() => {
+    setPassedMin(true);
+  }, 2000)
 
   const timeout = (function (condition) {
     return setTimeout(function () {
@@ -45,7 +50,7 @@ const DelayedLoad = ({ fullHeight, condition, delay, render, fail }) => {
 
   return (
     <span>
-      {state === 'load' ? (
+      {state === 'load' || !passedMin ? (
         <span>
           {fullHeight ? (
             <Wrapper>

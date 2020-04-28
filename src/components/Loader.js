@@ -4,7 +4,11 @@ import styled, { keyframes, css } from 'styled-components';
 const Loader = ({ text, color, size, absolute }) => {
   return (
     <span>
-      <StyledLoader color={color || false} absolute={absolute} size={size || false} />
+      <StyledLoader
+        color={color || false}
+        absolute={absolute}
+        size={size || false}
+      />
       {text && <Text className='center'>{text}</Text>}
     </span>
   );
@@ -18,15 +22,15 @@ const spin = keyframes`
 `;
 
 const StyledLoader = styled.span`
-  border-top: 3px solid
+  border-top: ${(props) => (props.size > 70 ? '6px' : '5px')} solid
     ${(props) => (props.color ? props.color : props.theme.color.secondary.dark)};
-  border-left: 3px solid
+  border-left: ${(props) => (props.size > 70 ? '6px' : '5px')} solid
     ${(props) =>
       props.color ? props.color : props.theme.color.secondary.dark}cc;
-  border-bottom: 3px solid
+  border-bottom: ${(props) => (props.size > 70 ? '6px' : '5px')} solid
     ${(props) =>
       props.color ? props.color : props.theme.color.secondary.dark}90;
-  border-right: 3px solid
+  border-right: ${(props) => (props.size > 70 ? '6px' : '5px')} solid
     ${(props) =>
       props.color ? props.color : props.theme.color.secondary.dark}70;
   border-radius: 50px;
