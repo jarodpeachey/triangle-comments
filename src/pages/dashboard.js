@@ -18,6 +18,7 @@ import { FirebaseContext } from '../providers/FirebaseProvider';
 import { isBrowser } from '../utils/isBrowser';
 import { DatabaseContext } from '../providers/DatabaseProvider';
 import { AppContext } from '../providers/AppProvider';
+import Spacer from '../components/Spacer';
 
 const Account = () => {
   const [activeTab, setActiveTab] = useState('home');
@@ -123,18 +124,14 @@ const Account = () => {
       `}
           >
             <span>
-              <Row breakpoints={[900]} spacing={[18, 18]}>
-                <div widths={[3]}></div>
-                <div widths={[9]}>
-                  {/* <Router>
+              <Spacer height={36}/>
+              {/* <Router>
                       <DelayedLoad> */}
-                  {activeTab === 'home' && <Profile />}
-                  {activeTab === 'settings' && <Settings />}
-                  {/* {activeTab === 'billing' && <Billing />} */}
-                  {/* </DelayedLoad>
+              {activeTab === 'home' && <Profile />}
+              {activeTab === 'settings' && <Settings />}
+              {/* {activeTab === 'billing' && <Billing />} */}
+              {/* </DelayedLoad>
                     </Router> */}
-                </div>
-              </Row>
             </span>
           </Section>
         </div>

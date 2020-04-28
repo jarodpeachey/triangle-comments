@@ -4,9 +4,13 @@ import { Link } from 'gatsby';
 import Button from '../Button';
 import { FirebaseContext } from '../../providers/FirebaseProvider';
 import { isBrowser } from '../../utils/isBrowser';
+import { AppContext } from '../../providers/AppProvider';
 
 const Menu = ({ scrolled }) => {
   const { firebase } = useContext(FirebaseContext);
+  const { setNotificationMessage, setNotificationType } = useContext(
+    AppContext
+  );
 
   return (
     <MenuWrapper scrolled={scrolled}>
@@ -14,7 +18,7 @@ const Menu = ({ scrolled }) => {
         <Link to='/'>Home</Link>
       </MenuItem> */}
       {isBrowser() && firebase.auth().currentUser ? (
-        <>
+        <span>
           <MenuItem
             light={
               isBrowser() && window.location.pathname.includes('dashboard')
@@ -24,6 +28,24 @@ const Menu = ({ scrolled }) => {
           </MenuItem>
           <MenuItem button>
             <Button
+              onClick={() => {
+                firebase
+                  .auth()
+                  .signOut()
+                  .then(function () {
+                    console.log('Signed out!');
+                    setNotificationType('success');
+                    setNotificationMessage('You are now signed out.');
+                    window.location.href = '/';
+                  })
+                  .catch(function (error) {
+                    console.log(err);
+                    setNotificationType('error');
+                    setNotificationMessage(
+                      'There was an error signing you out.'
+                    );
+                  });
+              }}
               lightText={
                 isBrowser() && window.location.pathname.includes('dashboard')
               }
@@ -33,9 +55,9 @@ const Menu = ({ scrolled }) => {
               Log Out
             </Button>
           </MenuItem>
-        </>
+        </span>
       ) : (
-        <>
+        <span>
           <MenuItem>
             <Link to='/'>Home</Link>
           </MenuItem>
@@ -49,7 +71,7 @@ const Menu = ({ scrolled }) => {
               Log In
             </Button>
           </MenuItem>
-        </>
+        </span>
       )}
     </MenuWrapper>
   );

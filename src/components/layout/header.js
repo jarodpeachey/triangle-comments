@@ -15,7 +15,12 @@ import { FirebaseContext } from '../../providers/FirebaseProvider';
 import { isBrowser } from '../../utils/isBrowser';
 
 const Header = ({ siteTitle }) => {
-  const { scrolled, setScrolled } = useContext(AppContext);
+  const {
+    scrolled,
+    setScrolled,
+    setNotificationMessage,
+    setNotificationType,
+  } = useContext(AppContext);
   const { firebase } = useContext(FirebaseContext);
   const [open, setOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
@@ -117,7 +122,31 @@ const Header = ({ siteTitle }) => {
                         <AccountMenuItem to='/dashboard/profile'>
                           Profile
                         </AccountMenuItem>
-                        <AccountMenuItem to='/'>Log Out</AccountMenuItem>
+                        <AccountMenuItem
+                          onClick={() => {
+                            firebase
+                              .auth()
+                              .signOut()
+                              .then(function () {
+                                console.log('Signed out!');
+                                setNotificationType('success');
+                                setNotificationMessage(
+                                  'You are now signed out.'
+                                );
+                                window.location.href = '/';
+                              })
+                              .catch(function (error) {
+                                console.log(err);
+                                setNotificationType('error');
+                                setNotificationMessage(
+                                  'There was an error signing you out.'
+                                );
+                              });
+                          }}
+                          to='/'
+                        >
+                          Log Out
+                        </AccountMenuItem>
                       </MobileMenuItems>
                     </AccountMenu>
                   </AccountMenuToggle>
