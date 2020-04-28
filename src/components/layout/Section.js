@@ -12,6 +12,7 @@ const Section = ({
   customStyles,
   dark,
   light,
+  thin,
 }) => {
   const theme = useContext(ThemeContext);
 
@@ -22,7 +23,14 @@ const Section = ({
       center={center}
       dark={dark}
       light={light}
-      color={dark ? theme.color.primary.backgroundDark : light ? theme.color.primary.backgroundLight : background || 'transparent'}
+      thin={thin}
+      color={
+        dark
+          ? theme.color.primary.backgroundDark
+          : light
+          ? theme.color.primary.backgroundLight
+          : background || 'transparent'
+      }
     >
       <div className='container'>
         {title && <Title dark={dark}>{title}</Title>}
@@ -34,16 +42,23 @@ const Section = ({
 };
 
 const Title = styled.h2`
-  color: ${props => props.dark ? 'white' : props.theme.color.text.heading};
+  color: ${(props) => (props.dark ? 'white' : props.theme.color.text.heading)};
 `;
 
 const SubTitle = styled.p`
-  color: ${props => props.dark ? props.theme.color.text.light : props.theme.color.text.dark};
+  color: ${(props) =>
+    props.dark ? props.theme.color.text.light : props.theme.color.text.dark};
 `;
 
 const StyledSection = styled.section`
   text-align: ${(props) => (props.center ? 'center' : 'inherit')};
   z-index: 1;
+  ${props => props.thin && css`
+    .container {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+  `};
   background: ${(props) => props.color};
   ${(props) =>
     props.fullHeight &&

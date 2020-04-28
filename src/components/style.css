@@ -214,8 +214,8 @@ small {
   width: 100% !important;
 }
 
-button {
-  font-family: sans-serif !important;
+.inline-block {
+  display: inline-block !important;
 }
 
 .center {

@@ -21,9 +21,9 @@ import Footer from './Footer';
 import Header from './Header';
 import { AppContext } from '../../providers/AppProvider';
 import { pathnameIncludes } from '../../utils/pathnameIncludes';
-import EditPersonalInfoModal from '../account/EditPersonalInfoModal';
+import EditPersonalInfoModal from '../dashboard/EditPersonalInfoModal';
 import Notification from '../Notification';
-import PasswordModal from '../account/PasswordModal';
+import PasswordModal from '../auth/PasswordModal';
 import { isBrowser } from '../../utils/isBrowser';
 
 library.add(

@@ -20,8 +20,8 @@ exports.onCreatePage = ({ page, actions }) => {
       },
     });
 
-    if (page.path.match(/^\/account/)) {
-      page.matchPath = '/account/*';
+    if (page.path.match(/^\/dashboard/)) {
+      page.matchPath = '/dashboard/*';
 
       // Update the page.
       createPage(page);

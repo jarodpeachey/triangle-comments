@@ -15,11 +15,21 @@ const Menu = ({ scrolled }) => {
       </MenuItem> */}
       {isBrowser() && firebase.auth().currentUser ? (
         <>
-          <MenuItem>
-            <Link to='/account'>Account</Link>
+          <MenuItem
+            light={
+              isBrowser() && window.location.pathname.includes('dashboard')
+            }
+          >
+            <Link to='/dashboard'>Account</Link>
           </MenuItem>
           <MenuItem button>
-            <Button small outlined>
+            <Button
+              lightText={
+                isBrowser() && window.location.pathname.includes('dashboard')
+              }
+              small
+              outlined
+            >
               Log Out
             </Button>
           </MenuItem>
@@ -66,7 +76,8 @@ const MenuItem = styled.div`
     padding: ${(props) => (props.button ? '0' : '8px 24px')};
     font-weight: 500;
     transition-duration: 0.25s;
-    color: ${props => props.theme.color.text.heading};
+    color: ${(props) =>
+      props.light ? 'white' : props.theme.color.text.heading};
   }
   :hover a {
     transition-duration: 0.25s;

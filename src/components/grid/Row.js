@@ -13,6 +13,7 @@ const Row = ({
   demo,
   vertical,
   flexDirections,
+  customStyles,
 }) => {
   console.log(breakpoints[0]);
   return (
@@ -25,6 +26,7 @@ const Row = ({
       spacingY={typeof spacing[1] === 'number' ? spacing[1] : spacing[0]}
       vertical={vertical}
       flexDirections={flexDirections || null}
+      customStyles={customStyles}
     >
       {React.Children.toArray(children).map((item) => {
         return item ? (
@@ -54,6 +56,11 @@ const Row = ({
 };
 
 const Wrapper = styled.div`
+  ${(props) =>
+    props.customStyles &&
+    css`
+      ${props.customStyles}
+    `};
   margin: -${(props) => props.spacingY}px -${(props) => props.spacingX}px -${(
   props
 ) => props.spacingY}px -${(props) => props.spacingX}px;

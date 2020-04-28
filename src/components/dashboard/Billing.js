@@ -1,4 +1,4 @@
-// src/pages/AccountSettings.js
+// src/pages/Billing.js
 import React, { useContext, useEffect, useState } from 'react';
 import { Router } from '@reach/router';
 import { Link } from 'gatsby';
@@ -13,7 +13,7 @@ import { AppContext } from '../../providers/AppProvider';
 import { FirebaseContext } from '../../providers/FirebaseProvider';
 import { isBrowser } from '../../utils/isBrowser';
 
-const AccountSettings = () => {
+const Billing = () => {
   const { setEditModalOpen } = useContext(AppContext);
   const { firebase } = useContext(FirebaseContext);
 
@@ -48,7 +48,7 @@ const AccountSettings = () => {
               <p className='small m-none'>Last Payment Date: 10/07/01</p>
               <p className='small m-none'>Last Payment Amount: $15.00</p>
               <Spacer />
-              <Button link='/account/billing' gray small>
+              <Button link='/dashboard/billing' gray small>
                 More
               </Button>
             </>
@@ -74,4 +74,4 @@ const SlideWrapper = styled.div`
   animation: ${animation} 250ms ease-out;
 `;
 
-export default AccountSettings;
+export default Billing;

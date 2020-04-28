@@ -109,7 +109,7 @@ const AuthForm = () => {
             setLoading(false);
             setShowForm(false);
             setMessage(
-              "We've sent a confirmation email to you. Please open it and click the link to verify your account."
+              "We've sent a confirmation email to you. Please open it and click the link to verify your dashboard."
             );
           })
           .catch((faunaErr) => {
@@ -149,7 +149,7 @@ const AuthForm = () => {
       .then((response) => {
         console.log(response);
 
-        window.location = '/account';
+        window.location = '/dashboard';
       })
       .catch((err) => {
         console.log('Error: ', err);

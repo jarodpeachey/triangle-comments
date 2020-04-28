@@ -106,8 +106,7 @@ const Wrapper = styled.div`
     @media (min-width: ${props.breakpointOne}px) and (max-width: ${
           props.breakpointTwo !== undefined ? props.breakpointTwo : 2400
         }px) {
-    // max-width: 50% !important;
-    min-width: 50%;
+    // min-width: 50%;
     flex: 1 1 0;
   }
   `

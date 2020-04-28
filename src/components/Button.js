@@ -20,6 +20,8 @@ const Button = ({
   medium,
   link,
   disabled,
+  lightText,
+  darkText,
 }) => {
   return (
     <span>
@@ -38,6 +40,8 @@ const Button = ({
             gray={gray}
             outlined={outlined}
             onClick={onClick || null}
+            lightText={lightText}
+            darkText={darkText}
             link
           >
             {children}
@@ -57,6 +61,8 @@ const Button = ({
           gray={gray}
           outlined={outlined}
           onClick={onClick || null}
+          lightText={lightText}
+          darkText={darkText}
         >
           {children}
         </StyledButton>
@@ -109,7 +115,11 @@ const StyledButton = styled.button`
     ${props.theme.color.primary.dark}
   )`} !important;
   color: ${(props) =>
-    props.outlined || props.gray
+    props.lightText
+      ? 'white'
+      : props.darkText
+      ? props.theme.color.text.dark
+      : props.outlined || props.gray
       ? props.theme.color.text.heading
       : props.secondary
       ? 'white'
@@ -145,7 +155,8 @@ const StyledButton = styled.button`
         : `${props.theme.color.primary.main}90`};
     background: ${(props) =>
       props.gray && props.theme.color.gray.three} !important;
-    transform: ${(props) => (props.gray || props.disabled ? 'none' : 'scale(1.03)')};
+    transform: ${(props) =>
+      props.gray || props.disabled ? 'none' : 'scale(1.03)'};
   }
   // :active ::before {
   //   right: 0 !important;
@@ -154,12 +165,16 @@ const StyledButton = styled.button`
     text-decoration: none !important;
     padding: 0 !important;
     margin: 0 !important;
-    color: ${(props) =>
-      props.outlined
-        ? 'black'
-        : props.secondary
-        ? 'white'
-        : 'white'} !important;
+  color: ${(props) =>
+    props.lightText
+      ? 'white'
+      : props.darkText
+      ? props.theme.color.text.dark
+      : props.outlined || props.gray
+      ? props.theme.color.text.heading
+      : props.secondary
+      ? 'white'
+      : 'white'} !important;
   }
   display: block;
   ${(props) =>

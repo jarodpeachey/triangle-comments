@@ -1,6 +1,6 @@
 [
     {
-        "path": "/account/",
-        "matchPath": "/account/*"
+        "path": "/dashboard/",
+        "matchPath": "/dashboard/*"
     }
 ]

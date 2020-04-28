@@ -18,6 +18,7 @@ const Header = ({ siteTitle }) => {
   const { scrolled, setScrolled } = useContext(AppContext);
   const { firebase } = useContext(FirebaseContext);
   const [open, setOpen] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
   const [width, setWidth] = useState(0);
 
   useEffect(() => {
@@ -48,6 +49,10 @@ const Header = ({ siteTitle }) => {
     setOpen(!open);
   };
 
+  const accountToggleFunction = () => {
+    setAccountOpen(!accountOpen);
+  };
+
   const onScroll = () => {
     if (window.scrollY > 40) {
       setScrolled(true);
@@ -62,26 +67,61 @@ const Header = ({ siteTitle }) => {
       !window.location.pathname.includes('/signup') &&
       !window.location.pathname.includes('/login') ? (
         <>
-          <Wrapper id='header' open={open} scrolled={scrolled}>
+          <Wrapper
+            id='header'
+            open={open}
+            dashboard={
+              isBrowser() && window.location.pathname.includes('dashboard')
+            }
+            scrolled={scrolled}
+          >
             <div className='container'>
               <Flex>
-                <SiteTitle scrolled={scrolled}>
+                <SiteTitle
+                  light={
+                    isBrowser() &&
+                    window.location.pathname.includes('dashboard')
+                  }
+                  scrolled={scrolled}
+                >
                   <FontAwesomeIcon icon='shapes' />
                   Staticbox
                 </SiteTitle>
-                <Menu scrolled={scrolled} />
-                {/* <MobileMenu scrolled={scrolled} /> */}
-                <MobileMenuToggle
-                  scrolled={scrolled}
-                  onClick={toggleFunction}
-                  open={open}
-                >
-                  <MobileMenuRotate open={open}>
-                    <span />
-                    <span />
-                    <span />
-                  </MobileMenuRotate>
-                </MobileMenuToggle>
+                {isBrowser() &&
+                !window.location.pathname.includes('dashboard') ? (
+                  <span>
+                    <Menu scrolled={scrolled} />
+                    {/* <MobileMenu scrolled={scrolled} /> */}
+                    <MobileMenuToggle
+                      scrolled={scrolled}
+                      onClick={toggleFunction}
+                      open={open}
+                    >
+                      <MobileMenuRotate open={open}>
+                        <span />
+                        <span />
+                        <span />
+                      </MobileMenuRotate>
+                    </MobileMenuToggle>
+                  </span>
+                ) : (
+                  <AccountMenuToggle
+                    scrolled={scrolled}
+                    onClick={accountToggleFunction}
+                    open={accountOpen}
+                  >
+                    <FontAwesomeIcon icon='user' />
+                    <AccountMenu open={accountOpen} scolled={scrolled}>
+                      <MobileMenuItems open={accountOpen}>
+                        <AccountMenuItem to='/'>Home</AccountMenuItem>
+                        <AccountMenuItem to='/dashboard/profile'>
+                          Profile
+                        </AccountMenuItem>
+                        <AccountMenuItem to='/'>Log Out</AccountMenuItem>
+                      </MobileMenuItems>
+                    </AccountMenu>
+                  </AccountMenuToggle>
+                )}
               </Flex>
             </div>
             {/* <MobileMenuOverlay open={open}> */}
@@ -95,11 +135,15 @@ const Header = ({ siteTitle }) => {
           >
             <div className='container'>
               <Row spacing={[8]} breakpoints={[576]} flexDirections={['row']}>
-                <div widths={isBrowser() && firebase.auth().currentUser ? [12] : [8]}>
+                <div
+                  widths={
+                    isBrowser() && firebase.auth().currentUser ? [12] : [8]
+                  }
+                >
                   <MobileMenuItems open={open}>
                     <MobileMenuItem to='/'>Home</MobileMenuItem>
                     {isBrowser() && firebase.auth().currentUser && (
-                      <MobileMenuItem to='/account'>Account</MobileMenuItem>
+                      <MobileMenuItem to='/dashboard'>Account</MobileMenuItem>
                     )}
                     <MobileMenuItem to='https://github.com/jarodpeachey/triangle-comments'>
                       Docs
@@ -115,6 +159,10 @@ const Header = ({ siteTitle }) => {
                     >
                       <div widths={[6, 12]}>
                         <Button
+                          light={
+                            isBrowser() &&
+                            window.location.pathname.includes('dashboard')
+                          }
                           link='/signup'
                           medium
                           className='full-width'
@@ -155,12 +203,21 @@ Header.defaultProps = {
 
 const Wrapper = styled.header`
   .container {
-    padding-top: ${(props) => (props.scrolled ? '18px' : '32px')};
-    padding-bottom: ${(props) => (props.scrolled ? '18px' : '32px')};
+    padding-top: ${(props) =>
+      props.dashboard ? '32px' : props.scrolled ? '18px' : '32px'};
+    padding-bottom: ${(props) =>
+      props.dashboard ? '32px' : props.scrolled ? '18px' : '32px'};
     transition: all 0.25s ease-in;
   }
+  z-index: 999999999999999;
   background: ${(props) =>
-    props.open ? 'white' : props.scrolled ? 'white' : 'transparent'};
+    props.dashboard
+      ? 'transparent'
+      : props.open
+      ? 'white'
+      : props.scrolled
+      ? 'white'
+      : 'transparent'};
   color: ${(props) =>
     props.scrolled
       ? props.theme.color.primary.light
@@ -168,18 +225,22 @@ const Wrapper = styled.header`
   transition-duration: 0.25s;
   transition: all 0.25s ease-in;
   box-shadow: ${(props) =>
-    props.open
+    props.dashboard
+      ? 'none'
+      : props.open
       ? 'none'
       : props.scrolled
       ? `0 5px 60px -20px ${props.theme.color.primary.light}60`
       : ''};
   border-bottom: ${(props) =>
-    props.open
+    props.dashboard
+      ? 'none'
+      : props.open
       ? '2px solid #e8e8e8'
       : props.scrolled
       ? `2px solid #e8e8e8`
       : '2px solid transparent'};
-  position: fixed;
+  position: ${(props) => (props.dashboard ? 'absolute' : 'fixed')};
   left: 0;
   top: 0;
   right: 0;
@@ -199,13 +260,14 @@ const SiteTitle = styled.h1`
   letter-spacing: 3px;
   text-transform: uppercase;
   font-size: 22px;
+  color: ${(props) => (props.light ? 'white' : 'inherit')} !important;
   @media (min-width: 769px) {
     font-size: 26px;
   }
   z-index: 999;
   svg {
-    color: ${(props) => props.theme.color.primary.main} !important;
-    fill: ${(props) => props.theme.color.primary.main} !important;
+    color: ${(props) => (props.light ? 'white' : 'inherit')} !important;
+
     margin-right: 8px;
     position: relative;
     top: -1px;
@@ -291,6 +353,69 @@ const MobileMenu = styled.div`
   }
 `;
 
+const AccountMenu = styled.div`
+  display: ${(props) => (props.open ? 'block' : 'none')};
+  height: fit-content;
+  width: fit-content;
+  top: 45px;
+  line-height: 1;
+  background: white;
+  position: absolute;
+  z-index: 99999999999999999;
+  transition: ${(props) =>
+    props.open ? 'all 0.25s ease-out' : 'all 0.6s ease-out'};
+  border-radius: 3px;
+  box-shadow: 2px 2px 20px -5px #00000050;
+  right: 0;
+  min-width: 150px;
+`;
+
+const AccountMenuItem = styled(Link)`
+  text-decoration: none;
+  transition-duration: 0.2s;
+  color: ${(props) => props.theme.color.text.heading} !important;
+  font-weight: 700;
+  text-align: center;
+  font-size: 16px;
+  border-bottom: 1px solid #e8e8e8;
+  display: block;
+  padding: 16px 24px;
+  border-radius: 3px;
+  width: 100%;
+  :last-child {
+    border: none;
+  }
+  transition-duration: 0.2s;
+  :hover {
+    background: #f7f7f7;
+    transition-duration: 0.2s;
+  }
+`;
+
+const AccountMenuToggle = styled.div`
+  z-index: 9999;
+  width: 40px;
+  height: 40px;
+  transform: rotate(0deg);
+  transition: all 0.25s ease-in;
+  cursor: pointer;
+  margin-left: auto;
+  border-radius: 50px;
+  padding: 6px;
+  background: ${(props) => (props.open ? '#ffffff60' : 'transparent')};
+  border: 1px solid #fff;
+  :hover {
+    background: ${(props) => (props.open ? '#ffffff60' : '#ffffff30')};
+  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  svg {
+    color: white;
+    font-size: 20px;
+  }
+`;
+
 const ButtonsContainer = styled.div`
   width: 100%;
   display: flex;
@@ -305,8 +430,8 @@ const MobileMenuItems = styled.div`
 const MobileMenuItem = styled(Link)`
   text-decoration: none;
   transition-duration: 0.2s;
-  color: #666 !important;
-  font-weight: bold;
+  color: ${(props) => props.theme.color.text.heading} !important;
+  font-weight: 700;
   text-align: center;
   font-size: 16px;
   border-bottom: 1px solid #e8e8e8;

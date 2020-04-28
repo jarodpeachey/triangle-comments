@@ -1,22 +1,80 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-fragments */
 // src/pages/DelayedLoad.js
 import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
 import Loader from './Loader';
 
-const DelayedLoad = ({ children, delay }) => {
-  const [loading, setLoading] = useState(true);
+const DelayedLoad = ({ fullHeight, condition, delay, render, fail }) => {
+  const [state, setState] = useState('load');
+  const [globalState, setGlobalState] = useState('');
+
+  console.log(condition);
+
+  const callback = () => {};
+
+  const timeout = (function (condition) {
+    return setTimeout(function () {
+      console.log('Condition inside of callback: ', condition);
+      if (!condition && globalState !== 'success') {
+        setState('fail');
+      } else {
+        setState('success');
+      }
+    }, delay);
+  })(condition);
+  // window.setTimeout(callback, delay);
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, delay);
-  }, []);
+    if (condition && condition.data) {
+      setState('success');
+      setGlobalState('success');
+      clearTimeout(timeout);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [condition]);
+
+  useEffect(() => {
+    if (state === 'success') {
+      console.log('State is success. Clearing ', timeout);
+      setGlobalState('success');
+      clearTimeout(timeout);
+    }
+  }, [state]);
 
   return (
     <span>
-      {loading ? <Loader size={100} text='Loading...' /> : <span>{children}</span>}
+      {state === 'load' ? (
+        <span>
+          {fullHeight ? (
+            <Wrapper>
+              <Loader color='#ffffff' size={75} text='Loading...' />
+            </Wrapper>
+          ) : (
+            <Loader size={75} text='Loading...' />
+          )}
+        </span>
+      ) : globalState === 'success' ? (
+        <span>{render}</span>
+      ) : (
+        <span>{fail}</span>
+      )}
     </span>
   );
 };
+
+const Wrapper = styled.div`
+  top: 0;
+  position: absolute;
+  height: 100vh !important;
+  min-height: 100% !important;
+  width: 100vw;
+  background: ${(props) => props.theme.color.primary.backgroundDark};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999999;
+`;
 
 export default DelayedLoad;
