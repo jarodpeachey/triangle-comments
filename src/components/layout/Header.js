@@ -94,7 +94,7 @@ const Header = ({ siteTitle }) => {
                 </SiteTitle>
                 {isBrowser() &&
                 !window.location.pathname.includes('dashboard') ? (
-                  <span>
+                  <>
                     <Menu scrolled={scrolled} />
                     {/* <MobileMenu scrolled={scrolled} /> */}
                     <MobileMenuToggle
@@ -108,7 +108,7 @@ const Header = ({ siteTitle }) => {
                         <span />
                       </MobileMenuRotate>
                     </MobileMenuToggle>
-                  </span>
+                  </>
                 ) : (
                   <AccountMenuToggle
                     scrolled={scrolled}

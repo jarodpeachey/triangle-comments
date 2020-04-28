@@ -18,7 +18,7 @@ const Menu = ({ scrolled }) => {
         <Link to='/'>Home</Link>
       </MenuItem> */}
       {isBrowser() && firebase.auth().currentUser ? (
-        <span>
+        <>
           <MenuItem
             light={
               isBrowser() && window.location.pathname.includes('dashboard')
@@ -55,9 +55,9 @@ const Menu = ({ scrolled }) => {
               Log Out
             </Button>
           </MenuItem>
-        </span>
+        </>
       ) : (
-        <span>
+        <>
           <MenuItem>
             <Link to='/'>Home</Link>
           </MenuItem>
@@ -71,7 +71,7 @@ const Menu = ({ scrolled }) => {
               Log In
             </Button>
           </MenuItem>
-        </span>
+        </>
       )}
     </MenuWrapper>
   );
