@@ -22,9 +22,9 @@ import Spacer from '../components/Spacer';
 
 const Account = () => {
   const [activeTab, setActiveTab] = useState(
-    window.location.pathname.includes('settings')
+    isBrowser() && window.location.pathname.includes('settings')
       ? 'settings'
-      : window.location.pathname.includes('comments')
+      : isBrowser() && window.location.pathname.includes('comments')
       ? 'comments'
       : 'home'
   );
