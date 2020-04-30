@@ -22,6 +22,8 @@ const Settings = () => {
   const { q, serverClient, faunaUser } = useContext(DatabaseContext);
   const [reRender, setRender] = useState(false);
   const [activeTab, setActiveTab] = useState('general');
+  const [keys, setKeys] = useState([]);
+  const [key, setKey] = useState('');
 
   useEffect(() => {
     setRender(!reRender);
@@ -29,36 +31,89 @@ const Settings = () => {
     console.log(faunaUser.ref);
 
     if (firebaseUser) {
-      serverClient
-        .query(q.Match(q.Index('key_test_four'), faunaUser.data.id))
-        .then((res) => console.log('Keys by user: ', res, res.data))
-        .catch((err) => console.log(err));
-
-      serverClient
-        .query(
-          q.Map(
-            q.Paginate(q.Match(q.Index('all_keys'))),
-            q.Lambda(
-              'keysRef',
-              q.Let(
-                {
-                  keys: q.Get(q.Var('keysRef')),
-                  user: q.Get(q.Select(['data', 'user'], q.Var('keys'))),
-                },
-                {
-                  user: q.Select(['data', 'name'], q.Var('user')),
-                  keys: q.Select(['data', 'keys'], q.Var('keys')),
-                }
-              )
-            )
-          )
-        )
-        .then((commentsResponse) =>
-          console.log('Comments from user: ', commentsResponse)
-        )
-        .catch((commentsError) => console.log(commentsError));
+      // serverClient
+      //   .query(q.Match(q.Index('key_test_four'), faunaUser.data.id))
+      //   .then((res) => console.log('Keys by user: ', res, res.data))
+      //   .catch((err) => console.log(err));
     }
   }, [firebaseUser]);
+
+  serverClient
+    .query(
+      q.Map(
+        q.Paginate(q.Match(q.Index('all_keys'))),
+        q.Lambda(
+          'keysRef',
+          q.Let(
+            {
+              keys: q.Get(q.Var('keysRef')),
+              user: q.Get(q.Select(['data', 'user'], q.Var('keys'))),
+            },
+            {
+              user: q.Select(['ref'], q.Var('user')),
+              key: q.Select(['data', 'key'], q.Var('keys')),
+            }
+          )
+        )
+      ),
+      { secret: 'fnEDqswJoPACEgOmCb0MkAIUO0Mtcu5wDWGg5PSvigYek3Aac8s' }
+    )
+    .then((keysResponse) =>
+      console.log('Keys from user: ', keysResponse)
+    )
+    .catch((commentsError) => console.log(commentsError));
+
+  // if (key) {
+  //   serverClient
+  //     .query(
+  //       q.Map(
+  //         q.Paginate(q.Match(q.Index('all_keys'))),
+  //         q.Lambda(
+  //           'keysRef',
+  //           q.Let(
+  //             {
+  //               keys: q.Get(q.Var('keysRef')),
+  //               user: q.Get(q.Select(['data', 'user'], q.Var('keys'))),
+  //             },
+  //             {
+  //               user: q.Select(['data', 'name'], q.Var('user')),
+  //               key: q.Select(['data', 'key'], q.Var('keys')),
+  //             }
+  //           )
+  //         )
+  //       ),
+  //       { secret: key }
+  //     )
+  //     .then((keysResponse) => {
+  //       console.log('Keys from user: ', keysResponse);
+  //       setKeys(keysResponse.data);
+  //     })
+  //     .catch((keysError) => console.log(keysError));
+  // } else {
+  //   serverClient
+  //     .query(
+  //       q.Map(
+  //         q.Paginate(q.Match(q.Index('all_keys'))),
+  //         q.Lambda(
+  //           'keysRef',
+  //           q.Let(
+  //             {
+  //               keys: q.Get(q.Var('keysRef')),
+  //               user: q.Get(q.Select(['data', 'user'], q.Var('keys'))),
+  //             },
+  //             {
+  //               user: q.Select(['data', 'name'], q.Var('user')),
+  //               key: q.Select(['data', 'key'], q.Var('keys')),
+  //             }
+  //           )
+  //         )
+  //       )
+  //     )
+  //     .then((keysResponse) => {
+  //       console.log('Keys from all users: ', keysResponse);
+  //     })
+  //     .catch((keysError) => console.log(keysError));
+  // }
 
   const openEditModal = () => {
     setEditModalOpen(true);
@@ -76,30 +131,26 @@ const Settings = () => {
 
         alert(`New API key created: ${secretResponse.secret}`);
 
-        // serverClient
-        //   .query(
-        //     q.Map(
-        //       q.Paginate(q.Match(q.Index('all_comments'))),
-        //       q.Lambda(
-        //         'commentsRef',
-        //         q.Let(
-        //           {
-        //             comments: q.Get(q.Var('commentsRef')),
-        //             user: q.Get(q.Select(['data', 'user'], q.Var('comments'))),
-        //           },
-        //           {
-        //             user: q.Select(['data', 'name'], q.Var('user')),
-        //             comments: q.Select(['data', 'comments'], q.Var('comments')),
-        //           }
-        //         )
-        //       )
-        //     ),
-        //     { secret: secretResponse.secret }
-        //   )
-        //   .then((commentsResponse) =>
-        //     console.log('Comments from user: ', commentsResponse)
-        //   )
-        //   .catch((commentsError) => console.log(commentsError));
+        serverClient
+          .query(
+            q.Create(q.Collection('keys'), {
+              data: {
+                user: q.Select(
+                  'ref',
+                  q.Get(q.Match(q.Index('user_by_id'), faunaUser.data.id))
+                ),
+                key: secretResponse.secret,
+                test: true,
+              },
+            })
+          )
+          .then((commentsResponseTwo) => {
+            console.log(commentsResponseTwo);
+
+            setKey(secretResponse.secret);
+            setRender(true);
+          })
+          .catch((commentsErrorTwo) => console.log(commentsErrorTwo));
       })
       .catch((secretErr) => console.log(secretErr));
   };
@@ -178,12 +229,13 @@ const Settings = () => {
                 title='API Keys'
                 subtitle='Your API keys grant access to all your comments. Keep them safe.'
               >
-                <APIKey>
-                  <strong>Key:</strong> 12kjqrej64grj46tgrjt
-                </APIKey>
-                <APIKey>
-                  <strong>Key:</strong> a7sf7ifgsd7igisdf7gt
-                </APIKey>
+                {keys.map((key) => {
+                  return (
+                    <APIKey key={`api-key-${key.key}`}>
+                      <strong>Key:</strong> {key.key}
+                    </APIKey>
+                  );
+                })}
                 <Spacer />
                 <Button onClick={() => createAPIKey()} small>
                   Create New

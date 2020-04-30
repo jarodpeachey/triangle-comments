@@ -86,15 +86,14 @@ const AuthForm = () => {
                   name || 'Guest',
                   response.user.email,
                   response.user.uid,
-                  [
+                  
                     {
                       name: 'Staticboard Team',
                       email: 'staticboard@gmai.com',
                       comment:
                         "This is your first comment! Awesome sauce!\n\n If you don't want this comment here, go to your dashboard to delete it: https://staticboard.com/dashboard",
                     },
-                  ],
-                  [],
+                  
                 ],
               ],
               q.Lambda(
@@ -105,25 +104,23 @@ const AuthForm = () => {
                       data: {
                         name: q.Select(0, q.Var('data')),
                         email: q.Select(1, q.Var('data')),
-                        id: q.Select(2, q.Var('data')),
-                        comments: q.Select(3, q.Var('data')),
-                        keys: q.Select(4, q.Var('data')),
+                        id: q.Select(2, q.Var('data'))
                       },
                       credentials: {
                         password: response.user.uid,
                       },
                     }),
-                    comments: q.Select(3, q.Var('data')),
-                    keys: q.Select(4, q.Var('data')),
+                    comment: q.Select(3, q.Var('data')),
+                    // keys: q.Select(4, q.Var('data')),
                   },
                   q.Map(
-                    [[q.Var('user'), q.Var('comments'), q.Var('keys')]],
+                    [[q.Var('user'), q.Var('comment')]],
                     q.Lambda(
                       'newData',
                       q.Create(q.Collection('comments'), {
                         data: {
                           user: q.Select('ref', q.Select(0, q.Var('newData'))),
-                          comments: q.Select(1, q.Var('newData')),
+                          comment: q.Select(1, q.Var('newData')),
                         },
                       })
                     )
