@@ -17,7 +17,7 @@ const IndexPage = ({ data }) => {
   const theme = useContext(ThemeContext);
 
   return (
-    <>
+    <Wrapper>
       <Hero />
       <div id='blur'>
         <svg
@@ -58,9 +58,18 @@ const IndexPage = ({ data }) => {
         <GetStartedSection />
       </div>
       <SEO title='Home' />
-    </>
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  p {
+    line-height: 30px !important;
+    font-size: 20px !important;
+    font-weight: 400 !important;
+    color: ${(props) => props.theme.color.text.dark} !important;
+  }
+`;
 
 export const IndexQuery = graphql`
   query {

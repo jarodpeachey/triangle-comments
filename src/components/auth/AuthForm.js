@@ -47,6 +47,26 @@ const AuthForm = () => {
     setEmail(e.target.value);
   };
 
+  const queryMoreItems = (user, comments, keys) => {
+    serverClient
+      .query(
+        q.Create(q.Collection('comments'), {
+          data: {
+            user: q.Select('ref', user),
+            comments,
+          },
+        }),
+        q.Create(q.Collection('keys'), {
+          data: {
+            user: q.Select('ref', user),
+            keys,
+          },
+        })
+      )
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
   const handleSignup = (e) => {
     e.preventDefault();
 
@@ -74,6 +94,7 @@ const AuthForm = () => {
                         "This is your first comment! Awesome sauce!\n\n If you don't want this comment here, go to your dashboard to delete it: https://staticboard.com/dashboard",
                     },
                   ],
+                  [],
                 ],
               ],
               q.Lambda(
@@ -86,19 +107,27 @@ const AuthForm = () => {
                         email: q.Select(1, q.Var('data')),
                         id: q.Select(2, q.Var('data')),
                         comments: q.Select(3, q.Var('data')),
+                        keys: q.Select(4, q.Var('data')),
                       },
                       credentials: {
-                        password: `${response.uid}-${response.email}`,
+                        password: response.user.uid,
                       },
                     }),
                     comments: q.Select(3, q.Var('data')),
+                    keys: q.Select(4, q.Var('data')),
                   },
-                  q.Create(q.Collection('comments'), {
-                    data: {
-                      user: q.Select('ref', q.Var('user')),
-                      comments: q.Var('comments'),
-                    },
-                  })
+                  q.Map(
+                    [[q.Var('user'), q.Var('comments'), q.Var('keys')]],
+                    q.Lambda(
+                      'newData',
+                      q.Create(q.Collection('comments'), {
+                        data: {
+                          user: q.Select('ref', q.Select(0, q.Var('newData'))),
+                          comments: q.Select(1, q.Var('newData')),
+                        },
+                      })
+                    )
+                  )
                 )
               )
             )

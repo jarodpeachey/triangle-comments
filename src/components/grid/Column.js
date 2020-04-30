@@ -57,6 +57,7 @@ const Info = styled.div``;
 const Wrapper = styled.div`
   // min-width: ${(props) => (props.maxColumnSize / 12) * 100}% !important;
   width: 100%;
+  height: 100%;
   padding: ${(props) => props.spacingY}px ${(props) => props.spacingX}px;
 
   ${(props) =>

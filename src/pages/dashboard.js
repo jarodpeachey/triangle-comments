@@ -6,7 +6,7 @@ import { Link } from 'gatsby';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Section from '../components/layout/Section';
-import Profile from '../components/dashboard/Profile';
+import Dashboard from '../components/dashboard/Dashboard';
 import Settings from '../components/dashboard/Settings';
 import Billing from '../components/dashboard/Billing';
 import DelayedLoad from '../components/DelayedLoad';
@@ -21,7 +21,13 @@ import { AppContext } from '../providers/AppProvider';
 import Spacer from '../components/Spacer';
 
 const Account = () => {
-  const [activeTab, setActiveTab] = useState('home');
+  const [activeTab, setActiveTab] = useState(
+    window.location.pathname.includes('settings')
+      ? 'settings'
+      : window.location.pathname.includes('comments')
+      ? 'comments'
+      : 'home'
+  );
   const { firebase, firebaseUser } = useContext(FirebaseContext);
   const { faunaUser } = useContext(DatabaseContext);
   const { signedIn } = useContext(AppContext);
@@ -83,7 +89,22 @@ const Account = () => {
                     }}
                   >
                     <FontAwesomeIcon icon='home' />
-                    General
+                    Dashboard
+                  </Tab>
+                  <Tab
+                    active={
+                      isBrowser() &&
+                      window.location.pathname.includes('/comments')
+                    }
+                    onClick={() => {
+                      if (isBrowser()) {
+                        window.history.pushState({}, '', '/dashboard/comments');
+                      }
+                      setActiveTab('comments');
+                    }}
+                  >
+                    <FontAwesomeIcon icon='comment' />
+                    Comments
                   </Tab>
                   <Tab
                     active={
@@ -92,7 +113,7 @@ const Account = () => {
                     }
                     onClick={() => {
                       if (isBrowser()) {
-                        window.history.pushState({}, '', '/settings');
+                        window.history.pushState({}, '', '/dashboard/settings');
                       }
                       setActiveTab('settings');
                     }}
@@ -107,7 +128,7 @@ const Account = () => {
                       }
                       onClick={() => {
                         if (typeof window !== 'undefined') {
-                          window.history.pushState({}, '', '/dashboard/billing');
+                          window.history.pushState({}, '', '/dashboard/dashboard/billing');
                         }
                         setActiveTab('billing');
                       }}
@@ -121,14 +142,17 @@ const Account = () => {
           </Section>
           <Section
             customStyles={`
-        padding-top: 64px;
+        padding-top: 80px;
+                  @media(min-width: 769px) {
+            padding-top: 48px;
+          }
       `}
           >
             <span>
               <Spacer height={36} />
               {/* <Router>
                       <DelayedLoad> */}
-              {activeTab === 'home' && <Profile />}
+              {activeTab === 'home' && <Dashboard />}
               {activeTab === 'settings' && <Settings />}
               {/* {activeTab === 'billing' && <Billing />} */}
               {/* </DelayedLoad>

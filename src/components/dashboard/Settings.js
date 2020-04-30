@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Router } from '@reach/router';
 import { Link } from 'gatsby';
 import styled, { keyframes } from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Card from '../Card';
 import Button from '../Button';
 import Spacer from '../Spacer';
@@ -12,54 +13,242 @@ import EditPersonalInfoModal from './EditPersonalInfoModal';
 import { AppContext } from '../../providers/AppProvider';
 import { FirebaseContext } from '../../providers/FirebaseProvider';
 import { isBrowser } from '../../utils/isBrowser';
+import { DatabaseContext } from '../../providers/DatabaseProvider';
+import Row from '../grid/Row';
 
 const Settings = () => {
   const { setEditModalOpen } = useContext(AppContext);
-  const { firebase } = useContext(FirebaseContext);
+  const { firebase, firebaseUser } = useContext(FirebaseContext);
+  const { q, serverClient, faunaUser } = useContext(DatabaseContext);
+  const [reRender, setRender] = useState(false);
+  const [activeTab, setActiveTab] = useState('general');
+
+  useEffect(() => {
+    setRender(!reRender);
+
+    console.log(faunaUser.ref);
+
+    if (firebaseUser) {
+      serverClient
+        .query(q.Match(q.Index('key_test_four'), faunaUser.data.id))
+        .then((res) => console.log('Keys by user: ', res, res.data))
+        .catch((err) => console.log(err));
+
+      serverClient
+        .query(
+          q.Map(
+            q.Paginate(q.Match(q.Index('all_keys'))),
+            q.Lambda(
+              'keysRef',
+              q.Let(
+                {
+                  keys: q.Get(q.Var('keysRef')),
+                  user: q.Get(q.Select(['data', 'user'], q.Var('keys'))),
+                },
+                {
+                  user: q.Select(['data', 'name'], q.Var('user')),
+                  keys: q.Select(['data', 'keys'], q.Var('keys')),
+                }
+              )
+            )
+          )
+        )
+        .then((commentsResponse) =>
+          console.log('Comments from user: ', commentsResponse)
+        )
+        .catch((commentsError) => console.log(commentsError));
+    }
+  }, [firebaseUser]);
 
   const openEditModal = () => {
     setEditModalOpen(true);
   };
 
-  const currentUser = isBrowser() && firebase.auth().currentUser;
+  const createAPIKey = () => {
+    serverClient
+      .query(
+        q.Login(q.Match(q.Index('user_by_id'), firebaseUser.uid), {
+          password: firebaseUser.uid,
+        })
+      )
+      .then((secretResponse) => {
+        console.log('Secret: ', secretResponse);
+
+        alert(`New API key created: ${secretResponse.secret}`);
+
+        // serverClient
+        //   .query(
+        //     q.Map(
+        //       q.Paginate(q.Match(q.Index('all_comments'))),
+        //       q.Lambda(
+        //         'commentsRef',
+        //         q.Let(
+        //           {
+        //             comments: q.Get(q.Var('commentsRef')),
+        //             user: q.Get(q.Select(['data', 'user'], q.Var('comments'))),
+        //           },
+        //           {
+        //             user: q.Select(['data', 'name'], q.Var('user')),
+        //             comments: q.Select(['data', 'comments'], q.Var('comments')),
+        //           }
+        //         )
+        //       )
+        //     ),
+        //     { secret: secretResponse.secret }
+        //   )
+        //   .then((commentsResponse) =>
+        //     console.log('Comments from user: ', commentsResponse)
+        //   )
+        //   .catch((commentsError) => console.log(commentsError));
+      })
+      .catch((secretErr) => console.log(secretErr));
+  };
 
   return (
     // <DelayedLoad>
-      <SlideWrapper>
-        <h2 className='mt-none'>Account Info</h2>
-        <Card title='Personal Info'>
-          {currentUser ? (
-            <>
-              <p className='small m-none'>Name: {currentUser.displayName || 'Anonymous'}</p>
-              <p className='small m-none'>Email: {currentUser.email}</p>
-              <Spacer />
-              <Button onClick={() => openEditModal(true)} gray small>
-                Edit
-              </Button>
-            </>
-          ) : (
-            <Loader />
-          )}
-        </Card>
-        <Card title='Billing Info'>
-          {currentUser ? (
-            <>
-              <p className='small m-none'>Plan: Developer</p>
-              <p className='small m-none'>Last Payment Date: 10/07/01</p>
-              <p className='small m-none'>Last Payment Amount: $15.00</p>
-              <Spacer />
-              <Button link='/dashboard/billing' gray small>
-                More
-              </Button>
-            </>
-          ) : (
-            <Loader />
-          )}
-        </Card>
-      </SlideWrapper>
-    //</DelayedLoad>
+    <span>
+      <Row spacing={[32]} breakpoints={[769]}>
+        <div widths={[3]}>
+          <Tabs>
+            <Tab
+              active={
+                (isBrowser() &&
+                  window.location.pathname === '/dashboard/settings/') ||
+                (isBrowser() &&
+                  window.location.pathname === '/dashboard/settings')
+              }
+              onClick={() => {
+                if (typeof window !== 'undefined') {
+                  window.history.pushState({}, '', '/dashboard/settings');
+                }
+                setActiveTab('general');
+              }}
+            >
+              <FontAwesomeIcon icon='home' />
+              General
+            </Tab>
+            <Tab
+              active={
+                isBrowser() &&
+                window.location.pathname.includes('/settings/api')
+              }
+              onClick={() => {
+                if (isBrowser()) {
+                  window.history.pushState({}, '', '/dashboard/settings/api');
+                }
+                setActiveTab('api');
+              }}
+            >
+              <FontAwesomeIcon icon='cog' />
+              API
+            </Tab>
+            {/* <Tab
+                      active={
+                        typeof window !== 'undefined' &&
+                        window.location.pathname.includes('/dashboard/settings')
+                      }
+                      onClick={() => {
+                        if (typeof window !== 'undefined') {
+                          window.history.pushState({}, '', '/dashboard/dashboard/billing');
+                        }
+                        setActiveTab('billing');
+                      }}
+                    >
+                      <FontAwesomeIcon icon='dollar-sign' />
+                      Billing
+                    </Tab> */}
+          </Tabs>
+        </div>
+        <div widths={[9]}>
+          <SlideWrapper>
+            {activeTab === 'general' && (
+              <Card title='Account'>
+                <p className='small m-none'>
+                  Name: {faunaUser.data.name || 'Guest'}
+                </p>
+                <p className='small m-none'>Email: {faunaUser.data.email}</p>
+                <Spacer />
+                <Button onClick={() => openEditModal(true)} gray small>
+                  Edit
+                </Button>
+              </Card>
+            )}
+            {activeTab === 'api' && (
+              <Card
+                title='API Keys'
+                subtitle='Your API keys grant access to all your comments. Keep them safe.'
+              >
+                <APIKey>
+                  <strong>Key:</strong> 12kjqrej64grj46tgrjt
+                </APIKey>
+                <APIKey>
+                  <strong>Key:</strong> a7sf7ifgsd7igisdf7gt
+                </APIKey>
+                <Spacer />
+                <Button onClick={() => createAPIKey()} small>
+                  Create New
+                </Button>
+              </Card>
+            )}
+          </SlideWrapper>
+        </div>
+      </Row>
+    </span>
   );
 };
+
+const Tabs = styled.div`
+  width: 100%;
+  position: relative;
+`;
+
+const Tab = styled.div`
+  width: fit-content;
+  width: 100%;
+  display: block;
+  padding: 8px 16px;
+  border-radius: 50px;
+  margin-right: 8px;
+  transition-duration: 0.25s;
+  background: ${(props) =>
+    props.active ? props.theme.color.primary.backgroundDark : 'transparent'};
+  color: ${(props) => (props.active ? 'white' : 'initial')};
+  :hover {
+    cursor: pointer;
+    background: ${(props) =>
+      props.active
+        ? `${props.theme.color.primary.backgroundDark}`
+        : props.theme.color.gray.three};
+    transition-duration: 0.25s;
+  }
+  svg {
+    margin-right: 8px;
+    color: inherit;
+  }
+  text-decoration: none;
+`;
+
+const APIKey = styled.p`
+  margin-top: 4px;
+  margin-bottom: 0;
+`;
+
+const CommentWrapper = styled.div`
+  border: 2px solid ${(props) => props.theme.color.gray.two};
+  padding: 12px;
+  border-radius: 3px;
+  margin: 16px 0;
+`;
+
+const CommentTitle = styled(Link)`
+  margin: 0;
+  margin-bottom: 8px;
+  text-decoration: none;
+  color: ${(props) => props.theme.color.text.heading} !important;
+  :hover {
+    color: ${(props) => props.theme.color.primary.main} !important;
+  }
+`;
 
 const animation = keyframes`
   from {
