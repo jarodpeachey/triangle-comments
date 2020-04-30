@@ -21,47 +21,45 @@ const Settings = () => {
   const { firebase, firebaseUser } = useContext(FirebaseContext);
   const { q, serverClient, faunaUser } = useContext(DatabaseContext);
   const [reRender, setRender] = useState(false);
-  const [activeTab, setActiveTab] = useState('general');
+  const [activeTab, setActiveTab] = useState(
+    isBrowser() && window.location.pathname.includes('api') ? 'api' : 'general'
+  );
   const [keys, setKeys] = useState([]);
   const [key, setKey] = useState('');
 
   useEffect(() => {
-    setRender(!reRender);
+    setRender(false);
 
     console.log(faunaUser.ref);
 
-    if (firebaseUser) {
-      // serverClient
-      //   .query(q.Match(q.Index('key_test_four'), faunaUser.data.id))
-      //   .then((res) => console.log('Keys by user: ', res, res.data))
-      //   .catch((err) => console.log(err));
-    }
-  }, [firebaseUser]);
-
-  serverClient
-    .query(
-      q.Map(
-        q.Paginate(q.Match(q.Index('all_keys'))),
-        q.Lambda(
-          'keysRef',
-          q.Let(
-            {
-              keys: q.Get(q.Var('keysRef')),
-              user: q.Get(q.Select(['data', 'user'], q.Var('keys'))),
-            },
-            {
-              user: q.Select(['ref'], q.Var('user')),
-              key: q.Select(['data', 'key'], q.Var('keys')),
-            }
-          )
+    if (!reRender) {
+      serverClient
+        .query(
+          q.Map(
+            q.Paginate(q.Match(q.Index('all_keys'))),
+            q.Lambda(
+              'keysRef',
+              q.Let(
+                {
+                  keys: q.Get(q.Var('keysRef')),
+                  user: q.Get(q.Select(['data', 'user'], q.Var('keys'))),
+                },
+                {
+                  user: q.Select(['ref'], q.Var('user')),
+                  key: q.Select(['data', 'key'], q.Var('keys')),
+                }
+              )
+            )
+          ),
+          { secret: 'fnEDqswJoPACEgOmCb0MkAIUO0Mtcu5wDWGg5PSvigYek3Aac8s' }
         )
-      ),
-      { secret: 'fnEDqswJoPACEgOmCb0MkAIUO0Mtcu5wDWGg5PSvigYek3Aac8s' }
-    )
-    .then((keysResponse) =>
-      console.log('Keys from user: ', keysResponse)
-    )
-    .catch((commentsError) => console.log(commentsError));
+        .then((keysResponse) => {
+          console.log('Keys from user: ', keysResponse.data);
+          setKeys(keysResponse.data);
+        })
+        .catch((commentsError) => console.log(commentsError));
+    }
+  }, [reRender]);
 
   // if (key) {
   //   serverClient
@@ -236,7 +234,7 @@ const Settings = () => {
                     </APIKey>
                   );
                 })}
-                <Spacer />
+                {/* <Spacer /> */}
                 <Button onClick={() => createAPIKey()} small>
                   Create New
                 </Button>
@@ -283,6 +281,10 @@ const Tab = styled.div`
 const APIKey = styled.p`
   margin-top: 4px;
   margin-bottom: 0;
+  border-radius: 5px;
+  border: 1px solid ${props => props.theme.color.gray.three};
+  padding: 12px;
+  margin: 16px 0;
 `;
 
 const CommentWrapper = styled.div`

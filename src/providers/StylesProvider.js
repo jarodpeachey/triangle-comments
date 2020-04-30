@@ -32,7 +32,13 @@ export const StylesProvider = (props) => {
   return (
     <CustomThemeProvider>
       <ThemeProvider theme={theme}>
-        <StyleWrapper textColor={theme.color.text.heading} width={scrollbarWidth}>{props.children}</StyleWrapper>
+        <StyleWrapper
+          theme={theme}
+          textColor={theme.color.text.heading}
+          width={scrollbarWidth}
+        >
+          {props.children}
+        </StyleWrapper>
       </ThemeProvider>
     </CustomThemeProvider>
   );
@@ -44,7 +50,20 @@ const StyleWrapper = styled.div`
   height: auto;
   display: inline-block;
   padding-right: ${(props) => props.width}px;
-  p, small, code {
-    color: ${props => props.textColor};
+  p,
+  small,
+  code {
+    color: ${(props) => props.theme.color.text.paragraph};
+  }
+  strong {
+    color: ${props => props.theme.color.text.dark};
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: ${(props) => props.theme.color.text.heading};
   }
 `;

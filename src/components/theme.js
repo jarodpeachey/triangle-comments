@@ -6,9 +6,9 @@ export const theme = {
     success: '#00ab66',
     error: '#ff6347',
     text: {
-      light: '#989fa7',
-      dark: '#626f7f',
-      heading: '#3a3e44',
+      paragraph: '#636d72',
+      heading: '#2e3c42',
+      dark: '#0e1e24',
     },
     primary: {
       backgroundLight: '#f6faff',

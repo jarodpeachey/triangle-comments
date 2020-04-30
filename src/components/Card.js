@@ -7,7 +7,7 @@ const Card = ({ children, title, subtitle }) => {
     <Wrapper>
       <StyledCard>
         {title && <Title border={!subtitle}>{title}</Title>}
-        {subtitle && <Subtitle>{subtitle}</Subtitle>}
+        {subtitle && <Subtitle className='weight-light'>{subtitle}</Subtitle>}
         {children}
       </StyledCard>
     </Wrapper>
@@ -29,17 +29,17 @@ const StyledCard = styled.div`
 
 const Title = styled.h2`
   margin: 0;
-  padding-bottom: 12px;
-  margin-bottom: ${(props) => (props.border ? '16px' : '0')};
+  padding-bottom: ${(props) => (props.border ? '12px' : '0')};
+  margin-bottom: ${(props) => (props.border ? '16px' : '8px')};
   border-bottom: ${(props) =>
     props.border ? `2px solid ${props.theme.color.gray.two}` : 'none'};
 `;
 
-const Subtitle = styled.h4`
+const Subtitle = styled.p`
   margin: 0;
   padding-bottom: 12px;
   margin-bottom: 16px;
-  color: ${(props) => props.theme.color.text.light};
+  // color: #00000090 !important;
   border-bottom: 2px solid ${(props) => props.theme.color.gray.two};
 `;
 

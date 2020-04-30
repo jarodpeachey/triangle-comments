@@ -1,10 +1,8 @@
 /* LAYOUT AND GRID SYSTEM
 --------------------------------------------------------------- */
 
-@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Hind:wght@400;600;800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Exo:wght@500;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Oxygen:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira sans:wght@500;600;700&display=swap');
 
 #header {
   z-index: 999999;
@@ -180,26 +178,24 @@ html {
 
 html,
 body {
-  color: #3a3e44;
-  font-family: 'Heebo', sans-serif;
-  overflow-x: hidden;
+  font-family: 'Heebo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;  overflow-x: hidden;
 }
 
 p,
 small {
-  font-family: 'Heebo', sans-serif;
-  color: #626f7f;
+  font-family: 'Heebo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;  /* color: #626f7f; */
 }
 
 p {
   font-size: 16px;
   font-family: 'Heebo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    line-height: 1.5rem;
 }
 
 p.small {
-  color: var(--text-heading);
-  font-size: 16px;
 }
 
 .logo {
@@ -259,43 +255,54 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Fire Sans', sans-serif;
+  font-family: 'Fira Sans', sans-serif;
+}
+
+.weight-light {
+  font-weight: 400;
+}
+
+.weight-regular {
+  font-weight: 500;
+}
+
+.weight-heavy, strong {
   font-weight: 600;
 }
 
-h1, .h1 {
+h1,
+.h1 {
   margin-block-start: 0.67em;
   margin-block-end: 0.67em;
   font-size: 2em;
-  font-weight: bold;
 }
-h2, .h2 {
+h2,
+.h2 {
   margin-block-start: 0.83em;
   margin-block-end: 0.83em;
   font-size: 1.5em;
-  font-weight: bold;
 }
-h3, .h3 {
+h3,
+.h3 {
   margin-block-start: 1em;
   margin-block-end: 1em;
   font-size: 1.17em;
-  font-weight: bold;
 }
-h4, .h4 {
+h4,
+.h4 {
   margin-block-start: 1.33em;
   margin-block-end: 1.33em;
   font-size: 1em;
-  font-weight: bold;
 }
-h5, .h5 {
+h5,
+.h5 {
   margin-block-start: 1.67em;
   margin-block-end: 1.67em;
   font-size: 0.83em;
-  font-weight: bold;
 }
-h6, .h6 {
+h6,
+.h6 {
   margin-block-start: 2.33em;
   margin-block-end: 2.33em;
   font-size: 0.67em;
-  font-weight: bold;
 }

@@ -13,19 +13,15 @@ const PasswordModal = ({
     console.log('Function');
   },
 }) => {
-  let currentUser = isBrowser() ? localStorage.getItem('user') : null;
-  currentUser = JSON.parse(currentUser);
-
-  const [statePassword, setStatePassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const { firebase } = useContext(FirebaseContext);
-
+  const { firebase, firebaseUser } = useContext(FirebaseContext);
   const {
     setEditModalOpen,
     setNotificationMessage,
     setNotificationType,
     setPasswordModalOpen,
   } = useContext(AppContext);
+  const [statePassword, setStatePassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const onPasswordChange = (e) => {
     setStatePassword(e.target.value);
@@ -39,10 +35,11 @@ const PasswordModal = ({
     firebase
       .auth()
       .currentUser.reauthenticateWithCredential(
-        isBrowser() && firebase.auth.EmailAuthProvider.credential(
-          currentUser.email,
-          statePassword
-        )
+        isBrowser() &&
+          firebase.auth.EmailAuthProvider.credential(
+            firebaseUser.email,
+            statePassword
+          )
       )
       .then((res) => {
         console.log('Success! ', res);

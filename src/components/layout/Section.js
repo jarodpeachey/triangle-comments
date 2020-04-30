@@ -47,7 +47,7 @@ const Title = styled.h2`
 
 const SubTitle = styled.p`
   color: ${(props) =>
-    props.dark ? props.theme.color.text.light : props.theme.color.text.dark};
+    props.dark ? props.theme.color.text.paragraph : props.theme.color.text.heading};
 `;
 
 const StyledSection = styled.section`

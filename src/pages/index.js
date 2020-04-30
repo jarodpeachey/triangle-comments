@@ -67,7 +67,7 @@ const Wrapper = styled.div`
     line-height: 30px !important;
     font-size: 20px !important;
     font-weight: 400 !important;
-    color: ${(props) => props.theme.color.text.dark} !important;
+    color: ${(props) => props.theme.color.text.heading} !important;
   }
 `;
 

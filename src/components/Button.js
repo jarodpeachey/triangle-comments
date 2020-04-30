@@ -118,7 +118,7 @@ const StyledButton = styled.button`
     props.lightText
       ? 'white'
       : props.darkText
-      ? props.theme.color.text.dark
+      ? props.theme.color.text.heading
       : props.outlined || props.gray
       ? props.theme.color.text.heading
       : props.secondary
