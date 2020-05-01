@@ -35,11 +35,11 @@ export const DatabaseProvider = ({ children, firebase }) => {
   }, [firebase]);
 
   const adminClient = new faunadb.Client({
-    secret: 'fnADqD4nZUACFDVsydrwShq80zbDeHUy_KhTsyGs',
+    secret: 'fnADqyhQ_dACEqW98J7zPaAqjOCJnTaLptiJ9Dzh',
   });
 
   const serverClient = new faunadb.Client({
-    secret: 'fnADqD4tupACFNbomOWpD8aq3Iq2mJhymQZJDAd-',
+    secret: 'fnADqyhZfWACFCX6hpVHgl9jV0TKx1IgS_99o4h-',
   });
 
   // Test user-based API keys
@@ -51,7 +51,7 @@ export const DatabaseProvider = ({ children, firebase }) => {
     adminClient,
     serverClient,
     q,
-    faunaUser
+    faunaUser,
   };
 
   return (

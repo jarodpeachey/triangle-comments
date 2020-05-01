@@ -1,11 +1,11 @@
 const firebaseConfig = {
-  apiKey: 'AIzaSyBvYZ7_Yp3d3RvVMkNxEuGg2aUA_dkLWQ0',
-  authDomain: 'staticbox-ddea5.firebaseapp.com',
-  databaseURL: 'https://staticbox-ddea5.firebaseio.com',
-  projectId: 'staticbox-ddea5',
-  storageBucket: 'staticbox-ddea5.appspot.com',
-  messagingSenderId: '106733678517',
-  appId: '1:106733678517:web:324a9c5bcbcaf29706f3fc',
+  apiKey: 'AIzaSyAGeDFEE8Hy8iglKjAomHqEiExkqOB4FW0',
+  authDomain: 'staticbox-569b0.firebaseapp.com',
+  databaseURL: 'https://staticbox-569b0.firebaseio.com',
+  projectId: 'staticbox-569b0',
+  storageBucket: 'staticbox-569b0.appspot.com',
+  messagingSenderId: '633664128163',
+  appId: '1:633664128163:web:e6295b45623e5bc3c5eb16',
 };
 
 export default firebaseConfig;
