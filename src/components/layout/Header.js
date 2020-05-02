@@ -83,6 +83,7 @@ const Header = ({ siteTitle }) => {
             <div className='container'>
               <Flex>
                 <SiteTitle
+                  className='logo'
                   light={
                     isBrowser() &&
                     window.location.pathname.includes('dashboard')
