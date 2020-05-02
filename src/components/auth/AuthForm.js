@@ -12,10 +12,13 @@ import { ThemeContext } from '../theme';
 import { FirebaseContext } from '../../providers/FirebaseProvider';
 import { DatabaseContext } from '../../providers/DatabaseProvider';
 import { isBrowser } from '../../utils/isBrowser';
+import { AppContext } from '../../providers/AppProvider';
 
 const AuthForm = () => {
   const { firebase, firebaseUser } = useContext(FirebaseContext);
-  const { q, serverClient, faunaUser } = useContext(DatabaseContext);
+  const { q, serverClient, faunaUser, setUserSecret, dispatch } = useContext(
+    DatabaseContext
+  );
   const theme = useContext(ThemeContext);
 
   const [loading, setLoading] = useState(false);
@@ -30,6 +33,8 @@ const AuthForm = () => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
+
+  // const [dispatch] = useContext(DatabaseContext);
 
   const onNameInputChange = (e) => {
     setName(e.target.value);
@@ -86,51 +91,90 @@ const AuthForm = () => {
                   name || 'Guest',
                   response.user.email,
                   response.user.uid,
-                  
-                    {
-                      name: 'Staticboard Team',
-                      email: 'staticboard@gmai.com',
-                      comment:
-                        "This is your first comment! Awesome sauce!\n\n If you don't want this comment here, go to your dashboard to delete it: https://staticboard.com/dashboard",
-                    },
-                  
+
+                  {
+                    name: 'Staticboard Team',
+                    email: 'staticboard@gmai.com',
+                    comment:
+                      "This is your first comment! Awesome sauce!\n\n If you don't want this comment here, go to your dashboard to delete it: https://staticboard.com/dashboard",
+                  },
                 ],
               ],
               q.Lambda(
                 'data',
                 q.Let(
                   {
-                    user: q.Create(q.Collection('users'), {
-                      data: {
-                        name: q.Select(0, q.Var('data')),
-                        email: q.Select(1, q.Var('data')),
-                        id: q.Select(2, q.Var('data'))
-                      },
-                      credentials: {
-                        password: response.user.uid,
-                      },
-                    }),
+                    user: q.Call(
+                      q.Function('create_user'),
+                      q.Select(0, q.Var('data')),
+                      q.Select(1, q.Var('data')),
+                      q.Select(2, q.Var('data'))
+                    ),
                     comment: q.Select(3, q.Var('data')),
-                    // keys: q.Select(4, q.Var('data')),
+                    site: q.Call(
+                      q.Function('create_site'),
+                      `${name}'s Site`,
+                      '7HJGg-g7Fj70F',
+                      q.Var('user')
+                    ),
                   },
-                  q.Map(
-                    [[q.Var('user'), q.Var('comment')]],
-                    q.Lambda(
-                      'newData',
-                      q.Create(q.Collection('comments'), {
-                        data: {
-                          user: q.Select('ref', q.Select(0, q.Var('newData'))),
-                          comment: q.Select(1, q.Var('newData')),
-                        },
-                      })
-                    )
-                  )
+                  q.Login(q.Select('ref', q.Var('user')), {
+                    password: q.Select(['data', 'id'], q.Var('user')),
+                  })
+                  // q.Map(
+                  //   [[q.Var('user'), q.Var('comment')]],
+                  //   q.Lambda(
+                  //     'newData',
+                  //     q.Create(q.Collection('comments'), {
+                  //       data: {
+                  //         user: q.Select('ref', q.Select(0, q.Var('newData'))),
+                  //         comment: q.Select(1, q.Var('newData')),
+                  //       },
+                  //     })
+                  //   )
+                  // )
                 )
               )
             )
           )
           .then((faunaResponse) => {
             console.log(faunaResponse);
+            console.log(faunaResponse[0].ref.id);
+
+            serverClient
+              .query(q.Get(q.Match(q.Index('user_by_id'), response.user.uid)))
+              .then((faunaResponseTwo) => {
+                console.log(faunaResponseTwo);
+                dispatch({
+                  type: 'register',
+                  data: {
+                    secret: faunaResponse[0].secret,
+                    user: faunaResponseTwo,
+                  },
+                });
+              })
+              .catch((faunaErr) => {
+                console.log(faunaErr);
+              });
+
+            // userClient.query(
+            //   q.Map(
+            //     q.Paginate(q.Match(q.Index('all_sites'))),
+            //     q.Lambda(
+            //       'sitesRef',
+            //       q.Let(
+            //         {
+            //           sites: q.Get(q.Var('sitesRef')),
+            //           user: q.Get(q.Select(['data', 'user'], q.Var('sites'))),
+            //         },
+            //         {
+            //           user: q.Select(['ref'], q.Var('user')),
+            //           site: q.Var('sites'),
+            //         }
+            //       )
+            //     )
+            //   )
+            // );
 
             setLoading(false);
             setShowForm(false);
@@ -175,7 +219,37 @@ const AuthForm = () => {
       .then((response) => {
         console.log(response);
 
-        window.location = '/dashboard';
+        serverClient
+          .query(
+            q.Let(
+              {
+                user: q.Get(q.Match(q.Index('user_by_id'), response.user.uid)),
+              },
+              q.Login(q.Select('ref', q.Var('user')), {
+                password: q.Select(['data', 'id'], q.Var('user')),
+              })
+            )
+          )
+          .then((faunaResponse) => {
+            console.log(faunaResponse);
+            // console.log(faunaResponse[0].ref.id);
+
+            serverClient
+              .query(q.Get(q.Match(q.Index('user_by_id'), response.user.uid)))
+              .then((faunaResponseTwo) => {
+                console.log(faunaResponseTwo);
+                dispatch({
+                  type: 'login',
+                  data: {
+                    secret: faunaResponse.secret,
+                    user: faunaResponseTwo,
+                  },
+                });
+              })
+              .catch((faunaErr) => {
+                console.log(faunaErr);
+              });
+          });
       })
       .catch((err) => {
         console.log('Error: ', err);

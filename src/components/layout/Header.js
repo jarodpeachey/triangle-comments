@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import React, { useState, useEffect, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
-import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import { Link } from 'gatsby';
 import Menu from './Menu';
 // import MobileMenu from './MobileMenu';

@@ -18,8 +18,9 @@ import Row from '../grid/Row';
 const Dashboard = () => {
   const { setEditModalOpen } = useContext(AppContext);
   const { firebase, firebaseUser } = useContext(FirebaseContext);
-  const { q, serverClient, faunaUser } = useContext(DatabaseContext);
   const [reRender, setRender] = useState(false);
+  const { state } = useContext(DatabaseContext);
+  const { user } = state;
 
   useEffect(() => {
     setRender(!reRender);
@@ -37,19 +38,17 @@ const Dashboard = () => {
         <div widths={[6]}>
           {/* <Card title='Account'>
             <p className='small m-none'>
-              Name: {faunaUser.data.name || 'Guest'}
+              Name: {user.data.name || 'Guest'}
             </p>
-            <p className='small m-none'>Email: {faunaUser.data.email}</p>
+            <p className='small m-none'>Email: {user.data.email}</p>
             <Spacer />
             <Button onClick={() => openEditModal(true)} gray small>
               Edit
             </Button>
           </Card> */}
           <Card title='Account'>
-            <p className='small m-none'>
-              Name: {faunaUser.data.name || 'Guest'}
-            </p>
-            <p className='small m-none'>Email: {faunaUser.data.email}</p>
+            <p className='small m-none'>Name: {user.data.name || 'Guest'}</p>
+            <p className='small m-none'>Email: {user.data.email}</p>
             <Spacer />
             <Button link='/dashboard/account' gray small>
               More

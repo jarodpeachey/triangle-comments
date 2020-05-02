@@ -1,0 +1,6 @@
+[
+    {
+        "path": "/dashboard/",
+        "matchPath": "/dashboard/*"
+    }
+]

@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'gatsby';
 import queryString from 'query-string';
-import Layout from '../components/layout/layout';
 import SEO from '../components/SEO';
 import Hero from '../components/sections/Hero';
 import Button from '../components/Button';

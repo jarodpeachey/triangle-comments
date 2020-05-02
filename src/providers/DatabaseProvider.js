@@ -1,45 +1,68 @@
-import React, { useState, useContext, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useContext } from 'react';
 import faunadb, { query as q } from 'faunadb';
 import { AppContext } from './AppProvider';
 import { isBrowser } from '../utils/isBrowser';
 import { FirebaseContext } from './FirebaseProvider';
+import { setCookie } from '../utils/cookies';
 
 export const DatabaseContext = React.createContext({});
 
-export const DatabaseProvider = ({ children, firebase }) => {
-  const { signedIn } = useContext(AppContext);
-  const { firebaseUser } = useContext(FirebaseContext);
-  const [faunaUser, setFaunaUser] = useState(null);
+export const DatabaseReducer = (state, action) => {
+  switch (action.type) {
+    case 'login': {
+      isBrowser() &&
+        localStorage.setItem('faunaUser', JSON.stringify(action.data.user));
 
-  useEffect(() => {
-    console.log(firebaseUser);
-    console.log(signedIn);
-    if (signedIn) {
-      const UID = firebase.firebaseUser && firebase.firebaseUser.uid;
-
-      console.log(UID);
-      serverClient
-        .query(q.Get(q.Match(q.Index('user_by_id'), isBrowser() && UID)))
-        .then((response) => {
-          setFaunaUser(response);
-          isBrowser() &&
-            localStorage.setItem('faunaUser', JSON.stringify(response));
-          console.log(response);
-        })
-        .catch((err) => console.log(err));
-    } else {
-      setFaunaUser(null);
-      isBrowser() && localStorage.removeItem('faunaUser');
+      if (isBrowser()) {
+        setCookie('user_secret', action.data.secret);
+        window.location.pathname = '/dashboard';
+      }
+      return {
+        user: action.data.user,
+        userClient: new faunadb.Client({
+          secret: action.data.secret,
+        }),
+      };
     }
-  }, [firebase]);
+    case 'register': {
+      isBrowser() &&
+        localStorage.setItem('faunaUser', JSON.stringify(action.data.user));
 
-  const adminClient = new faunadb.Client({
-    secret: 'fnADqyhQ_dACEqW98J7zPaAqjOCJnTaLptiJ9Dzh',
-  });
+      if (isBrowser()) {
+        setCookie('user_secret', action.data.secret);
+        window.location.pathname = '/dashboard';
+      }
+
+      return {
+        user: action.data.user,
+        userClient: new faunadb.Client({
+          secret: action.data.secret,
+        }),
+      };
+    }
+    case 'logout': {
+      isBrowser() && localStorage.removeItem('faunaUser');
+      return { user: null };
+    }
+    default: {
+      throw new Error(`Unhandled action type: ${action.type}`);
+    }
+  }
+};
+
+export const DatabaseProvider = ({ children }) => {
+  const [state, dispatch] = React.useReducer(DatabaseReducer, { user: null });
+
+  if (isBrowser() && localStorage.getItem('faunaUser')) {
+    const newUser = localStorage.getItem('faunaUser');
+    dispatch({
+      type: 'login',
+      data: JSON.parse(newUser),
+    });
+  }
 
   const serverClient = new faunadb.Client({
-    secret: 'fnADqyhZfWACFCX6hpVHgl9jV0TKx1IgS_99o4h-',
+    secret: 'fnADq29sx9ACE4FItI0Ps8suOAzL0UHyqDNFNjgV',
   });
 
   // Test user-based API keys
@@ -48,10 +71,10 @@ export const DatabaseProvider = ({ children, firebase }) => {
   // });
 
   const ctx = {
-    adminClient,
     serverClient,
     q,
-    faunaUser,
+    state,
+    dispatch,
   };
 
   return (
@@ -61,6 +84,4 @@ export const DatabaseProvider = ({ children, firebase }) => {
   );
 };
 
-DatabaseProvider.propTypes = {
-  children: PropTypes.any.isRequired,
-};
+export const DatabaseConsumer = DatabaseContext.Consumer;

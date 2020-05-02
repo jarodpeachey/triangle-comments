@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-fragments */
 // src/pages/dashboard.js
 import React, { useContext, useState, useEffect } from 'react';
@@ -28,20 +29,16 @@ const Account = () => {
       ? 'comments'
       : 'home'
   );
-  const { firebase, firebaseUser } = useContext(FirebaseContext);
-  const { faunaUser } = useContext(DatabaseContext);
-  const { signedIn } = useContext(AppContext);
-  const [state, setState] = useState({});
+  const { state } = useContext(DatabaseContext);
+  const { user } = state;
 
-  useEffect(() => {
-    console.log(faunaUser);
-  }, [faunaUser]);
+  console.log(user);
 
   return (
     <DelayedLoad
       fullHeight
-      condition={faunaUser || null}
-      delay={4000}
+      condition={user}
+      delay={3000}
       render={
         <div id='blur'>
           <Section
@@ -65,7 +62,7 @@ const Account = () => {
               <div widths={['auto']}>
                 {' '}
                 <Title className='mb-none'>
-                  {faunaUser && faunaUser.data.name}
+                  {user && user.data.name}
                 </Title>
                 <SiteLink href='https://google.com'>
                   https://google.com

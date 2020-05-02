@@ -7,19 +7,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Card from '../Card';
 import Button from '../Button';
 import Spacer from '../Spacer';
-import Loader from '../Loader';
-import DelayedLoad from '../DelayedLoad';
-import EditPersonalInfoModal from './EditPersonalInfoModal';
 import { AppContext } from '../../providers/AppProvider';
-import { FirebaseContext } from '../../providers/FirebaseProvider';
 import { isBrowser } from '../../utils/isBrowser';
 import { DatabaseContext } from '../../providers/DatabaseProvider';
 import Row from '../grid/Row';
 
 const Settings = () => {
   const { setEditModalOpen } = useContext(AppContext);
-  const { firebase, firebaseUser } = useContext(FirebaseContext);
-  const { q, serverClient, faunaUser } = useContext(DatabaseContext);
   const [reRender, setRender] = useState(false);
   const [activeTab, setActiveTab] = useState(
     isBrowser() && window.location.pathname.includes('api') ? 'api' : 'general'
@@ -27,38 +21,41 @@ const Settings = () => {
   const [keys, setKeys] = useState([]);
   const [key, setKey] = useState('');
 
+  const { state, userClient, q } = useContext(DatabaseContext);
+  const { user } = state;
+
   useEffect(() => {
     setRender(false);
 
-    console.log(faunaUser.ref);
+    // console.log(faunaUser.ref);
 
-    if (!reRender) {
-      serverClient
-        .query(
-          q.Map(
-            q.Paginate(q.Match(q.Index('all_keys'))),
-            q.Lambda(
-              'keysRef',
-              q.Let(
-                {
-                  keys: q.Get(q.Var('keysRef')),
-                  user: q.Get(q.Select(['data', 'user'], q.Var('keys'))),
-                },
-                {
-                  user: q.Select(['ref'], q.Var('user')),
-                  key: q.Select(['data', 'key'], q.Var('keys')),
-                }
-              )
-            )
-          ),
-          { secret: 'fnEDqswJoPACEgOmCb0MkAIUO0Mtcu5wDWGg5PSvigYek3Aac8s' }
-        )
-        .then((keysResponse) => {
-          console.log('Keys from user: ', keysResponse.data);
-          setKeys(keysResponse.data);
-        })
-        .catch((commentsError) => console.log(commentsError));
-    }
+    // if (!reRender) {
+    //   serverClient
+    //     .query(
+    //       q.Map(
+    //         q.Paginate(q.Match(q.Index('all_keys'))),
+    //         q.Lambda(
+    //           'keysRef',
+    //           q.Let(
+    //             {
+    //               keys: q.Get(q.Var('keysRef')),
+    //               user: q.Get(q.Select(['data', 'user'], q.Var('keys'))),
+    //             },
+    //             {
+    //               user: q.Select(['ref'], q.Var('user')),
+    //               key: q.Select(['data', 'key'], q.Var('keys')),
+    //             }
+    //           )
+    //         )
+    //       ),
+    //       { secret: 'fnEDqswJoPACEgOmCb0MkAIUO0Mtcu5wDWGg5PSvigYek3Aac8s' }
+    //     )
+    //     .then((keysResponse) => {
+    //       console.log('Keys from user: ', keysResponse.data);
+    //       setKeys(keysResponse.data);
+    //     })
+    //     .catch((commentsError) => console.log(commentsError));
+    // }
   }, [reRender]);
 
   // if (key) {
@@ -118,10 +115,10 @@ const Settings = () => {
   };
 
   const createAPIKey = () => {
-    serverClient
+    userClient
       .query(
-        q.Login(q.Match(q.Index('user_by_id'), firebaseUser.uid), {
-          password: firebaseUser.uid,
+        q.Login(q.Match(q.Index('user_by_id'), user.data.id), {
+          password: user.data.id,
         })
       )
       .then((secretResponse) => {
@@ -129,16 +126,15 @@ const Settings = () => {
 
         alert(`New API key created: ${secretResponse.secret}`);
 
-        serverClient
+        userClient
           .query(
             q.Create(q.Collection('keys'), {
               data: {
                 user: q.Select(
                   'ref',
-                  q.Get(q.Match(q.Index('user_by_id'), faunaUser.data.id))
+                  q.Get(q.Match(q.Index('user_by_id'), user.data.id))
                 ),
-                key: secretResponse.secret,
-                test: true,
+                key: secretResponse.secret
               },
             })
           )
@@ -146,7 +142,7 @@ const Settings = () => {
             console.log(commentsResponseTwo);
 
             setKey(secretResponse.secret);
-            setRender(true);
+            // setRender(true);
           })
           .catch((commentsErrorTwo) => console.log(commentsErrorTwo));
       })
@@ -213,9 +209,9 @@ const Settings = () => {
             {activeTab === 'general' && (
               <Card title='Account'>
                 <p className='small m-none'>
-                  Name: {faunaUser.data.name || 'Guest'}
+                  Name: {user.data.name || 'Guest'}
                 </p>
-                <p className='small m-none'>Email: {faunaUser.data.email}</p>
+                <p className='small m-none'>Email: {user.data.email}</p>
                 <Spacer />
                 <Button onClick={() => openEditModal(true)} gray small>
                   Edit
@@ -282,7 +278,7 @@ const APIKey = styled.p`
   margin-top: 4px;
   margin-bottom: 0;
   border-radius: 5px;
-  border: 1px solid ${props => props.theme.color.gray.three};
+  border: 1px solid ${(props) => props.theme.color.gray.three};
   padding: 12px;
   margin: 16px 0;
 `;

@@ -33,7 +33,6 @@
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "react-helmet": "^5.2.1",
-    "request": "^2.88.2",
     "styled-components": "^5.0.1",
     "triangle-comments": "^0.0.4"
   },

@@ -1,27 +1,27 @@
 import React from 'react';
 import { StylesProvider } from './src/providers/StylesProvider';
-import Layout from './src/components/layout/layout';
-import {
-  FirebaseProvider,
-  FirebaseContext,
-} from './src/providers/FirebaseProvider';
-import { DatabaseProvider } from './src/providers/DatabaseProvider';
+import Layout from './src/components/layout/Layout';
+import { FirebaseProvider } from './src/providers/FirebaseProvider';
+// import { DatabaseProvider } from './src/providers/DatabaseProvider';
 import { AppProvider } from './src/providers/AppProvider';
 import { isBrowser } from './src/utils/isBrowser';
+import {
+  DatabaseProvider,
+  DatabaseReducer,
+} from './src/providers/DatabaseProvider';
 
 export const wrapRootElement = ({ element }) => {
   console.log(element);
+  // const [state, dispatch] = React.useReducer(DatabaseReducer, { user: null });
 
   return (
     <AppProvider>
       <FirebaseProvider>
-        <FirebaseContext.Consumer>
-          {(firebase) => (
-            <DatabaseProvider firebase={firebase}>
-              <StylesProvider>{element}</StylesProvider>
-            </DatabaseProvider>
-          )}
-        </FirebaseContext.Consumer>
+        {/* <DatabaseProvider> */}
+        <DatabaseProvider>
+          <StylesProvider>{element}</StylesProvider>
+        </DatabaseProvider>
+        {/* </DatabaseProvider> */}
       </FirebaseProvider>
     </AppProvider>
   );
