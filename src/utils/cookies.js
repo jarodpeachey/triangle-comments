@@ -6,6 +6,11 @@ export const setCookie = (name, value) => {
     document.cookie = `${name}=${value}`;
   }
 };
+export const deleteCookie = (name) => {
+  if (isBrowser()) {
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC`;
+  }
+};
 
 export const getCookie = (cookieName) => {
   const name = `${cookieName}=`;

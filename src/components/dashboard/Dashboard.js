@@ -33,51 +33,9 @@ const Dashboard = () => {
   return (
     // <DelayedLoad>
     <SlideWrapper>
-      {/* <h2 className='mt-none'>Account Info</h2> */}
-      <Row spacing={[16]} breakpoints={[769]}>
-        <div widths={[6]}>
-          {/* <Card title='Account'>
-            <p className='small m-none'>
-              Name: {user.data.name || 'Guest'}
-            </p>
-            <p className='small m-none'>Email: {user.data.email}</p>
-            <Spacer />
-            <Button onClick={() => openEditModal(true)} gray small>
-              Edit
-            </Button>
-          </Card> */}
-          <Card title='Account'>
-            <p className='small m-none'>Name: {user.data.name || 'Guest'}</p>
-            <p className='small m-none'>Email: {user.data.email}</p>
-            <Spacer />
-            <Button link='/dashboard/account' gray small>
-              More
-            </Button>
-          </Card>
-        </div>
-        <div widths={[6]}>
-          <Card title='Latest Comments'>
-            <CommentWrapper>
-              <CommentTitle className='h3'>The Best Way To Live</CommentTitle>
-              <p className='m-none'>
-                Awesome post! I love the detail in this...
-              </p>
-              <small className='m-none'>- Mark Smith</small>
-            </CommentWrapper>
-            <CommentWrapper>
-              <CommentTitle className='h3'>Top 10 Web Browsers</CommentTitle>
-              <p className='m-none'>
-                There's a broken link near the end of this. Great post th...
-              </p>
-              <small className='m-none'>- James Carlton</small>
-            </CommentWrapper>
-            <Spacer />
-            <Button link='/dashboard/comment' gray small>
-              More
-            </Button>
-          </Card>
-        </div>
-      </Row>
+      <Card title='Sites'>
+        All Sites!
+      </Card>
     </SlideWrapper>
   );
 };

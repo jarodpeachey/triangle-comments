@@ -1,4 +1,4 @@
-// src/pages/Settings.js
+// src/pages/SiteSettings.js
 import React, { useContext, useEffect, useState } from 'react';
 import { Router } from '@reach/router';
 import { Link } from 'gatsby';
@@ -12,7 +12,7 @@ import { isBrowser } from '../../utils/isBrowser';
 import { DatabaseContext } from '../../providers/DatabaseProvider';
 import Row from '../grid/Row';
 
-const Settings = () => {
+const SiteSettings = () => {
   const { setEditModalOpen } = useContext(AppContext);
   const [reRender, setRender] = useState(false);
   const [activeTab, setActiveTab] = useState(
@@ -134,7 +134,7 @@ const Settings = () => {
                   'ref',
                   q.Get(q.Match(q.Index('user_by_id'), user.data.id))
                 ),
-                key: secretResponse.secret,
+                key: secretResponse.secret
               },
             })
           )
@@ -158,13 +158,11 @@ const Settings = () => {
             <Tab
               active={
                 (isBrowser() &&
-                  window.location.pathname === '/dashboard/settings/') ||
-                (isBrowser() &&
-                  window.location.pathname === '/dashboard/settings')
+                  window.location.pathname === '/dashboard/sites/staticbox/settings')
               }
               onClick={() => {
                 if (typeof window !== 'undefined') {
-                  window.history.pushState({}, '', '/dashboard/settings');
+                  window.history.pushState({}, '', '/dashboard/sites/staticbox/settings');
                 }
                 setActiveTab('general');
               }}
@@ -179,7 +177,7 @@ const Settings = () => {
               }
               onClick={() => {
                 if (isBrowser()) {
-                  window.history.pushState({}, '', '/dashboard/settings/api');
+                  window.history.pushState({}, '', '/dashboard/sites/staticbox/settings/api');
                 }
                 setActiveTab('api');
               }}
@@ -313,4 +311,4 @@ const SlideWrapper = styled.div`
   animation: ${animation} 250ms ease-out;
 `;
 
-export default Settings;
+export default SiteSettings;

@@ -6,6 +6,7 @@ import 'firebase/firestore';
 import firebaseConfig from '../../firebaseConfig';
 import { isBrowser } from '../utils/isBrowser';
 import { AppContext } from './AppProvider';
+import { setCookie, deleteCookie } from '../utils/cookies';
 
 export const FirebaseContext = React.createContext({});
 
@@ -23,10 +24,12 @@ export const FirebaseProvider = ({ children }) => {
         setSignedIn(true);
         localStorage.setItem('firebaseUser', JSON.stringify(user));
         setFirebaseUser(user);
+        setCookie('user_id', user.uid);
       } else {
         setSignedIn(false);
         localStorage.removeItem('firebaseUser');
         setFirebaseUser(null);
+        deleteCookie('user_id');
       }
     });
 
