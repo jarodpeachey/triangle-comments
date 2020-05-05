@@ -89,7 +89,7 @@ const Header = ({ siteTitle }) => {
                   }
                   scrolled={scrolled}
                 >
-                  <FontAwesomeIcon icon='shapes' />
+                  <FontAwesomeIcon icon='comment-alt' />
                   Staticbox
                 </SiteTitle>
                 {isBrowser() &&
@@ -286,7 +286,7 @@ const SiteTitle = styled.h1`
   margin: 0;
   margin-bottom: -1px;
   transition: all 0.25s ease-in;
-  letter-spacing: 3px;
+  // letter-spacing: 3px;
   text-transform: uppercase;
   font-size: 22px;
   color: ${(props) => (props.light ? 'white' : 'inherit')} !important;
@@ -294,12 +294,36 @@ const SiteTitle = styled.h1`
     font-size: 26px;
   }
   z-index: 999;
+  position: relative;
+  ::after {
+    content: 'S';
+    display: block;
+    position: absolute;
+    height: 100%;
+    color: white;
+    font-size: 32px;
+    font-weight: 900 !important;
+    @media (min-width: 769px) {
+      font-size: 38px;
+    }
+    z-index: -1;
+    top: -4px;
+    left: 18px;
+    transform: rotate(-10deg);
+    font-family: Exo, Segoe UI;
+  }
   svg {
     color: ${(props) => (props.light ? 'white' : 'inherit')} !important;
 
-    margin-right: 8px;
+    margin-right: 16px;
     position: relative;
-    top: -1px;
+    top: 6px;
+    left: 12px;
+    z-index: -1;
+    font-size: 28px;
+    @media(min-width: 769px) {
+      font-size: 36px
+    }
   }
 `;
 

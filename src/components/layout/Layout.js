@@ -16,6 +16,7 @@ import {
   faDollarSign,
   faTimes,
   faComment,
+  faCommentAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { fab, faLinkedin, faGithub } from '@fortawesome/free-brands-svg-icons';
 import Footer from './Footer';
@@ -41,7 +42,8 @@ library.add(
   faHome,
   faDollarSign,
   faTimes,
-  faComment
+  faComment,
+  faCommentAlt
 );
 
 const Layout = (props) => {
