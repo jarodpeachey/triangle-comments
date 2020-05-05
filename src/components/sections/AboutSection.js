@@ -10,15 +10,20 @@ const AboutSection = ({ data }) => {
 
   return (
     <div>
-      <Section background='white'>
+      {/* <Section background='white'>
         <h1 className='center'>
-          Drop-in commenting system built for speed and customization.
+          
         </h1>
         <p className='center'>
-          Staticbox takes care of everything. Simply customize your comment form,
-          copy the code and paste it wherever you want in your site.
+          Welcome to Staticbox!
         </p>
-      </Section>
+        <p className='center'>
+          Staticbox is a modern commenting system built to get rid of bloat and make comments as simple as they should be.
+        </p>
+        <p className='center'>
+          It's as simple as 1-2-3. Are you ready to get started?
+        </p>
+      </Section> */}
     </div>
   );
 };

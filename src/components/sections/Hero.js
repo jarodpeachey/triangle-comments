@@ -51,11 +51,10 @@ const Hero = ({ children }) => {
           <HeroContainer>
             <ChildContainer className='container'>
               <Title>
-                The simplest way to add comments to your static website.
+                A Blazing Fast Commenting System for your Website
               </Title>
               <SubTitle>
-                A uniquely different commenting system that lets you customize
-                fast, and loads even faster.
+                A uniquely different commenting system built on customizability, simplicity and performance.
               </SubTitle>
               <ButtonFlex>
                 <ButtonWrapper>
@@ -107,6 +106,7 @@ const MainWrapper = styled.div`
   display: flex;
   align-items: center;
   margin-top: -60px;
+  padding-bottom: 180px;
 `;
 
 const HeroContainer = styled.div`
@@ -137,10 +137,12 @@ const Title = styled.h1`
   max-width: 550px;
 `;
 
-const SubTitle = styled.p`
+const SubTitle = styled.div`
   // color: rgba(81, 160, 249, 0.4);
   font-size: 26px;
   max-width: 550px;
+  margin-bottom: 36px;
+  color: ${props => props.theme.color.text.heading};
 `;
 
 const ButtonFlex = styled.div`

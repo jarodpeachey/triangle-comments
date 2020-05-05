@@ -91,6 +91,8 @@ export const DatabaseReducer = (state, action) => {
 
 export const DatabaseProvider = ({ children }) => {
   const [state, dispatch] = React.useReducer(DatabaseReducer, { user: null });
+  const {signedIn} = useContext(AppContext);
+  const firebase = useContext(FirebaseContext);
 
   console.log(state.user, state.site);
 
@@ -144,6 +146,10 @@ export const DatabaseProvider = ({ children }) => {
           console.log(faunaErr);
         });
     }
+
+    // if (isBrowser() && !signedIn) {
+    //   dispatch({ type: 'logout', data: {} });
+    // }
   }, []);
 
   const serverClient = new faunadb.Client({

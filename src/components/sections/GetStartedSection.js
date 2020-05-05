@@ -8,6 +8,9 @@ const GetStartedSection = ({ data }) => {
 
   return (
     <Section
+      customStyles={`
+        margin-top: -60px;
+      `}
       dark
       center
       title='Try It Out'

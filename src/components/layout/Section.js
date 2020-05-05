@@ -42,12 +42,14 @@ const Section = ({
 };
 
 const Title = styled.h2`
-  color: ${(props) => (props.dark ? 'white' : props.theme.color.text.heading)};
+  color: ${(props) => (props.dark ? 'white' : props.theme.color.text.heading)} !important;
 `;
 
 const SubTitle = styled.p`
   color: ${(props) =>
-    props.dark ? props.theme.color.text.paragraph : props.theme.color.text.heading};
+    props.dark ? '#ffffff90' : props.theme.color.text.heading} !important;
+    margin: 0 auto;
+    max-width: 769px !important
 `;
 
 const StyledSection = styled.section`

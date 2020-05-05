@@ -31,7 +31,6 @@ export const FirebaseProvider = ({ children }) => {
         setSignedIn(false);
         localStorage.removeItem('firebaseUser');
         setFirebaseUser(null);
-        dispatch({ type: 'logout' });
       }
     });
 
