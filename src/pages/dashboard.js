@@ -7,8 +7,8 @@ import { Link } from 'gatsby';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Section from '../components/layout/Section';
-import Dashboard from '../components/dashboard/SiteDashboard';
-import Settings from '../components/dashboard/SiteSettings';
+import Dashboard from '../components/dashboard/Dashboard';
+import Settings from '../components/dashboard/Settings';
 import Billing from '../components/dashboard/Billing';
 import DelayedLoad from '../components/DelayedLoad';
 import Row from '../components/grid/Row';
@@ -21,19 +21,25 @@ import { DatabaseContext } from '../providers/DatabaseProvider';
 import { AppContext } from '../providers/AppProvider';
 import Spacer from '../components/Spacer';
 import Site from '../components/dashboard/Site';
+import NewSite from '../components/dashboard/NewSite';
 
 const Account = () => {
   const [activeTab, setActiveTab] = useState(
     isBrowser() && window.location.pathname.includes('billing')
       ? 'billing'
+      : isBrowser() && window.location.pathname.includes('new')
+      ? 'new'
       : isBrowser() && window.location.pathname.includes('settings')
       ? 'settings'
       : 'sites'
   );
-  const { state } = useContext(DatabaseContext);
-  const { user } = state;
+  const { state, dispatch } = useContext(DatabaseContext);
+  const { user, site } = state;
 
-  console.log(user);
+  if (isBrowser() && !/\/sites\/(.*)/.test(window.location.pathname) && site) {
+    dispatch({ type: 'logoutSite', data: {} });
+  } else {
+  }
 
   return (
     <DelayedLoad
@@ -46,92 +52,98 @@ const Account = () => {
             <Site />
           ) : (
             <>
-              <Section
-                thin
-                customStyles={`
+              {isBrowser() && window.location.pathname.includes('new') ? (
+                <NewSite />
+              ) : (
+                <>
+                  <Section
+                    thin
+                    customStyles={`
           position: absolute;
           top: 0;
           padding: 96px 0 24px;
           display: block;
           width: 100%;
         `}
-                dark
-              >
-                <Row
-                  customStyles={`
+                    dark
+                  >
+                    <Row
+                      customStyles={`
               align-items: flex-end !important;
             `}
-                  spacing={[12]}
-                  breakpoints={[769]}
-                >
-                  <div widths={['auto']}>
-                    {' '}
-                    <Title className='mb-none'>{user && user.data.name}</Title>
-                    {/* <SiteLink href='https://google.com'>
+                      spacing={[12]}
+                      breakpoints={[769]}
+                    >
+                      <div widths={['auto']}>
+                        {' '}
+                        <Title className='mb-none'>
+                          {user && user.data.name}
+                        </Title>
+                        {/* <SiteLink href='https://google.com'>
                   https://google.com
                 </SiteLink> */}
-                  </div>
-                  <div widths={['auto']}>
-                    <Tabs>
-                      <Tab
-                        active={
-                          isBrowser() &&
-                          window.location.pathname.includes('/sites')
-                        }
-                        onClick={() => {
-                          if (isBrowser()) {
-                            window.history.pushState(
-                              {},
-                              '',
-                              '/dashboard/sites'
-                            );
-                          }
-                          setActiveTab('sites');
-                        }}
-                      >
-                        <FontAwesomeIcon icon='home' />
-                        Sites
-                      </Tab>
-                      <Tab
-                        active={
-                          isBrowser() &&
-                          window.location.pathname.includes('/billing')
-                        }
-                        onClick={() => {
-                          if (isBrowser()) {
-                            window.history.pushState(
-                              {},
-                              '',
-                              '/dashboard/billing'
-                            );
-                          }
-                          setActiveTab('billing');
-                        }}
-                      >
-                        <FontAwesomeIcon icon='comment' />
-                        Billing
-                      </Tab>
-                      <Tab
-                        active={
-                          isBrowser() &&
-                          window.location.pathname.includes('/settings')
-                        }
-                        onClick={() => {
-                          if (isBrowser()) {
-                            window.history.pushState(
-                              {},
-                              '',
-                              '/dashboard/settings'
-                            );
-                          }
-                          setActiveTab('settings');
-                        }}
-                      >
-                        <FontAwesomeIcon icon='cog' />
-                        Settings
-                      </Tab>
+                      </div>
+                      <div widths={['auto']}>
+                        <Tabs>
+                          <Tab
+                            active={
+                              isBrowser() &&
+                              window.location.pathname.includes('/sites')
+                            }
+                            onClick={() => {
+                              if (isBrowser()) {
+                                window.history.pushState(
+                                  {},
+                                  '',
+                                  '/dashboard/sites'
+                                );
+                              }
+                              setActiveTab('sites');
+                            }}
+                          >
+                            <FontAwesomeIcon icon='home' />
+                            Sites
+                          </Tab>
+                          <Tab
+                            active={
+                              isBrowser() &&
+                              window.location.pathname.includes('/billing')
+                            }
+                            onClick={() => {
+                              if (isBrowser()) {
+                                window.history.pushState(
+                                  {},
+                                  '',
+                                  '/dashboard/billing'
+                                );
+                              }
+                              setActiveTab('billing');
+                            }}
+                          >
+                            <FontAwesomeIcon icon='comment' />
+                            Billing
+                          </Tab>
+                          <Tab
+                            active={
+                              isBrowser() &&
+                              window.location.pathname.includes('/settings')
+                            }
+                            onClick={() => {
+                              if (isBrowser()) {
+                                window.history.pushState(
+                                  {},
+                                  '',
+                                  '/dashboard/settings'
+                                );
+                              }
+                              setActiveTab('settings');
+                            }}
+                          >
+                            <FontAwesomeIcon icon='cog' />
+                            Settings
+                          </Tab>
 
-                      {/* <Tab
+                          {/* <Tab
                       active={
                         typeof window !== 'undefined' &&
                         window.location.pathname.includes('/dashboard/settings')
@@ -146,29 +158,31 @@ const Account = () => {
                       <FontAwesomeIcon icon='dollar-sign' />
                       Billing
                     </Tab> */}
-                    </Tabs>
-                  </div>
-                </Row>
-              </Section>
-              <Section
-                customStyles={`
+                        </Tabs>
+                      </div>
+                    </Row>
+                  </Section>
+                  <Section
+                    customStyles={`
         padding-top: 80px;
                   @media(min-width: 769px) {
             padding-top: 48px;
           }
       `}
-              >
-                <span>
-                  <Spacer height={36} />
-                  {/* <Router>
+                  >
+                    <span>
+                      <Spacer height={36} />
+                      {/* <Router>
                       <DelayedLoad> */}
-                  {activeTab === 'sites' && <Dashboard />}
-                  {activeTab === 'settings' && <Settings />}
-                  {/* {activeTab === 'billing' && <Billing />} */}
-                  {/* </DelayedLoad>
+                      {activeTab === 'sites' && <Dashboard />}
+                      {activeTab === 'settings' && <Settings />}
+                      {/* {activeTab === 'billing' && <Billing />} */}
+                      {/* </DelayedLoad>
                     </Router> */}
-                </span>
-              </Section>
+                    </span>
+                  </Section>
+                </>
+              )}
             </>
           )}
         </div>

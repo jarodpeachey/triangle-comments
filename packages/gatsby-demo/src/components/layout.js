@@ -6,8 +6,6 @@ import Header from './header';
 import Footer from './footer';
 
 const Layout = (props) => {
-  console.log(props);
-
   return (
     <>
       <Header siteTitle={props.title} />

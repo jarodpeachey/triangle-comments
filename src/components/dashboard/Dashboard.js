@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-fragments */
 // src/pages/Dashboard.js
 import React, { useContext, useEffect, useState } from 'react';
 import { Router } from '@reach/router';
@@ -14,47 +15,121 @@ import { FirebaseContext } from '../../providers/FirebaseProvider';
 import { isBrowser } from '../../utils/isBrowser';
 import { DatabaseContext } from '../../providers/DatabaseProvider';
 import Row from '../grid/Row';
+import { formatDate } from '../../utils/formatDate';
 
 const Dashboard = () => {
   const { setEditModalOpen } = useContext(AppContext);
   const { firebase, firebaseUser } = useContext(FirebaseContext);
-  const [reRender, setRender] = useState(false);
-  const { state } = useContext(DatabaseContext);
-  const { user } = state;
+  const [sites, setSites] = useState([]);
+  const { state, q } = useContext(DatabaseContext);
+  const { user, userClient } = state;
 
   useEffect(() => {
-    setRender(!reRender);
-  }, [firebaseUser]);
-
-  const openEditModal = () => {
-    setEditModalOpen(true);
-  };
+    userClient
+      .query(
+        q.Map(
+          q.Paginate(q.Match(q.Index('all_sites'))),
+          q.Lambda(
+            'sitesRef',
+            q.Let(
+              {
+                sites: q.Get(q.Var('sitesRef')),
+                user: q.Get(q.Select(['data', 'user'], q.Var('sites'))),
+              },
+              {
+                user: q.Select(['ref'], q.Var('user')),
+                site: q.Var('sites'),
+              }
+            )
+          )
+        )
+      )
+      .then((response) => {
+        console.log(response);
+        setSites(response.data);
+      })
+      .catch((error) => console.log(error));
+  }, [user]);
 
   return (
     // <DelayedLoad>
     <SlideWrapper>
-      <Card title='Sites'>
-        All Sites!
-      </Card>
+      <Row spacing={[12]} breakpoints={[0]}>
+        <div widths={[6]}>
+          <h2 className='m-none'>Sites</h2>
+        </div>
+        <div widths={[6]}>
+          <Button link='/dashboard/new' right small secondary>
+            <span
+              style={{
+                fontSize: 26,
+                lineHeight: '8px',
+                position: 'relative',
+                top: 5,
+              }}
+            >
+              +
+            </span>{' '}
+            New Site
+          </Button>
+        </div>
+      </Row>
+      {sites && sites.length > 0 ? (
+        <Row breakpoints={[0, 576, 769]} spacing={[24]}>
+          {sites.map(({ site }) => {
+            console.log(site);
+
+            return (
+              <Site
+                widths={[12, 6, 4]}
+                to={`/dashboard/sites/${site.data.name
+                  .toLowerCase()
+                  .replace(/ /g, '-')
+                  .replace("'", '')}`}
+              >
+                <Card
+                  customStyles={`
+                    height: 100%;
+                    text-align: center;
+                    display: flex;
+                    align-items: center;
+                    flex-direction: column;
+                    justify-content: center;
+                    height: 225px;
+                  `}
+                >
+                  <SiteName>{site.data.name}</SiteName>
+                  <SiteDate>
+                    Created on {formatDate(site.ts)}
+                  </SiteDate>
+                </Card>
+              </Site>
+            );
+          })}
+        </Row>
+      ) : (
+        <Card>No sites!</Card>
+      )}
     </SlideWrapper>
   );
 };
 
-const CommentWrapper = styled.div`
-  border: 2px solid ${(props) => props.theme.color.gray.two};
-  padding: 12px;
-  border-radius: 3px;
-  margin: 16px 0;
+const Site = styled(Link)`
+  width: 100%;
+  height: 100%;
+  // max-width: 300px;
+  height: 225px;
+  display: block;
+  // border-bottom: 2px solid ${(props) => props.theme.color.gray.three};
+  text-decoration: none;
 `;
 
-const CommentTitle = styled(Link)`
-  margin: 0;
-  margin-bottom: 8px;
-  text-decoration: none;
-  color: ${(props) => props.theme.color.text.heading} !important;
-  :hover {
-    color: ${(props) => props.theme.color.primary.main} !important;
-  }
+const SiteName = styled.h2`
+  margin-top: 0;
+`;
+
+const SiteDate = styled.small`
+  color: ${(props) => props.theme.color.text.paragraph};
 `;
 
 const animation = keyframes`

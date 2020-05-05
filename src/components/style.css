@@ -306,3 +306,22 @@ h6,
   margin-block-end: 2.33em;
   font-size: 0.67em;
 }
+
+.left {
+  margin-right: auto !important;
+  display: block !important;
+  width: fit-content !important;
+}
+
+.right {
+  margin-left: auto !important;
+  display: block !important;
+  width: fit-content !important;
+}
+
+.center {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  display: block !important;
+  width: fit-content !important;
+}

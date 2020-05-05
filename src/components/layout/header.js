@@ -136,7 +136,7 @@ const Header = ({ siteTitle }) => {
                                 window.location.href = '/';
                               })
                               .catch(function (error) {
-                                console.log(err);
+                                console.log(error);
                                 setNotificationType('error');
                                 setNotificationMessage(
                                   'There was an error signing you out.'

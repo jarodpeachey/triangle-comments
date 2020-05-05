@@ -15,7 +15,6 @@ const Row = ({
   flexDirections,
   customStyles,
 }) => {
-  console.log(breakpoints[0]);
   return (
     <Wrapper
       standardWidth={standardWidth}

@@ -3,7 +3,7 @@ import faunadb, { query as q } from 'faunadb';
 import { AppContext } from './AppProvider';
 import { isBrowser } from '../utils/isBrowser';
 import { FirebaseContext } from './FirebaseProvider';
-import { setCookie, getCookie } from '../utils/cookies';
+import { setCookie, getCookie, deleteCookie } from '../utils/cookies';
 
 export const DatabaseContext = React.createContext({});
 
@@ -15,9 +15,9 @@ export const DatabaseReducer = (state, action) => {
 
       if (isBrowser()) {
         setCookie('user_secret', action.data.secret);
-        window.location.pathname = '/dashboard';
       }
       return {
+        ...state,
         user: action.data.user,
         userClient: new faunadb.Client({
           secret: action.data.secret,
@@ -36,6 +36,7 @@ export const DatabaseReducer = (state, action) => {
       }
 
       return {
+        ...state,
         user: action.data.user,
         userClient: new faunadb.Client({
           secret: action.data.secret,
@@ -44,7 +45,43 @@ export const DatabaseReducer = (state, action) => {
     }
     case 'logout': {
       isBrowser() && localStorage.removeItem('faunaUser');
-      return { user: null };
+      if (isBrowser()) {
+        deleteCookie('user_secret');
+        deleteCookie('user_id');
+        deleteCookie('site_secret');
+        deleteCookie('site_id');
+        // window.location.pathname = '/dashboard';
+      }
+      return { user: null, userClient: null, siteClient: null, site: null };
+    }
+    case 'loginSite': {
+      isBrowser() &&
+        localStorage.setItem('site', JSON.stringify(action.data.site));
+
+      if (isBrowser()) {
+        setCookie('site_secret', action.data.secret);
+        setCookie('site_id', action.data.site.data.id);
+      }
+      return {
+        ...state,
+        site: action.data.site,
+        siteClient: new faunadb.Client({
+          secret: action.data.secret,
+        }),
+      };
+    }
+    case 'logoutSite': {
+      isBrowser() && localStorage.removeItem('site');
+
+      if (isBrowser()) {
+        deleteCookie('site_secret');
+        deleteCookie('site_id');
+      }
+      return {
+        ...state,
+        site: null,
+        siteClient: null,
+      };
     }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);
@@ -55,8 +92,15 @@ export const DatabaseReducer = (state, action) => {
 export const DatabaseProvider = ({ children }) => {
   const [state, dispatch] = React.useReducer(DatabaseReducer, { user: null });
 
+  console.log(state.user, state.site);
+
   useEffect(() => {
-    if (isBrowser() && localStorage.getItem('firebaseUser') && getCookie('user_secret')) {
+    if (
+      isBrowser() &&
+      localStorage.getItem('firebaseUser') &&
+      getCookie('user_secret') &&
+      getCookie('user_id')
+    ) {
       // const newUser = localStorage.getItem('faunaUser');
 
       // console.log(newUser);
@@ -66,10 +110,33 @@ export const DatabaseProvider = ({ children }) => {
         .then((response) => {
           console.log(response);
           dispatch({
-            type: 'register',
+            type: 'login',
             data: {
               secret: getCookie('user_secret'),
               user: response,
+            },
+          });
+        })
+        .catch((faunaErr) => {
+          console.log(faunaErr);
+        });
+    }
+
+    if (
+      isBrowser() &&
+      localStorage.getItem('firebaseUser') &&
+      getCookie('site_id') &&
+      getCookie('site_secret')
+    ) {
+      serverClient
+        .query(q.Get(q.Match(q.Index('site_by_id'), getCookie('site_id'))))
+        .then((response) => {
+          console.log(response);
+          dispatch({
+            type: 'loginSite',
+            data: {
+              secret: getCookie('site_secret'),
+              site: response,
             },
           });
         })

@@ -2,10 +2,10 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { Link } from 'gatsby';
 
-const Card = ({ children, title, subtitle }) => {
+const Card = ({ children, title, subtitle, customStyles }) => {
   return (
     <Wrapper>
-      <StyledCard>
+      <StyledCard customStyles={customStyles}>
         {title && <Title border={!subtitle}>{title}</Title>}
         {subtitle && <Subtitle className='weight-light'>{subtitle}</Subtitle>}
         {children}
@@ -25,6 +25,11 @@ const StyledCard = styled.div`
   border-radius: 5px;
   border: 1px solid ${(props) => props.theme.color.gray.three};
   // box-shadow: 2px 4px 10px 0px ${(props) => props.theme.color.gray.three};
+  ${(props) =>
+    props.customStyles &&
+    css`
+      ${props.customStyles}
+    `}
 `;
 
 const Title = styled.h2`

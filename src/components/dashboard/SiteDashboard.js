@@ -20,7 +20,7 @@ const SiteDashboard = () => {
   const { firebase, firebaseUser } = useContext(FirebaseContext);
   const [reRender, setRender] = useState(false);
   const { state } = useContext(DatabaseContext);
-  const { user } = state;
+  const { user, site } = state;
 
   useEffect(() => {
     setRender(!reRender);
@@ -46,12 +46,11 @@ const SiteDashboard = () => {
               Edit
             </Button>
           </Card> */}
-          <Card title='Account'>
-            <p className='small m-none'>Name: {user.data.name || 'Guest'}</p>
-            <p className='small m-none'>Email: {user.data.email}</p>
+          <Card title='Details'>
+            <p className='small m-none'>Name: {site.data.name || 'Guest'}</p>
             <Spacer />
-            <Button link='/dashboard/account' gray small>
-              More
+            <Button gray small>
+              Edit
             </Button>
           </Card>
         </div>
@@ -72,7 +71,13 @@ const SiteDashboard = () => {
               <small className='m-none'>- James Carlton</small>
             </CommentWrapper>
             <Spacer />
-            <Button link='/dashboard/comment' gray small>
+            <Button
+              link={`/dashboard/sites/${site.data.name
+                .toLowerCase()
+                .replace(/ /g, '-')}/comments`}
+              gray
+              small
+            >
               More
             </Button>
           </Card>

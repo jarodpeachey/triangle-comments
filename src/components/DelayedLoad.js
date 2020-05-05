@@ -5,22 +5,26 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Loader from './Loader';
 
-const DelayedLoad = ({ fullHeight, condition, delay, render, fail }) => {
+const DelayedLoad = ({
+  fullHeight,
+  condition,
+  delay,
+  render,
+  fail,
+  infinite,
+}) => {
   const [state, setState] = useState('load');
   const [passedMin, setPassedMin] = useState(false);
   const [globalState, setGlobalState] = useState('');
-
-  console.log(condition);
 
   const callback = () => {};
 
   setTimeout(() => {
     setPassedMin(true);
-  }, 2000)
+  }, 2000);
 
   const timeout = (function (condition) {
     return setTimeout(function () {
-      console.log('Condition inside of callback: ', condition);
       if (!condition && globalState !== 'success') {
         setState('fail');
       } else {
@@ -50,20 +54,28 @@ const DelayedLoad = ({ fullHeight, condition, delay, render, fail }) => {
 
   return (
     <span>
-      {state === 'load' || !passedMin ? (
-        <span>
-          {fullHeight ? (
-            <Wrapper>
-              <Loader color='#ffffff' size={75} text='Loading...' />
-            </Wrapper>
-          ) : (
-            <Loader size={75} text='Loading...' />
-          )}
-        </span>
-      ) : globalState === 'success' ? (
-        <span>{render}</span>
+      {infinite ? (
+        <Wrapper>
+          <Loader color='#ffffff' size={75} text='Loading...' />
+        </Wrapper>
       ) : (
-        <span>{fail}</span>
+        <>
+          {state === 'load' || !passedMin ? (
+            <span>
+              {fullHeight ? (
+                <Wrapper>
+                  <Loader color='#ffffff' size={75} text='Loading...' />
+                </Wrapper>
+              ) : (
+                <Loader size={75} text='Loading...' />
+              )}
+            </span>
+          ) : globalState === 'success' ? (
+            <span>{render}</span>
+          ) : (
+            <span>{fail}</span>
+          )}
+        </>
       )}
     </span>
   );

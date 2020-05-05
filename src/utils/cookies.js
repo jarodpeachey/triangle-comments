@@ -3,12 +3,12 @@ import { isBrowser } from './isBrowser';
 /* eslint-disable import/prefer-default-export */
 export const setCookie = (name, value) => {
   if (isBrowser()) {
-    document.cookie = `${name}=${value}`;
+    document.cookie = `${name}=${value}; path=/`;
   }
 };
 export const deleteCookie = (name) => {
   if (isBrowser()) {
-    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC`;
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
   }
 };
 

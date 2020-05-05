@@ -26,7 +26,7 @@ const Button = ({
   return (
     <span>
       {link ? (
-        <Link className='no-styling' to={link}>
+        <Link className={left ? 'no-styling left' : center ? 'no-styling center' : right ? 'no-styling right' : 'no-styling'} to={link}>
           <StyledButton
             disabled={disabled}
             small={small}

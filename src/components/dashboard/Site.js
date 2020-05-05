@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-fragments */
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { DatabaseContext } from '../../providers/DatabaseProvider';
@@ -9,105 +9,163 @@ import Spacer from '../Spacer';
 import SiteSettings from './SiteSettings';
 import SiteDashboard from './SiteDashboard';
 import { isBrowser } from '../../utils/isBrowser';
+import DelayedLoad from '../DelayedLoad';
+import Card from '../Card';
+import Button from '../Button';
 
 const Site = () => {
   const [activeTab, setActiveTab] = useState(
-    isBrowser() && window.location.pathname.includes('comments') ?
-      'comments' :
-      isBrowser() && window.location.pathname.includes('settings') ?
-      'settings' :
-      'home'
+    isBrowser() && window.location.pathname.includes('comments')
+      ? 'comments'
+      : isBrowser() && window.location.pathname.includes('settings')
+      ? 'settings'
+      : 'home'
   );
-  const { state } = useContext(DatabaseContext);
-  const { user } = state;
+  const [loading, setLoading] = useState(true);
 
-  console.log(user);
+  const { state, q, dispatch } = useContext(DatabaseContext);
+  const { user, site, userClient } = state;
+
+  useEffect(() => {
+    const pathnames = window.location.pathname.split('sites/');
+
+    console.log(pathnames);
+
+    userClient
+      .query(
+        q.Get(
+          q.Match(q.Index('site_by_id'), isBrowser() && q.Select(1, pathnames))
+        )
+      )
+      .then((response) => {
+        console.log(response);
+
+        userClient
+          .query(
+            q.Login(q.Select('ref', response), {
+              password: q.Select(['data', 'id'], response),
+            })
+          )
+          .then((responseTwo) => {
+            dispatch({
+              type: 'loginSite',
+              data: {
+                secret: responseTwo.secret,
+                site: response,
+              },
+            });
+            setLoading(false);
+          })
+          .catch((errorTwo) => console.log(errorTwo));
+      })
+      .catch((errorTwo) => {
+        console.log(errorTwo);
+      });
+  }, [user]);
+
+  console.log(site);
   return (
-    <div id='blur'>
-      <Section
-        thin
-        customStyles={`
+    <span>
+      {loading ? (
+        <DelayedLoad fullHeight infinite />
+      ) : (
+        <div id='blur'>
+          <Section
+            thin
+            customStyles={`
           position: absolute;
           top: 0;
           padding: 96px 0 24px;
           display: block;
           width: 100%;
         `}
-        dark
-      >
-        <Row
-          customStyles={`
+            dark
+          >
+            <Row
+              customStyles={`
               align-items: flex-end !important;
             `}
-          spacing={[12]}
-          breakpoints={[769]}
-        >
-          <div widths={['auto']}>
-            {' '}
-            <Title className='mb-none'>{user && user.data.name}</Title>
-            {/* <SiteLink href='https://google.com'>
+              spacing={[12]}
+              breakpoints={[769]}
+            >
+              <div widths={['auto']}>
+                {' '}
+                <Title className='mb-none'>{site && site.data.name}</Title>
+                {/* <SiteLink href='https://google.com'>
                   https://google.com
                 </SiteLink> */}
-          </div>
-          <div widths={['auto']}>
-            <Tabs>
-              <Tab
-                active={
-                  isBrowser() &&
-                  window.location.pathname === '/dashboard/sites/staticbox'
-                }
-                onClick={() => {
-                  if (isBrowser()) {
-                    window.history.pushState(
-                      {},
-                      '',
-                      '/dashboard/sites/staticbox'
-                    );
-                  }
-                  setActiveTab('home');
-                }}
-              >
-                <FontAwesomeIcon icon='home' />
-                Dashboard
-              </Tab>
-              <Tab
-                active={
-                  isBrowser() && window.location.pathname.includes('/comments')
-                }
-                onClick={() => {
-                  if (isBrowser()) {
-                    window.history.pushState(
-                      {},
-                      '',
-                      '/dashboard/sites/staticbox/comments'
-                    );
-                  }
-                  setActiveTab('comments');
-                }}
-              >
-                <FontAwesomeIcon icon='comment' />
-                Comments
-              </Tab>
-              <Tab
-                active={
-                  isBrowser() && window.location.pathname.includes('/settings')
-                }
-                onClick={() => {
-                  if (isBrowser()) {
-                    window.history.pushState(
-                      {},
-                      '',
-                      '/dashboard/sites/staticbox/settings'
-                    );
-                  }
-                  setActiveTab('settings');
-                }}
-              >
-                <FontAwesomeIcon icon='cog' />
-                Site Settings
-              </Tab>
+                <SubTitle>{site && site.data.id}</SubTitle>
+              </div>
+              <div widths={['auto']}>
+                <Tabs>
+                  <Tab
+                    active={
+                      isBrowser() &&
+                      window.location.pathname ===
+                        `/dashboard/sites/${site.data.name
+                          .toLowerCase()
+                          .replace(/ /g, '-')}`
+                    }
+                    onClick={() => {
+                      if (isBrowser()) {
+                        window.history.pushState(
+                          {},
+                          '',
+                          `/dashboard/sites/${site.data.name
+                            .toLowerCase()
+                            .replace(/ /g, '-')}`
+                        );
+                      }
+                      setActiveTab('home');
+                    }}
+                  >
+                    <FontAwesomeIcon icon='home' />
+                    Dashboard
+                  </Tab>
+                  <Tab
+                    active={
+                      isBrowser() &&
+                      window.location.pathname.includes('/comments')
+                    }
+                    onClick={() => {
+                      if (isBrowser()) {
+                        window.history.pushState(
+                          {},
+                          '',
+                          `/dashboard/sites/${site.data.name
+                            .toLowerCase()
+                            .replace(/ /g, '-')}/comments`
+                        );
+                      }
+                      setActiveTab('comments');
+                    }}
+                  >
+                    <FontAwesomeIcon icon='comment' />
+                    Comments
+                  </Tab>
+                  <Tab
+                    active={
+                      isBrowser() &&
+                      window.location.pathname.includes('/settings')
+                    }
+                    onClick={() => {
+                      if (isBrowser()) {
+                        window.history.pushState(
+                          {},
+                          '',
+                          `/dashboard/sites/${site.data.name
+                            .toLowerCase()
+                            .replace(/ /g, '-')}/settings`
+                        );
+                      }
+                      setActiveTab('settings');
+                    }}
+                  >
+                    <FontAwesomeIcon icon='cog' />
+                    Site Settings
+                  </Tab>
 
-              {/* <Tab
+                  {/* <Tab
                       active={
                         typeof window !== 'undefined' &&
                         window.location.pathname.includes('/dashboard/settings')
@@ -122,35 +180,43 @@ const Site = () => {
                       <FontAwesomeIcon icon='dollar-sign' />
                       Billing
                     </Tab> */}
-            </Tabs>
-          </div>
-        </Row>
-      </Section>
-      <Section
-        customStyles={`
+                </Tabs>
+              </div>
+            </Row>
+          </Section>
+          <Section
+            customStyles={`
         padding-top: 80px;
                   @media(min-width: 769px) {
             padding-top: 48px;
           }
       `}
-      >
-        <span>
-          <Spacer height={36} />
-          {/* <Router>
+          >
+            <span>
+              <Spacer height={36} />
+              {/* <Router>
                       <DelayedLoad> */}
-          {activeTab === 'home' && <SiteDashboard />}
-          {activeTab === 'settings' && <SiteSettings />}
-          {/* {activeTab === 'billing' && <Billing />} */}
-          {/* </DelayedLoad>
+              {activeTab === 'home' && <SiteDashboard />}
+              {activeTab === 'settings' && <SiteSettings />}
+              {activeTab === 'comments' && <SiteSettings />}
+              {/* {activeTab === 'billing' && <Billing />} */}
+              {/* </DelayedLoad>
                     </Router> */}
-        </span>
-      </Section>
-    </div>
+            </span>
+          </Section>
+        </div>
+      )}
+    </span>
   );
 };
 
 const Title = styled.h1`
   color: white !important;
+`;
+
+const SubTitle = styled.p`
+  color: #ffffffcc !important;
+  margin: 0;
 `;
 
 const SiteLink = styled.a`
