@@ -90,9 +90,6 @@ const BackgroundImage = styled.div`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  @media (min-width: 576px) {
-    height: 110%;
-  }
   @media (min-width: 769px) {
     background-position: right center;
   }
@@ -107,6 +104,27 @@ const MainWrapper = styled.div`
   align-items: center;
   margin-top: -60px;
   padding-bottom: 180px;
+  @media (min-width: 576px) {
+    padding-bottom: 280px !important;
+  }
+  @media (min-width: 670px) {
+    padding-bottom: 280px !important;
+  }
+  @media (min-width: 750px) {
+    padding-bottom: 310px !important;
+  }
+  @media (min-width: 1000px) {
+    padding-bottom: 310px !important;
+  }
+  @media (min-width: 1200px) {
+    padding-bottom: 310px !important;
+  }
+  @media (min-width: 1500px) {
+    padding-bottom: 310px !important;
+  }
+  @media (min-width: 1677px) {
+    padding-bottom: 310px !important;
+  }
 `;
 
 const HeroContainer = styled.div`

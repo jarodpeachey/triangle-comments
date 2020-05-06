@@ -10,6 +10,8 @@ const GetStartedSection = ({ data }) => {
     <Section
       customStyles={`
         margin-top: -60px;
+        z-index: 999;
+        position: relative;
       `}
       dark
       center

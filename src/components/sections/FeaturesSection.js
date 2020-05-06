@@ -11,19 +11,49 @@ const FeaturesSection = ({ data }) => {
   return (
     <Section
       customStyles={`
-        margin-bottom: -76px;
-        padding-bottom: 76px;
+        margin-bottom: -360px;
+        padding-bottom: 360px;
         position: relative !important;
         z-index: 1 !important;
         display: block !important;
+        top: -110px !important;
+  @media (min-width: 576px) {
+    margin-bottom: -360px !important;
+    padding-bottom: 360px;
+  }
+  @media (min-width: 670px) {
+    margin-bottom: -360px !important;
+    padding-bottom: 360px;
+  }
+  @media (min-width: 850px) {
+    margin-bottom: -360px !important;
+    padding-bottom: 360px;
+  }
+  @media (min-width: 1000px) {
+    margin-bottom: -360px !important;
+    padding-bottom: 360px;
+  }
+  @media (min-width: 1300px) {
+    margin-bottom: -360px !important;
+    padding-bottom: 360px;
+  }
+  @media (min-width: 1500px) {
+    margin-bottom: -360px !important;
+    padding-bottom: 360px;
+  }
+  @media (min-width: 1677px) {
+    margin-bottom: -360px !important;
+    padding-bottom: 360px;
+  }
       `}
       background='#ffffff'
     >
       <h1 className='center'>Fully-Featured Commenting System</h1>
       <p className='center'>
-        Staticbox combines simplicity and speed with usability, giving you an effortless way to moderate comments.
+        Staticbox combines simplicity and speed with usability, giving you an
+        effortless way to moderate comments.
       </p>
-      <br/>
+      <br />
       <Row spacing={[12]} breakpoints={[576, 769, 960]}>
         <Feature widths={[6, 4, 3]}>
           <FeatureIcon offsetY={-2} offsetX={4}>
@@ -31,7 +61,8 @@ const FeaturesSection = ({ data }) => {
           </FeatureIcon>
           <FeatureTitle>Drop-in Forms</FeatureTitle>
           <FeatureSubtitle>
-            Simply add a form to your site and Staticbox takes care of the rest. Choose from multiple templates, or customize your own!
+            Simply add a form to your site and Staticbox takes care of the rest.
+            Choose from multiple templates, or customize your own!
           </FeatureSubtitle>
         </Feature>
         <Feature widths={[6, 4, 3]}>
@@ -40,7 +71,8 @@ const FeaturesSection = ({ data }) => {
           </FeatureIcon>
           <FeatureTitle>Blazing Fast</FeatureTitle>
           <FeatureSubtitle>
-            Staticbox takes advantage of serverless architecture to remove bloat and make sure it doesn't slow down your page.
+            Staticbox takes advantage of serverless architecture to remove bloat
+            and make sure it doesn't slow down your page.
           </FeatureSubtitle>
         </Feature>
         <Feature widths={[6, 4, 3]}>
@@ -49,7 +81,8 @@ const FeaturesSection = ({ data }) => {
           </FeatureIcon>
           <FeatureTitle>Intuitive UI</FeatureTitle>
           <FeatureSubtitle>
-            A minimalist UI makes it easy to filter and moderator your comments, as well as style your form.
+            A minimalist UI makes it easy to filter and moderator your comments,
+            as well as style your form.
           </FeatureSubtitle>
         </Feature>
         <Feature widths={[6, 4, 3]}>
@@ -58,7 +91,8 @@ const FeaturesSection = ({ data }) => {
           </FeatureIcon>
           <FeatureTitle>Customizable</FeatureTitle>
           <FeatureSubtitle>
-            A fully-customizable form and comments display makes Staticbox blend in perfectly with your brand and your style.
+            A fully-customizable form and comments display makes Staticbox blend
+            in perfectly with your brand and your style.
           </FeatureSubtitle>
         </Feature>
       </Row>
