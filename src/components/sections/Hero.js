@@ -45,16 +45,15 @@ const Hero = ({ children }) => {
           backgroundRepeat: 'repeat',
         }}
       /> */}
-      <BackgroundImage heroImage={heroImageTwo} />
       <div id='blur'>
         <MainWrapper>
+          <BackgroundImage heroImage={heroImageTwo} />
           <HeroContainer>
             <ChildContainer className='container'>
-              <Title>
-                A Blazing Fast Commenting System for your Website
-              </Title>
+              <Title>A Blazing Fast Commenting System for your Website</Title>
               <SubTitle>
-                A uniquely different commenting system built on customizability, simplicity and performance.
+                A uniquely different commenting system built on customizability,
+                simplicity and performance.
               </SubTitle>
               <ButtonFlex>
                 <ButtonWrapper>
@@ -83,9 +82,9 @@ const Hero = ({ children }) => {
 const BackgroundImage = styled.div`
   background-image: url(${(props) => props.heroImage});
   position: absolute;
-  top: 0;
+  top: -94px;
   z-index: 0;
-  height: 150%;
+  height: calc(100% + 94px);
   width: 100%;
   opacity: 1;
   background-size: cover;
@@ -104,6 +103,7 @@ const MainWrapper = styled.div`
   // padding-top: 64px;
   // height: 100vh;
   display: flex;
+  position: relative;
   align-items: center;
   margin-top: -60px;
   padding-bottom: 180px;
@@ -142,7 +142,7 @@ const SubTitle = styled.div`
   font-size: 26px;
   max-width: 550px;
   margin-bottom: 36px;
-  color: ${props => props.theme.color.text.heading};
+  color: ${(props) => props.theme.color.text.heading};
 `;
 
 const ButtonFlex = styled.div`
