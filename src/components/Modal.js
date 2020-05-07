@@ -74,6 +74,10 @@ const zoom = keyframes`
 const StyledModal = styled.div`
   max-width: 90%;
   margin: 0 auto;
+  min-width: 300px;
+  @media(min-width: 576px) {
+    min-width: 400px;
+  }
   animation: ${zoom} 250ms ease-out;
   position: relative;
   height: fit-content;

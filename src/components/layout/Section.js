@@ -13,11 +13,13 @@ const Section = ({
   dark,
   light,
   thin,
+  id
 }) => {
   const theme = useContext(ThemeContext);
 
   return (
     <StyledSection
+      id={id}
       customStyles={customStyles}
       fullHeight={fullHeight}
       center={center}

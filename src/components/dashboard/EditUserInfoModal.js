@@ -10,7 +10,7 @@ import { isBrowser } from '../../utils/isBrowser';
 import Loader from '../Loader';
 import { DatabaseContext } from '../../providers/DatabaseProvider';
 
-const EditPersonalInfoModal = () => {
+const EditUserInfoModal = () => {
   const { firebase, firebaseUser } = useContext(FirebaseContext);
   const { q, serverClient, faunaUser } = useContext(DatabaseContext);
 
@@ -21,7 +21,7 @@ const EditPersonalInfoModal = () => {
   console.log(faunaUser);
 
   const {
-    setEditModalOpen,
+    setEditUserInfoModalOpen,
     setNotificationMessage,
     setNotificationType,
     setPasswordModalOpen,
@@ -84,7 +84,7 @@ const EditPersonalInfoModal = () => {
                 })
                 .catch((faunaError) => console.log(faunaError));
 
-              setEditModalOpen(false);
+              setEditUserInfoModalOpen(false);
               setNotificationMessage(
                 'Success! Please check your email for a confirmation link.'
               );
@@ -96,20 +96,20 @@ const EditPersonalInfoModal = () => {
                 setPasswordModalOpen(true);
                 // setFunction()
               } else {
-                setEditModalOpen(false);
+                setEditUserInfoModalOpen(false);
                 setNotificationMessage('Something went wrong.');
                 setNotificationType('error');
               }
             });
         } else {
-          setEditModalOpen(false);
+          setEditUserInfoModalOpen(false);
           setNotificationMessage('Success!');
           setNotificationType('success');
         }
       })
       .catch((err) => {
         console.log('Error: ', err);
-        setEditModalOpen(false);
+        setEditUserInfoModalOpen(false);
         setNotificationMessage('Something went wrong.');
         setNotificationType('error');
       });
@@ -117,7 +117,7 @@ const EditPersonalInfoModal = () => {
 
   return (
     <Modal
-      toggleFunction={() => setEditModalOpen(false)}
+      toggleFunction={() => setEditUserInfoModalOpen(false)}
       title='Edit Personal Info'
     >
       <Input onChange={onNameChange} value={stateName} />
@@ -158,4 +158,4 @@ const Input = styled.input`
   }
 `;
 
-export default EditPersonalInfoModal;
+export default EditUserInfoModal;

@@ -23,10 +23,11 @@ import Footer from './Footer';
 import Header from './Header';
 import { AppContext } from '../../providers/AppProvider';
 import { pathnameIncludes } from '../../utils/pathnameIncludes';
-import EditPersonalInfoModal from '../dashboard/EditPersonalInfoModal';
+import EditUserInfoModal from '../dashboard/EditUserInfoModal';
 import Notification from '../Notification';
 import PasswordModal from '../auth/PasswordModal';
 import { isBrowser } from '../../utils/isBrowser';
+import EditSiteInfoModal from '../dashboard/EditSiteInfoModal';
 
 library.add(
   faBars,
@@ -48,10 +49,11 @@ library.add(
 
 const Layout = (props) => {
   const {
-    editModalOpen,
+    editUserInfoModalOpen,
     passwordModalOpen,
     notificationMessage,
     notificationType,
+    editSiteInfoModalOpen,
   } = useContext(AppContext);
 
   return (
@@ -62,7 +64,8 @@ const Layout = (props) => {
       )}
       {props.children}
       <Footer />
-      {editModalOpen && <EditPersonalInfoModal />}
+      {editUserInfoModalOpen && <EditUserInfoModal />}
+      {editSiteInfoModalOpen && <EditSiteInfoModal />}
       {passwordModalOpen && <PasswordModal />}
       {notificationMessage && (
         <Notification message={notificationMessage} type={notificationType} />

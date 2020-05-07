@@ -8,7 +8,6 @@ import Button from '../Button';
 import Spacer from '../Spacer';
 import Loader from '../Loader';
 import DelayedLoad from '../DelayedLoad';
-import EditPersonalInfoModal from './EditPersonalInfoModal';
 import { AppContext } from '../../providers/AppProvider';
 import { FirebaseContext } from '../../providers/FirebaseProvider';
 import { isBrowser } from '../../utils/isBrowser';

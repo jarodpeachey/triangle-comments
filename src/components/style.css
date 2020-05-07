@@ -334,7 +334,7 @@ h6,
 
 @media (min-width: 769px) {
   .tablet {
-    display: block !important;
+    display: initial !important;
   }
   .mobile, .desktop {
     display: none !important;
@@ -343,9 +343,13 @@ h6,
 
 @media (min-width: 960px) {
   .desktop {
-    display: block !important;
+    display: initial !important;
   }
   .mobile, .tablet {
     display: none !important;
   }
+}
+
+.inline {
+  display: inline;
 }

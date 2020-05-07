@@ -8,7 +8,8 @@ export const AppProvider = ({ children }) => {
   const [scrolled, setScrolled] = useState();
   const [notificationType, setNotificationType] = useState('info');
   const [notificationMessage, setNotificationMessage] = useState(null);
-  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editUserInfoModalOpen, setEditUserInfoModalOpen] = useState(false);
+  const [editSiteInfoModalOpen, setEditSiteInfoModalOpen] = useState(false);
   const [passwordModalOpen, setPasswordModalOpen] = useState(false);
   const [returnFunction, setFunction] = useState(null);
   const [signedIn, setSignedIn] = useState(false);
@@ -24,8 +25,10 @@ export const AppProvider = ({ children }) => {
       value={{
         scrolled,
         setScrolled,
-        editModalOpen,
-        setEditModalOpen,
+        editUserInfoModalOpen,
+        setEditUserInfoModalOpen,
+        editSiteInfoModalOpen,
+        setEditSiteInfoModalOpen,
         passwordModalOpen,
         setPasswordModalOpen,
         notificationType,

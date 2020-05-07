@@ -8,7 +8,7 @@ import Button from '../Button';
 import Spacer from '../Spacer';
 import Loader from '../Loader';
 import DelayedLoad from '../DelayedLoad';
-import EditPersonalInfoModal from './EditPersonalInfoModal';
+import EditPersonalInfoModal from './EditUserInfoModal';
 import { AppContext } from '../../providers/AppProvider';
 import { FirebaseContext } from '../../providers/FirebaseProvider';
 import { isBrowser } from '../../utils/isBrowser';
@@ -16,7 +16,7 @@ import { DatabaseContext } from '../../providers/DatabaseProvider';
 import Row from '../grid/Row';
 
 const SiteDashboard = () => {
-  const { setEditModalOpen } = useContext(AppContext);
+  const { setEditSiteInfoModalOpen } = useContext(AppContext);
   const { firebase, firebaseUser } = useContext(FirebaseContext);
   const [reRender, setRender] = useState(false);
   const { state } = useContext(DatabaseContext);
@@ -27,7 +27,7 @@ const SiteDashboard = () => {
   }, [firebaseUser]);
 
   const openEditModal = () => {
-    setEditModalOpen(true);
+    setEditSiteInfoModalOpen(true);
   };
 
   return (
@@ -49,7 +49,7 @@ const SiteDashboard = () => {
           <Card title='Details'>
             <p className='small m-none'>Name: {site.data.name || 'Guest'}</p>
             <Spacer />
-            <Button gray small>
+            <Button onClick={() => openEditModal()} gray small>
               Edit
             </Button>
           </Card>

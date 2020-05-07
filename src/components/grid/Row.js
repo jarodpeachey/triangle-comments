@@ -62,7 +62,7 @@ const Wrapper = styled.div`
     `};
   margin: -${(props) => props.spacingY}px -${(props) => props.spacingX}px -${(
   props
-) => props.spacingY}px -${(props) => props.spacingX}px;
+) => props.spacingY}px -${(props) => props.spacingX}px !important;
   width: ${(props) =>
     props.standardWidth ? '100%' : `calc(100% + ${props.spacingX * 2}px)`};
   @media (min-width: ${(props) => props.breakpoint}px) {

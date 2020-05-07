@@ -23,6 +23,7 @@ const Site = () => {
       : 'home'
   );
   const [loading, setLoading] = useState(true);
+  const [headerHeight, setHeaderHeight] = useState(0);
   const { setNotificationMessage, setNotificationType } = useContext(
     AppContext
   );
@@ -76,6 +77,15 @@ const Site = () => {
       });
   }, [user]);
 
+  useEffect(() => {
+    window.addEventListener('resize', onResize);
+    document.addEventListener('readystatechange', onResize);
+  }, []);
+
+  const onResize = () => {
+    setHeaderHeight(document.getElementById('background').clientHeight);
+  };
+
   console.log(site);
   return (
     <span>
@@ -84,6 +94,7 @@ const Site = () => {
       ) : (
         <div id='blur'>
           <Section
+            id='background'
             thin
             customStyles={`
           position: absolute;
@@ -101,7 +112,7 @@ const Site = () => {
               spacing={[12]}
               breakpoints={[769]}
             >
-              <div widths={['auto']}>
+              <div widths={[4]}>
                 {' '}
                 <Title className='mb-none'>{site && site.data.name}</Title>
                 {/* <SiteLink href='https://google.com'>
@@ -112,13 +123,7 @@ const Site = () => {
               <div widths={['auto']}>
                 <Tabs>
                   <Tab
-                    active={
-                      isBrowser() &&
-                      window.location.pathname ===
-                        `/dashboard/sites/${site.data.name
-                          .toLowerCase()
-                          .replace(/ /g, '-')}`
-                    }
+                    active={activeTab === 'home'}
                     onClick={() => {
                       if (isBrowser()) {
                         window.history.pushState(
@@ -136,10 +141,7 @@ const Site = () => {
                     Dashboard
                   </Tab>
                   <Tab
-                    active={
-                      isBrowser() &&
-                      window.location.pathname.includes('/comments')
-                    }
+                    active={activeTab === 'comments'}
                     onClick={() => {
                       if (isBrowser()) {
                         window.history.pushState(
@@ -157,10 +159,7 @@ const Site = () => {
                     Comments
                   </Tab>
                   <Tab
-                    active={
-                      isBrowser() &&
-                      window.location.pathname.includes('/settings')
-                    }
+                    active={activeTab === 'settings'}
                     onClick={() => {
                       if (isBrowser()) {
                         window.history.pushState(
@@ -175,7 +174,7 @@ const Site = () => {
                     }}
                   >
                     <FontAwesomeIcon icon='cog' />
-                    Site Settings
+                    <span className='tablet inline'>Site</span> Settings
                   </Tab>
 
                   {/* <Tab
@@ -199,14 +198,19 @@ const Site = () => {
           </Section>
           <Section
             customStyles={`
-        padding-top: 80px;
-                  @media(min-width: 769px) {
-            padding-top: 48px;
-          }
-      `}
+              padding-top: 175px;
+              @media(min-width: 435px) {
+                padding-top: 151px;
+              }
+              @media(min-width: 769px) {
+                padding-top: 87px;
+              }
+              padding-top: ${
+                headerHeight > 0 ? headerHeight - 94 : null
+              }px !important;
+            `}
           >
             <span>
-              <Spacer height={36} />
               {/* <Router>
                       <DelayedLoad> */}
               {activeTab === 'home' && <SiteDashboard />}
@@ -245,11 +249,17 @@ const Tabs = styled.div`
   display: flex;
   width: 100%;
   justify-content: flex-start;
+  align-items: center;
+  @media(min-width: 480px) {
+    flex-direction: row;
+    margin-bottom -12px;
+    margin-left: -16px;
+  }
   @media(min-width: 769px) {
     justify-content: flex-end;
+    margin-left: 0;
+    margin-right: -20px;
   }
-  margin-bottom -12px;
-  margin-left: -16px;
 `;
 
 const Tab = styled.div`
@@ -267,8 +277,10 @@ const Tab = styled.div`
     transition-duration: 0.25s;
   }
   svg {
-    margin-right: 8px;
     color: inherit;
+    @media (min-width: 435px) {
+      margin-right: 8px;
+    }
   }
   text-decoration: none;
   @media (min-width: 900px) {
