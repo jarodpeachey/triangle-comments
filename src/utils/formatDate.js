@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 export const formatDate = date => {
-  const newDate = new Date(date);
+  const newDate = new Date(date / 1000);
 
   const formattedDate = `${
     newDate.getMonth() > 8 ?

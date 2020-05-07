@@ -11,6 +11,7 @@ import { FirebaseContext } from '../../providers/FirebaseProvider';
 import { DatabaseContext } from '../../providers/DatabaseProvider';
 import Row from '../grid/Row';
 import { formatDate } from '../../utils/formatDate';
+import Spacer from '../Spacer';
 
 const Dashboard = () => {
   const { setEditModalOpen } = useContext(AppContext);
@@ -69,6 +70,7 @@ const Dashboard = () => {
           </Button>
         </div>
       </Row>
+      <Spacer height={48} />
       {sites && sites.length > 0 ? (
         <Row breakpoints={[0, 576, 769]} spacing={[24]}>
           {sites.map(({ site }) => {
@@ -94,9 +96,7 @@ const Dashboard = () => {
                   `}
                 >
                   <SiteName>{site.data.name}</SiteName>
-                  <SiteDate>
-                    Created on {formatDate(site.ts)}
-                  </SiteDate>
+                  <SiteDate>Created on {formatDate(site.ts)}</SiteDate>
                 </Card>
               </Site>
             );

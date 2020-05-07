@@ -12,7 +12,7 @@ import { DatabaseContext } from '../../providers/DatabaseProvider';
 
 const EditSiteInfoModal = () => {
   const { firebase, firebaseUser } = useContext(FirebaseContext);
-  const { q, serverClient, faunaUser, state } = useContext(DatabaseContext);
+  const { q, serverClient, faunaUser, state, dispatch } = useContext(DatabaseContext);
   const { siteClient, user, site } = state;
 
   const [stateName, setStateName] = useState(site.data.name || '');
@@ -48,6 +48,7 @@ const EditSiteInfoModal = () => {
       )
       .then((faunaResponse) => {
         console.log(faunaResponse);
+        dispatch({ type: 'updateSite', data: faunaResponse });
         setEditSiteInfoModalOpen(false);
         setNotificationMessage('Success!');
         setNotificationType('success');

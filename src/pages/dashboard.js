@@ -225,11 +225,17 @@ const Tabs = styled.div`
   display: flex;
   width: 100%;
   justify-content: flex-start;
+  align-items: center;
+  @media(min-width: 480px) {
+    flex-direction: row;
+    margin-bottom -12px;
+    margin-left: -16px;
+  }
   @media(min-width: 769px) {
     justify-content: flex-end;
+    margin-left: 0;
+    margin-right: -20px;
   }
-  margin-bottom -12px;
-  margin-left: -16px;
 `;
 
 const Tab = styled.div`
@@ -247,8 +253,10 @@ const Tab = styled.div`
     transition-duration: 0.25s;
   }
   svg {
-    margin-right: 8px;
     color: inherit;
+    @media (min-width: 435px) {
+      margin-right: 8px;
+    }
   }
   text-decoration: none;
   @media (min-width: 900px) {

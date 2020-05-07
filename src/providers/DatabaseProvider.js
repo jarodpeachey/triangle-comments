@@ -69,6 +69,18 @@ export const DatabaseReducer = (state, action) => {
         }),
       };
     }
+    case 'updateSite': {
+      isBrowser() && localStorage.setItem('site', JSON.stringify(action.data));
+
+      if (isBrowser()) {
+        setCookie('site_id', action.data.data.id);
+      }
+
+      return {
+        ...state,
+        site: action.data,
+      };
+    }
     case 'logoutSite': {
       isBrowser() && localStorage.removeItem('site');
 
