@@ -293,6 +293,7 @@ const SiteTitle = styled.h1`
   // letter-spacing: 3px;
   text-transform: uppercase;
   font-size: 22px;
+  margin-left: -8px;
   color: ${(props) => (props.light ? 'white' : 'inherit')} !important;
   @media (min-width: 769px) {
     font-size: 26px;
@@ -308,14 +309,17 @@ const SiteTitle = styled.h1`
       props.light
         ? props.theme.color.primary.backgroundDark
         : 'white'} !important;
-    font-size: 33px;
+    font-size: 31px;
+    top: -2px;
+    left: 16px;
     font-weight: 900 !important;
     @media (min-width: 769px) {
-      font-size: 38px;
+      font-size: 41px;
+      left: 17px;
+      top: -4px;
     }
     z-index: -1;
-    top: -3px;
-    left: 18px;
+
     transform: rotate(-10deg);
     font-family: Exo, Segoe UI;
   }

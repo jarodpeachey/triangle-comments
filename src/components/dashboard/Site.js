@@ -27,7 +27,7 @@ const Site = () => {
     AppContext
   );
   const { state, q, dispatch } = useContext(DatabaseContext);
-  const { user, site, userClient } = state;
+  const { user, site, userClient, siteClient } = state;
 
   useEffect(() => {
     const pathnames = window.location.pathname.split('sites/');

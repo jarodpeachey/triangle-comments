@@ -74,10 +74,12 @@ export const DatabaseReducer = (state, action) => {
 
       console.log(state);
 
-      state.siteClient
-        .query(q.Logout(false))
-        .then((repsonse) => console.log(repsonse))
-        .catch((err) => console.log(err));
+      if (state.siteClient) {
+        state.siteClient
+          .query(q.Logout(false))
+          .then((repsonse) => console.log(repsonse))
+          .catch((err) => console.log(err));
+      }
 
       if (isBrowser()) {
         deleteCookie('site_secret');
