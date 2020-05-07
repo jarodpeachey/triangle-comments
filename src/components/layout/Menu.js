@@ -5,9 +5,11 @@ import Button from '../Button';
 import { FirebaseContext } from '../../providers/FirebaseProvider';
 import { isBrowser } from '../../utils/isBrowser';
 import { AppContext } from '../../providers/AppProvider';
+import { DatabaseContext } from '../../providers/DatabaseProvider';
 
 const Menu = ({ scrolled }) => {
   const { firebase } = useContext(FirebaseContext);
+  const { dispatch } = useContext(DatabaseContext);
   const { setNotificationMessage, setNotificationType } = useContext(
     AppContext
   );
@@ -36,7 +38,9 @@ const Menu = ({ scrolled }) => {
                     console.log('Signed out!');
                     setNotificationType('success');
                     setNotificationMessage('You are now signed out.');
-                    window.location.href = '/';
+                    // window.location.href = '/';
+                    dispatch({ type: 'logout', data: {} });
+                    dispatch({ type: 'logoutSite', data: {} });
                   })
                   .catch(function (error) {
                     console.log(err);

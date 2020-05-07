@@ -91,7 +91,7 @@ const StyledButton = styled.button`
   letter-spacing: 1.1px !important;
   font-size: ${(props) => (props.small ? '13px' : '16px')} !important;
   font-weight: 600 !important;
-  // z-index:  !important;
+  z-index: 999999 !important;
   display: block;
   overflow: hidden !important;
   position: relative !important;

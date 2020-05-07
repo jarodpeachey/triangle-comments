@@ -11,6 +11,7 @@ import { AppContext } from '../../providers/AppProvider';
 import Button from '../Button';
 import Row from '../grid/Row';
 import { FirebaseContext } from '../../providers/FirebaseProvider';
+import { DatabaseContext } from '../../providers/DatabaseProvider';
 import { isBrowser } from '../../utils/isBrowser';
 
 const Header = ({ siteTitle }) => {
@@ -24,6 +25,7 @@ const Header = ({ siteTitle }) => {
   const [open, setOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [width, setWidth] = useState(0);
+  const { dispatch } = useContext(DatabaseContext);
 
   useEffect(() => {
     window.addEventListener('scroll', onScroll);
@@ -133,7 +135,9 @@ const Header = ({ siteTitle }) => {
                                 setNotificationMessage(
                                   'You are now signed out.'
                                 );
-                                window.location.href = '/';
+                                // window.location.href = '/';
+                                dispatch({ type: 'logout', data: {} });
+                                dispatch({ type: 'logoutSite', data: {} });
                               })
                               .catch(function (error) {
                                 console.log(error);
@@ -143,7 +147,7 @@ const Header = ({ siteTitle }) => {
                                 );
                               });
                           }}
-                          to='/'
+                          to=''
                         >
                           Log Out
                         </AccountMenuItem>
@@ -300,14 +304,17 @@ const SiteTitle = styled.h1`
     display: block;
     position: absolute;
     height: 100%;
-    color: white;
-    font-size: 32px;
+    color: ${(props) =>
+      props.light
+        ? props.theme.color.primary.backgroundDark
+        : 'white'} !important;
+    font-size: 33px;
     font-weight: 900 !important;
     @media (min-width: 769px) {
       font-size: 38px;
     }
     z-index: -1;
-    top: -4px;
+    top: -3px;
     left: 18px;
     transform: rotate(-10deg);
     font-family: Exo, Segoe UI;
@@ -321,8 +328,8 @@ const SiteTitle = styled.h1`
     left: 12px;
     z-index: -1;
     font-size: 28px;
-    @media(min-width: 769px) {
-      font-size: 36px
+    @media (min-width: 769px) {
+      font-size: 36px;
     }
   }
 `;

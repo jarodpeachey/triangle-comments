@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from 'react';
 import faunadb, { query as q } from 'faunadb';
 import { AppContext } from './AppProvider';
 import { isBrowser } from '../utils/isBrowser';
-import { FirebaseContext } from './FirebaseProvider';
 import { setCookie, getCookie, deleteCookie } from '../utils/cookies';
 
 export const DatabaseContext = React.createContext({});
@@ -52,7 +51,7 @@ export const DatabaseReducer = (state, action) => {
         deleteCookie('site_id');
         // window.location.pathname = '/dashboard';
       }
-      return { user: null, userClient: null, siteClient: null, site: null };
+      return { ...state, user: null, userClient: null };
     }
     case 'loginSite': {
       isBrowser() &&
@@ -73,10 +72,18 @@ export const DatabaseReducer = (state, action) => {
     case 'logoutSite': {
       isBrowser() && localStorage.removeItem('site');
 
+      console.log(state);
+
+      state.siteClient
+        .query(q.Logout(false))
+        .then((repsonse) => console.log(repsonse))
+        .catch((err) => console.log(err));
+
       if (isBrowser()) {
         deleteCookie('site_secret');
         deleteCookie('site_id');
       }
+
       return {
         ...state,
         site: null,
@@ -91,10 +98,7 @@ export const DatabaseReducer = (state, action) => {
 
 export const DatabaseProvider = ({ children }) => {
   const [state, dispatch] = React.useReducer(DatabaseReducer, { user: null });
-  const {signedIn} = useContext(AppContext);
-  const firebase = useContext(FirebaseContext);
-
-  console.log(state.user, state.site);
+  const { signedIn } = useContext(AppContext);
 
   useEffect(() => {
     if (

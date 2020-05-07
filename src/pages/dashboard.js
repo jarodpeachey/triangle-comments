@@ -39,6 +39,7 @@ const Account = () => {
   if (isBrowser() && !/\/sites\/(.*)/.test(window.location.pathname) && site) {
     dispatch({ type: 'logoutSite', data: {} });
   } else {
+
   }
 
   return (

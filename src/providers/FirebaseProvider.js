@@ -7,14 +7,12 @@ import firebaseConfig from '../../firebaseConfig';
 import { isBrowser } from '../utils/isBrowser';
 import { AppContext } from './AppProvider';
 import { setCookie, deleteCookie } from '../utils/cookies';
-import { DatabaseContext } from './DatabaseProvider';
 
 export const FirebaseContext = React.createContext({});
 
 export const FirebaseProvider = ({ children }) => {
   const { setSignedIn, setShouldUpdate } = useContext(AppContext);
   const [firebaseUser, setFirebaseUser] = useState(null);
-  const { dispatch } = useContext(DatabaseContext);
 
   if (isBrowser() && firebase.apps.length === 0) {
     firebase.initializeApp(firebaseConfig);
@@ -30,6 +28,7 @@ export const FirebaseProvider = ({ children }) => {
       } else {
         setSignedIn(false);
         localStorage.removeItem('firebaseUser');
+        localStorage.removeItem('faunaUser');
         setFirebaseUser(null);
       }
     });

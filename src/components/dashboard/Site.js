@@ -12,6 +12,7 @@ import { isBrowser } from '../../utils/isBrowser';
 import DelayedLoad from '../DelayedLoad';
 import Card from '../Card';
 import Button from '../Button';
+import { AppContext } from '../../providers/AppProvider';
 
 const Site = () => {
   const [activeTab, setActiveTab] = useState(
@@ -22,7 +23,9 @@ const Site = () => {
       : 'home'
   );
   const [loading, setLoading] = useState(true);
-
+  const { setNotificationMessage, setNotificationType } = useContext(
+    AppContext
+  );
   const { state, q, dispatch } = useContext(DatabaseContext);
   const { user, site, userClient } = state;
 
@@ -56,9 +59,19 @@ const Site = () => {
             });
             setLoading(false);
           })
-          .catch((errorTwo) => console.log(errorTwo));
+          .catch((errorTwo) => {
+            setNotificationType('error');
+            setNotificationMessage(
+              'There was an error accessing your site data.'
+            );
+            window.location.href = '/dashboard/sites';
+            console.log(errorTwo);
+          });
       })
       .catch((errorTwo) => {
+        setNotificationType('error');
+        setNotificationMessage('There was an error accessing your site data.');
+        window.location.href = '/dashboard/sites';
         console.log(errorTwo);
       });
   }, [user]);

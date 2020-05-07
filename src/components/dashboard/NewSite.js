@@ -32,7 +32,9 @@ const NewSite = () => {
   const onNameChange = (e) => {
     setName(e.target.value);
     setError(false);
-    setStateId(`${e.target.value.toLowerCase().replace(/ /g, '-')}`);
+    setStateId(
+      `${e.target.value.toLowerCase().replace(/ /g, '-').replace("'", '')}`
+    );
   };
 
   const addSite = (e) => {
@@ -42,6 +44,17 @@ const NewSite = () => {
           q.Let(
             {
               site: q.Call(q.Function('create_site'), name, stateId, user),
+              comment: q.Call(
+                q.Function('create_comment'),
+                'Jarod (Staticbox Founder)',
+                'jwpeachey107@aol.com',
+                `Hey, ${q.Select(
+                  ['data', 'name'],
+                  user
+                )}! Welcome to Staticbox! This is your first comment. You can delete it if you'd like, and practice for all the comments you're going to get in the future 😉`,
+                user,
+                q.Var('site')
+              ),
             },
             q.Login(q.Select('ref', q.Var('site')), {
               password: q.Select(['data', 'id'], q.Var('site')),

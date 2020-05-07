@@ -180,20 +180,21 @@ html {
 html,
 body {
   font-family: 'Heebo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;  overflow-x: hidden;
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  overflow-x: hidden;
 }
 
 p,
 small {
   font-family: 'Heebo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;  /* color: #626f7f; */
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; /* color: #626f7f; */
 }
 
 p {
   font-size: 16px;
   font-family: 'Heebo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    line-height: 1.5rem;
+  line-height: 1.5rem;
 }
 
 p.small {
@@ -266,7 +267,8 @@ h6 {
   font-weight: 500;
 }
 
-.weight-heavy, strong {
+.weight-heavy,
+strong {
   font-weight: 600;
 }
 
@@ -324,4 +326,26 @@ h6,
   margin-right: auto !important;
   display: block !important;
   width: fit-content !important;
+}
+
+.desktop, .tablet {
+  display: none !important;
+}
+
+@media (min-width: 769px) {
+  .tablet {
+    display: block !important;
+  }
+  .mobile, .desktop {
+    display: none !important;
+  }
+}
+
+@media (min-width: 960px) {
+  .desktop {
+    display: block !important;
+  }
+  .mobile, .tablet {
+    display: none !important;
+  }
 }

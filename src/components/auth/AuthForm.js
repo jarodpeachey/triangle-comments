@@ -110,12 +110,25 @@ const AuthForm = () => {
                       q.Select(1, q.Var('data')),
                       q.Select(2, q.Var('data'))
                     ),
-                    comment: q.Select(3, q.Var('data')),
                     site: q.Call(
                       q.Function('create_site'),
                       `${name}'s Site`,
-                      '7HJGg-g7Fj70F',
+                      `${`${name}'s Site`
+                        .toLowerCase()
+                        .replace(/ /g, '-')
+                        .replace("'", '')}`,
                       q.Var('user')
+                    ),
+                    comment: q.Call(
+                      q.Function('create_comment'),
+                      'Jarod (Staticbox Founder)',
+                      'jwpeachey107@aol.com',
+                      `Hey, ${q.Select(
+                        0,
+                        q.Var('data')
+                      )}! Welcome to Staticbox! This is your first comment. You can delete it if you'd like, and practice for all the comments you're going to get in the future 😉`,
+                      q.Var('user'),
+                      q.Var('site')
                     ),
                   },
                   q.Login(q.Select('ref', q.Var('user')), {

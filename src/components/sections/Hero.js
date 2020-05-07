@@ -103,27 +103,16 @@ const MainWrapper = styled.div`
   position: relative;
   align-items: center;
   margin-top: -60px;
+  margin-bottom: -60px;
   padding-bottom: 180px;
   @media (min-width: 576px) {
     padding-bottom: 280px !important;
   }
   @media (min-width: 670px) {
-    padding-bottom: 280px !important;
+    padding-bottom: 220px !important;
   }
   @media (min-width: 750px) {
-    padding-bottom: 310px !important;
-  }
-  @media (min-width: 1000px) {
-    padding-bottom: 310px !important;
-  }
-  @media (min-width: 1200px) {
-    padding-bottom: 310px !important;
-  }
-  @media (min-width: 1500px) {
-    padding-bottom: 310px !important;
-  }
-  @media (min-width: 1677px) {
-    padding-bottom: 310px !important;
+    padding-bottom: 260px !important;
   }
 `;
 
