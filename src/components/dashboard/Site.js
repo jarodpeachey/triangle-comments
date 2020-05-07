@@ -13,6 +13,7 @@ import DelayedLoad from '../DelayedLoad';
 import Card from '../Card';
 import Button from '../Button';
 import { AppContext } from '../../providers/AppProvider';
+import SiteComments from './SiteComments';
 
 const Site = () => {
   const [activeTab, setActiveTab] = useState(
@@ -215,7 +216,7 @@ const Site = () => {
                       <DelayedLoad> */}
               {activeTab === 'home' && <SiteDashboard />}
               {activeTab === 'settings' && <SiteSettings />}
-              {activeTab === 'comments' && <SiteSettings />}
+              {activeTab === 'comments' && <SiteComments />}
               {/* {activeTab === 'billing' && <Billing />} */}
               {/* </DelayedLoad>
                     </Router> */}
