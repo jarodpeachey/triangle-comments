@@ -28,6 +28,7 @@ import Notification from '../Notification';
 import PasswordModal from '../auth/PasswordModal';
 import { isBrowser } from '../../utils/isBrowser';
 import EditSiteInfoModal from '../dashboard/EditSiteInfoModal';
+import { DatabaseContext } from '../../providers/DatabaseProvider';
 
 library.add(
   faBars,
@@ -55,6 +56,20 @@ const Layout = (props) => {
     notificationType,
     editSiteInfoModalOpen,
   } = useContext(AppContext);
+  const { state, dispatch } = useContext(DatabaseContext);
+  const { user, site } = state;
+
+  console.log(
+    'Test for',
+    window.location.pathname,
+    ': ',
+    /\/sites\/(.*)/.test(window.location.pathname)
+  );
+
+  if (isBrowser() && !/\/sites\/(.*)/.test(window.location.pathname) && site) {
+    // dispatch({ type: 'logoutSite', data: {} });
+  } else {
+  }
 
   return (
     <Wrapper>

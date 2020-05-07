@@ -25,6 +25,7 @@ const Site = () => {
   );
   const [loading, setLoading] = useState(true);
   const [headerHeight, setHeaderHeight] = useState(0);
+  const [siteNameIndex, setSiteNameIndex] = useState(3);
   const { setNotificationMessage, setNotificationType } = useContext(
     AppContext
   );
@@ -32,14 +33,20 @@ const Site = () => {
   const { user, site, userClient, siteClient } = state;
 
   useEffect(() => {
-    const pathnames = window.location.pathname.split('sites/');
+    const pathnames = window.location.pathname.split('/');
 
     console.log(pathnames);
+
+    pathnames.forEach((item, index) => {
+      if (item === 'sites') {
+        setSiteNameIndex(index + 1);
+      }
+    });
 
     userClient
       .query(
         q.Get(
-          q.Match(q.Index('site_by_id'), isBrowser() && q.Select(1, pathnames))
+          q.Match(q.Index('site_by_id'), isBrowser() && q.Select(siteNameIndex, pathnames))
         )
       )
       .then((response) => {
@@ -66,15 +73,15 @@ const Site = () => {
             setNotificationMessage(
               'There was an error accessing your site data.'
             );
-            window.location.href = '/dashboard/sites';
-            console.log(errorTwo);
+            // window.location.href = '/dashboard/sites';
+            console.log('Error getting and logging in site: ', errorTwo);
           });
       })
       .catch((errorTwo) => {
         setNotificationType('error');
         setNotificationMessage('There was an error accessing your site data.');
-        window.location.href = '/dashboard/sites';
-        console.log(errorTwo);
+        // window.location.href = '/dashboard/sites';
+        console.log('Error getting site data: ', errorTwo);
       });
   }, [user]);
 

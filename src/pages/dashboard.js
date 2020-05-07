@@ -33,12 +33,6 @@ const Account = () => {
   const { state, dispatch } = useContext(DatabaseContext);
   const { user, site } = state;
 
-  if (isBrowser() && !/\/sites\/(.*)/.test(window.location.pathname) && site) {
-    dispatch({ type: 'logoutSite', data: {} });
-  } else {
-
-  }
-
   return (
     <DelayedLoad
       fullHeight
