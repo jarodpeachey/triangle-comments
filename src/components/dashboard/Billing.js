@@ -24,7 +24,7 @@ const Billing = () => {
 
   return (
     // <DelayedLoad>
-      <SlideWrapper>
+      <span>
         <h2 className='mt-none'>Account Info</h2>
         <Card title='Personal Info'>
           {currentUser ? (
@@ -55,7 +55,7 @@ const Billing = () => {
             <Loader />
           )}
         </Card>
-      </SlideWrapper>
+      </span>
     //</DelayedLoad>
   );
 };

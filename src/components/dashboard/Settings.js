@@ -205,38 +205,34 @@ const Settings = () => {
           </Tabs>
         </div>
         <div widths={[9]}>
-          <SlideWrapper>
-            {activeTab === 'general' && (
-              <Card title='Account'>
-                <p className='small m-none'>
-                  Name: {user.data.name || 'Guest'}
-                </p>
-                <p className='small m-none'>Email: {user.data.email}</p>
-                <Spacer />
-                <Button onClick={() => openEditModal(true)} gray small>
-                  Edit
-                </Button>
-              </Card>
-            )}
-            {activeTab === 'api' && (
-              <Card
-                title='API Keys'
-                subtitle='Your API keys grant access to all your comments. Keep them safe.'
-              >
-                {keys.map((key) => {
-                  return (
-                    <APIKey key={`api-key-${key.key}`}>
-                      <strong>Key:</strong> {key.key}
-                    </APIKey>
-                  );
-                })}
-                {/* <Spacer /> */}
-                <Button onClick={() => createAPIKey()} small>
-                  Create New
-                </Button>
-              </Card>
-            )}
-          </SlideWrapper>
+          {activeTab === 'general' && (
+            <Card title='Account'>
+              <p className='small m-none'>Name: {user.data.name || 'Guest'}</p>
+              <p className='small m-none'>Email: {user.data.email}</p>
+              <Spacer />
+              <Button onClick={() => openEditModal(true)} gray small>
+                Edit
+              </Button>
+            </Card>
+          )}
+          {activeTab === 'api' && (
+            <Card
+              title='API Keys'
+              subtitle='Your API keys grant access to all your comments. Keep them safe.'
+            >
+              {keys.map((key) => {
+                return (
+                  <APIKey key={`api-key-${key.key}`}>
+                    <strong>Key:</strong> {key.key}
+                  </APIKey>
+                );
+              })}
+              {/* <Spacer /> */}
+              <Button onClick={() => createAPIKey()} small>
+                Create New
+              </Button>
+            </Card>
+          )}
         </div>
       </Row>
     </span>

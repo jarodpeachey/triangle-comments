@@ -32,6 +32,12 @@ const Account = () => {
   );
   const { state, dispatch } = useContext(DatabaseContext);
   const { user, site } = state;
+  const [sites, setSites] = useState([]);
+
+  const setLoadedSites = (loadedSites) => {
+    console.log('Loaded sites in function: ', loadedSites);
+    setSites(loadedSites);
+  };
 
   return (
     <DelayedLoad
@@ -80,10 +86,7 @@ const Account = () => {
                       <div widths={['auto']}>
                         <Tabs>
                           <Tab
-                            active={
-                              isBrowser() &&
-                              window.location.pathname.includes('/sites')
-                            }
+                            active={activeTab === 'sites'}
                             onClick={() => {
                               if (isBrowser()) {
                                 window.history.pushState(
@@ -99,10 +102,7 @@ const Account = () => {
                             Sites
                           </Tab>
                           <Tab
-                            active={
-                              isBrowser() &&
-                              window.location.pathname.includes('/billing')
-                            }
+                            active={activeTab === 'billing'}
                             onClick={() => {
                               if (isBrowser()) {
                                 window.history.pushState(
@@ -118,10 +118,7 @@ const Account = () => {
                             Billing
                           </Tab>
                           <Tab
-                            active={
-                              isBrowser() &&
-                              window.location.pathname.includes('/settings')
-                            }
+                            active={activeTab === 'settings'}
                             onClick={() => {
                               if (isBrowser()) {
                                 window.history.pushState(
@@ -168,7 +165,12 @@ const Account = () => {
                       <Spacer height={36} />
                       {/* <Router>
                       <DelayedLoad> */}
-                      {activeTab === 'sites' && <Dashboard />}
+                      {activeTab === 'sites' && (
+                        <Dashboard
+                          loadedSites={sites}
+                          setSitesFunction={setLoadedSites}
+                        />
+                      )}
                       {activeTab === 'settings' && <Settings />}
                       {/* {activeTab === 'billing' && <Billing />} */}
                       {/* </DelayedLoad>

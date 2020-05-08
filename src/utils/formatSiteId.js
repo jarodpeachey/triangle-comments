@@ -5,7 +5,5 @@ export const formatSiteId = (value) => {
     .replace(/\'/g, '')
     .replace(/\,/g, '-');
 
-  console.log(formattedValue);
-
   return formattedValue;
 };

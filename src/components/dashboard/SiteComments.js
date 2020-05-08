@@ -149,59 +149,57 @@ const SiteComments = () => {
           </Tabs>
         </div>
         <div widths={[9]}>
-          <SlideWrapper>
-            {activeTab === 'published' && (
-              // <Card title='Account'>
-              //   <p className='small m-none'>
-              //     Name: {user.data.name || 'Guest'}
-              //   </p>
-              //   <p className='small m-none'>Email: {user.data.email}</p>
-              //   <Spacer />
-              //   <Button onClick={() => openEditModal(true)} gray small>
-              //     Edit
-              //   </Button>
-              // </Card>
-              <>
-                {comments && comments.length ? (
-                  <>
-                    {comments.map((comment) => {
-                      console.log(comment);
+          {activeTab === 'published' && (
+            // <Card title='Account'>
+            //   <p className='small m-none'>
+            //     Name: {user.data.name || 'Guest'}
+            //   </p>
+            //   <p className='small m-none'>Email: {user.data.email}</p>
+            //   <Spacer />
+            //   <Button onClick={() => openEditModal(true)} gray small>
+            //     Edit
+            //   </Button>
+            // </Card>
+            <>
+              {comments && comments.length ? (
+                <>
+                  {comments.map((comment) => {
+                    console.log(comment);
 
-                      return (
-                        <CommentWrapper key={`comment-${comment.data.name}`}>
-                          <CommentTitle className='h3'>
-                            {comment.data.name}
-                          </CommentTitle>
-                          <p>{shortenText(comment.data.comment, 100)}</p>
-                          <small>- {comment.data.email}</small>
-                        </CommentWrapper>
-                      );
-                    })}
-                  </>
-                ) : (
-                  <Card>Looks like you have no comments on your site yet!</Card>
-                )}
-              </>
-            )}
-            {activeTab === 'held' && (
-              <Card
-                title='API Keys'
-                subtitle='Your API keys grant access to all your comments. Keep them safe.'
-              >
-                {keys.map((key) => {
-                  return (
-                    <APIKey key={`api-key-${key.key}`}>
-                      <strong>Key:</strong> {key.key}
-                    </APIKey>
-                  );
-                })}
-                {/* <Spacer /> */}
-                <Button onClick={() => createAPIKey()} small>
-                  Create New
-                </Button>
-              </Card>
-            )}
-          </SlideWrapper>
+                    return (
+                      <CommentWrapper key={`comment-${comment.data.name}`}>
+                        <CommentTitle className='h3'>
+                          {comment.data.name}
+                        </CommentTitle>
+                        <p>{shortenText(comment.data.comment, 100)}</p>
+                        <small>- {comment.data.email}</small>
+                      </CommentWrapper>
+                    );
+                  })}
+                </>
+              ) : (
+                <Card>Looks like you have no comments on your site yet!</Card>
+              )}
+            </>
+          )}
+          {activeTab === 'held' && (
+            <Card
+              title='API Keys'
+              subtitle='Your API keys grant access to all your comments. Keep them safe.'
+            >
+              {keys.map((key) => {
+                return (
+                  <APIKey key={`api-key-${key.key}`}>
+                    <strong>Key:</strong> {key.key}
+                  </APIKey>
+                );
+              })}
+              {/* <Spacer /> */}
+              <Button onClick={() => createAPIKey()} small>
+                Create New
+              </Button>
+            </Card>
+          )}
         </div>
       </Row>
     </span>

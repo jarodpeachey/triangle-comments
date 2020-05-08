@@ -15,64 +15,73 @@ import { formatDate } from '../../utils/formatDate';
 import Spacer from '../Spacer';
 import { formatSiteId } from '../../utils/formatSiteId';
 
-const Dashboard = () => {
+const Dashboard = ({ setSitesFunction, loadedSites }) => {
   const { setEditModalOpen } = useContext(AppContext);
   const { firebase, firebaseUser } = useContext(FirebaseContext);
-  const [sites, setSites] = useState([]);
+  const [sites, setSites] = useState(loadedSites && loadedSites.length > 0 ? loadedSites : []);
   const { state, q } = useContext(DatabaseContext);
   const { user, userClient } = state;
-  const [loading, setLoading] = useState(true);
-  const [showItems, setShowItems] = useState(false);
+  const [loading, setLoading] = useState(!(loadedSites && loadedSites.length > 0));
+  const [showItems, setShowItems] = useState((loadedSites && loadedSites.length > 0));
   const [animate, setAnimate] = useState(false);
   const [animateItems, setAnimateItems] = useState(false);
 
+  console.log(sites);
+
   useEffect(() => {
-    userClient
-      .query(
-        q.Map(
-          q.Paginate(q.Match(q.Index('all_sites'))),
-          q.Lambda(
-            'sitesRef',
-            q.Let(
-              {
-                sites: q.Get(q.Var('sitesRef')),
-                user: q.Get(q.Select(['data', 'user'], q.Var('sites'))),
-              },
-              {
-                user: q.Select(['ref'], q.Var('user')),
-                site: q.Var('sites'),
-              }
+    console.log(loadedSites);
+
+    if (loadedSites && loadedSites.length > 0) {
+      // setSites(loadedSites);
+    } else {
+      userClient
+        .query(
+          q.Map(
+            q.Paginate(q.Match(q.Index('all_sites'))),
+            q.Lambda(
+              'sitesRef',
+              q.Let(
+                {
+                  sites: q.Get(q.Var('sitesRef')),
+                  user: q.Get(q.Select(['data', 'user'], q.Var('sites'))),
+                },
+                {
+                  user: q.Select(['ref'], q.Var('user')),
+                  site: q.Var('sites'),
+                }
+              )
             )
           )
         )
-      )
-      .then((response) => {
-        console.log(response);
-        setSites(response.data);
-        setShowItems(true);
-        setAnimate(true);
-        setTimeout(() => {
-          setAnimateItems(true);
-        }, 300);
-        setTimeout(() => {
-          setLoading(false);
-          setAnimate(false);
-          setAnimateItems(false);
-        }, 500);
-      })
-      .catch((error) => {
-        console.log(error);
-        setShowItems(true);
-        setAnimate(true);
-        setTimeout(() => {
-          setAnimateItems(true);
-        }, 300);
-        setTimeout(() => {
-          setLoading(false);
-          setAnimate(false);
-          setAnimateItems(false);
-        }, 500);
-      });
+        .then((response) => {
+          console.log(response);
+          setSites(response.data);
+          setSitesFunction(response.data);
+          setShowItems(true);
+          setAnimate(true);
+          setTimeout(() => {
+            setAnimateItems(true);
+          }, 200);
+          setTimeout(() => {
+            setLoading(false);
+            setAnimate(false);
+            setAnimateItems(false);
+          }, 200);
+        })
+        .catch((error) => {
+          console.log(error);
+          setShowItems(true);
+          setAnimate(true);
+          setTimeout(() => {
+            setAnimateItems(true);
+          }, 200);
+          setTimeout(() => {
+            setLoading(false);
+            setAnimate(false);
+            setAnimateItems(false);
+          }, 200);
+        });
+    }
   }, [user]);
 
   return (
@@ -140,8 +149,6 @@ const Dashboard = () => {
             >
               <Row breakpoints={[0, 576, 769]} spacing={[24]}>
                 {sites.map(({ site }) => {
-                  console.log(site);
-
                   return (
                     <Site
                       widths={[12, 6, 4]}
@@ -157,7 +164,7 @@ const Dashboard = () => {
                         justify-content: center;
                         height: 225px;
                         transform: scale(${animateItems ? 1 : loading ? 0 : 1});
-                        transition: transform .5s ease-out;
+                        transition: transform .2s ease-out;
                        `}
                       >
                         <SiteName>{site.data.name}</SiteName>
@@ -169,7 +176,13 @@ const Dashboard = () => {
               </Row>
             </div>
           ) : (
-            <Card>No sites!</Card>
+            <Card
+              customStyles={`
+                transform: scale(${animateItems ? 1 : loading ? 0 : 1});
+                transition: transform .2s ease-out;`}
+            >
+              No sites!
+            </Card>
           )}
         </>
       )}
@@ -199,7 +212,8 @@ const Skeleton = styled.div`
   overflow: hidden;
   position: relative;
   transform: scale(${(props) => (props.animate ? 0 : 1)});
-  transition: transform 0.5s ease-in;
+  opacity: ${(props) => (props.animate ? 0 : 1)};
+  transition: all 0.2s ease-in;
   ::after {
     content: '' !important;
     position: absolute !important;

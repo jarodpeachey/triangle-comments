@@ -33,7 +33,7 @@ const SiteDashboard = () => {
 
   return (
     // <DelayedLoad>
-    <SlideWrapper>
+    <span>
       {/* <h2 className='mt-none'>Account Info</h2> */}
       <Row spacing={[16]} breakpoints={[769]}>
         <div widths={[6]}>
@@ -82,7 +82,7 @@ const SiteDashboard = () => {
           </Card>
         </div>
       </Row>
-    </SlideWrapper>
+    </span>
   );
 };
 

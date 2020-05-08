@@ -14,6 +14,7 @@ export const DatabaseReducer = (state, action) => {
 
       if (isBrowser()) {
         setCookie('user_secret', action.data.secret);
+        setCookie('user_id', action.data.user.data.id);
       }
       return {
         ...state,
@@ -111,7 +112,7 @@ export const DatabaseReducer = (state, action) => {
 };
 
 export const DatabaseProvider = ({ children }) => {
-  const [state, dispatch] = React.useReducer(DatabaseReducer, { user: null });
+  const [state, dispatch] = React.useReducer(DatabaseReducer, {});
   const { signedIn } = useContext(AppContext);
 
   useEffect(() => {
@@ -136,6 +137,36 @@ export const DatabaseProvider = ({ children }) => {
               user: response,
             },
           });
+        })
+        .catch((faunaErr) => {
+          console.log(faunaErr);
+        });
+    } else if (
+      isBrowser() &&
+      localStorage.getItem('firebaseUser') &&
+      getCookie('user_id')
+    ) {
+      console.log('User id found, user secret not found. Fetching user secret');
+      // Login user and get new secret
+      serverClient
+        .query(q.Get(q.Match(q.Index('user_by_id'), getCookie('user_id'))))
+        .then((response) => {
+          console.log(response);
+          serverClient
+            .query(
+              q.Login(q.Select('ref', response), {
+                password: q.Select(['data', 'id'], response),
+              })
+            )
+            .then((secretResponse) => {
+              dispatch({
+                type: 'login',
+                data: {
+                  secret: secretResponse.secret,
+                  user: response,
+                },
+              });
+            });
         })
         .catch((faunaErr) => {
           console.log(faunaErr);

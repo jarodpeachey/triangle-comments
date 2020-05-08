@@ -134,7 +134,7 @@ const SiteSettings = () => {
                   'ref',
                   q.Get(q.Match(q.Index('user_by_id'), user.data.id))
                 ),
-                key: secretResponse.secret
+                key: secretResponse.secret,
               },
             })
           )
@@ -157,12 +157,17 @@ const SiteSettings = () => {
           <Tabs>
             <Tab
               active={
-                (isBrowser() &&
-                  window.location.pathname === '/dashboard/sites/staticbox/settings')
+                isBrowser() &&
+                window.location.pathname ===
+                  '/dashboard/sites/staticbox/settings'
               }
               onClick={() => {
                 if (typeof window !== 'undefined') {
-                  window.history.pushState({}, '', '/dashboard/sites/staticbox/settings');
+                  window.history.pushState(
+                    {},
+                    '',
+                    '/dashboard/sites/staticbox/settings'
+                  );
                 }
                 setActiveTab('general');
               }}
@@ -177,7 +182,11 @@ const SiteSettings = () => {
               }
               onClick={() => {
                 if (isBrowser()) {
-                  window.history.pushState({}, '', '/dashboard/sites/staticbox/settings/api');
+                  window.history.pushState(
+                    {},
+                    '',
+                    '/dashboard/sites/staticbox/settings/api'
+                  );
                 }
                 setActiveTab('api');
               }}
@@ -203,38 +212,34 @@ const SiteSettings = () => {
           </Tabs>
         </div>
         <div widths={[9]}>
-          <SlideWrapper>
-            {activeTab === 'general' && (
-              <Card title='Account'>
-                <p className='small m-none'>
-                  Name: {user.data.name || 'Guest'}
-                </p>
-                <p className='small m-none'>Email: {user.data.email}</p>
-                <Spacer />
-                <Button onClick={() => openEditModal(true)} gray small>
-                  Edit
-                </Button>
-              </Card>
-            )}
-            {activeTab === 'api' && (
-              <Card
-                title='API Keys'
-                subtitle='Your API keys grant access to all your comments. Keep them safe.'
-              >
-                {keys.map((key) => {
-                  return (
-                    <APIKey key={`api-key-${key.key}`}>
-                      <strong>Key:</strong> {key.key}
-                    </APIKey>
-                  );
-                })}
-                {/* <Spacer /> */}
-                <Button onClick={() => createAPIKey()} small>
-                  Create New
-                </Button>
-              </Card>
-            )}
-          </SlideWrapper>
+          {activeTab === 'general' && (
+            <Card title='Account'>
+              <p className='small m-none'>Name: {user.data.name || 'Guest'}</p>
+              <p className='small m-none'>Email: {user.data.email}</p>
+              <Spacer />
+              <Button onClick={() => openEditModal(true)} gray small>
+                Edit
+              </Button>
+            </Card>
+          )}
+          {activeTab === 'api' && (
+            <Card
+              title='API Keys'
+              subtitle='Your API keys grant access to all your comments. Keep them safe.'
+            >
+              {keys.map((key) => {
+                return (
+                  <APIKey key={`api-key-${key.key}`}>
+                    <strong>Key:</strong> {key.key}
+                  </APIKey>
+                );
+              })}
+              {/* <Spacer /> */}
+              <Button onClick={() => createAPIKey()} small>
+                Create New
+              </Button>
+            </Card>
+          )}
         </div>
       </Row>
     </span>

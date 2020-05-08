@@ -253,8 +253,8 @@ const Wrapper = styled.header`
       : 'transparent'};
   color: ${(props) =>
     props.scrolled
-      ? props.theme.color.primary.light
-      : props.theme.color.primary.light} !important;
+      ? props.theme.color.primary.main
+      : props.theme.color.primary.main} !important;
   transition-duration: 0.25s;
   transition: all 0.25s ease-in;
   box-shadow: ${(props) =>
