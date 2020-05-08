@@ -18,11 +18,17 @@ import { formatSiteId } from '../../utils/formatSiteId';
 const Dashboard = ({ setSitesFunction, loadedSites }) => {
   const { setEditModalOpen } = useContext(AppContext);
   const { firebase, firebaseUser } = useContext(FirebaseContext);
-  const [sites, setSites] = useState(loadedSites && loadedSites.length > 0 ? loadedSites : []);
+  const [sites, setSites] = useState(
+    loadedSites && loadedSites.length > 0 ? loadedSites : []
+  );
   const { state, q } = useContext(DatabaseContext);
   const { user, userClient } = state;
-  const [loading, setLoading] = useState(!(loadedSites && loadedSites.length > 0));
-  const [showItems, setShowItems] = useState((loadedSites && loadedSites.length > 0));
+  const [loading, setLoading] = useState(
+    !(loadedSites && loadedSites.length > 0)
+  );
+  const [showItems, setShowItems] = useState(
+    loadedSites && loadedSites.length > 0
+  );
   const [animate, setAnimate] = useState(false);
   const [animateItems, setAnimateItems] = useState(false);
 

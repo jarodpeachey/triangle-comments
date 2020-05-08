@@ -25,38 +25,32 @@ const Settings = () => {
   const { user, userClient } = state;
 
   useEffect(() => {
-    setRender(false);
 
-    // console.log(faunaUser.ref);
-
-    // if (!reRender) {
-    //   serverClient
-    //     .query(
-    //       q.Map(
-    //         q.Paginate(q.Match(q.Index('all_keys'))),
-    //         q.Lambda(
-    //           'keysRef',
-    //           q.Let(
-    //             {
-    //               keys: q.Get(q.Var('keysRef')),
-    //               user: q.Get(q.Select(['data', 'user'], q.Var('keys'))),
-    //             },
-    //             {
-    //               user: q.Select(['ref'], q.Var('user')),
-    //               key: q.Select(['data', 'key'], q.Var('keys')),
-    //             }
-    //           )
-    //         )
-    //       ),
-    //       { secret: 'fnEDqswJoPACEgOmCb0MkAIUO0Mtcu5wDWGg5PSvigYek3Aac8s' }
-    //     )
-    //     .then((keysResponse) => {
-    //       console.log('Keys from user: ', keysResponse.data);
-    //       setKeys(keysResponse.data);
-    //     })
-    //     .catch((commentsError) => console.log(commentsError));
-    // }
-  }, [reRender]);
+      userClient
+        .query(
+          q.Map(
+            q.Paginate(q.Match(q.Index('all_keys'))),
+            q.Lambda(
+              'keysRef',
+              q.Let(
+                {
+                  keys: q.Get(q.Var('keysRef')),
+                  user: q.Get(q.Select(['data', 'user'], q.Var('keys'))),
+                },
+                {
+                  user: q.Select(['ref'], q.Var('user')),
+                  key: q.Select(['data', 'key'], q.Var('keys')),
+                }
+              )
+            )
+          )
+        )
+        .then((keysResponse) => {
+          console.log('Keys from user: ', keysResponse.data);
+          setKeys(keysResponse.data);
+        })
+        .catch((keysError) => console.log(keysError));
+  }, []);
 
   // if (key) {
   //   serverClient
