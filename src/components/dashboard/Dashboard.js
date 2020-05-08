@@ -4,7 +4,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Router } from '@reach/router';
 import { Link } from 'gatsby';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 import Card from '../Card';
 import Button from '../Button';
 import { AppContext } from '../../providers/AppProvider';
@@ -21,6 +21,10 @@ const Dashboard = () => {
   const [sites, setSites] = useState([]);
   const { state, q } = useContext(DatabaseContext);
   const { user, userClient } = state;
+  const [loading, setLoading] = useState(true);
+  const [showItems, setShowItems] = useState(false);
+  const [animate, setAnimate] = useState(false);
+  const [animateItems, setAnimateItems] = useState(false);
 
   useEffect(() => {
     userClient
@@ -45,13 +49,35 @@ const Dashboard = () => {
       .then((response) => {
         console.log(response);
         setSites(response.data);
+        setShowItems(true);
+        setAnimate(true);
+        setTimeout(() => {
+          setAnimateItems(true);
+        }, 300);
+        setTimeout(() => {
+          setLoading(false);
+          setAnimate(false);
+          setAnimateItems(false);
+        }, 500);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+        setShowItems(true);
+        setAnimate(true);
+        setTimeout(() => {
+          setAnimateItems(true);
+        }, 300);
+        setTimeout(() => {
+          setLoading(false);
+          setAnimate(false);
+          setAnimateItems(false);
+        }, 500);
+      });
   }, [user]);
 
   return (
     // <DelayedLoad>
-    <SlideWrapper>
+    <span>
       <Row spacing={[12]} breakpoints={[0]}>
         <div widths={[6]}>
           <h2 className='m-none'>Sites</h2>
@@ -73,40 +99,127 @@ const Dashboard = () => {
         </div>
       </Row>
       <Spacer height={48} />
-      {sites && sites.length > 0 ? (
+      {loading && (
         <Row breakpoints={[0, 576, 769]} spacing={[24]}>
-          {sites.map(({ site }) => {
-            console.log(site);
-
-            return (
-              <Site
-                widths={[12, 6, 4]}
-                to={`/dashboard/sites/${formatSiteId(site.data.name)}`}
-              >
-                <Card
-                  customStyles={`
-                    height: 100%;
-                    text-align: center;
-                    display: flex;
-                    align-items: center;
-                    flex-direction: column;
-                    justify-content: center;
-                    height: 225px;
-                  `}
-                >
-                  <SiteName>{site.data.name}</SiteName>
-                  <SiteDate>Created on {formatDate(site.ts)}</SiteDate>
-                </Card>
-              </Site>
-            );
-          })}
+          <div widths={[12, 6, 4]}>
+            <Site to='#' widths={[12, 6, 4]}>
+              <Skeleton animate={animate}>
+                <SiteName skeleton />
+                <SiteDate skeleton />
+              </Skeleton>
+            </Site>
+          </div>
+          <div widths={[12, 6, 4]}>
+            <Site to='#' widths={[12, 6, 4]}>
+              <Skeleton animate={animate}>
+                <SiteName skeleton />
+                <SiteDate skeleton />
+              </Skeleton>
+            </Site>
+          </div>
+          <div widths={[12, 6, 4]}>
+            <Site to='#' widths={[12, 6, 4]}>
+              <Skeleton animate={animate}>
+                <SiteName skeleton />
+                <SiteDate skeleton />
+              </Skeleton>
+            </Site>
+          </div>
         </Row>
-      ) : (
-        <Card>No sites!</Card>
       )}
-    </SlideWrapper>
+      {showItems && (
+        <>
+          {sites && sites.length > 0 ? (
+            <div
+              style={{
+                position: animateItems ? 'absolute' : 'static',
+                top: 0,
+                left: 0,
+                width: '100%',
+              }}
+            >
+              <Row breakpoints={[0, 576, 769]} spacing={[24]}>
+                {sites.map(({ site }) => {
+                  console.log(site);
+
+                  return (
+                    <Site
+                      widths={[12, 6, 4]}
+                      to={`/dashboard/sites/${formatSiteId(site.data.name)}`}
+                    >
+                      <Card
+                        customStyles={`
+                        height: 100%;
+                        text-align: center;
+                        display: flex;
+                        align-items: center;
+                        flex-direction: column;
+                        justify-content: center;
+                        height: 225px;
+                        transform: scale(${animateItems ? 1 : loading ? 0 : 1});
+                        transition: transform .5s ease-out;
+                       `}
+                      >
+                        <SiteName>{site.data.name}</SiteName>
+                        <SiteDate>Created on {formatDate(site.ts)}</SiteDate>
+                      </Card>
+                    </Site>
+                  );
+                })}
+              </Row>
+            </div>
+          ) : (
+            <Card>No sites!</Card>
+          )}
+        </>
+      )}
+    </span>
   );
 };
+
+const shimmer = keyframes`
+  100% {
+    transform: translateX(100%);
+  }
+`;
+
+const Skeleton = styled.div`
+  padding: 16px;
+  // margin-bottom: 32px;
+  background: white;
+  border-radius: 5px;
+  border: 1px solid ${(props) => props.theme.color.gray.three};
+  height: 100%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  height: 225px;
+  overflow: hidden;
+  position: relative;
+  transform: scale(${(props) => (props.animate ? 0 : 1)});
+  transition: transform 0.5s ease-in;
+  ::after {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    left: 0 !important;
+    height: 100% !important;
+    bottom: 0 !important;
+    transform: translateX(-100%) !important;
+    background-image: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0,
+      rgba(255, 255, 255, 0.5) 30%,
+      rgba(255, 255, 255, 0) 50%,
+      rgba(255, 255, 255, 0.5) 70%,
+      rgba(255, 255, 255, 0) 100%
+    ) !important;
+    animation: ${shimmer} 2s infinite !important;
+  }
+`;
 
 const Site = styled(Link)`
   width: 100%;
@@ -120,10 +233,52 @@ const Site = styled(Link)`
 
 const SiteName = styled.h2`
   margin-top: 0;
+  ${(props) =>
+    props.skeleton &&
+    css`
+      width: 60%;
+      height: 20px;
+      border-radius: 5px;
+      background: ${props.theme.color.gray.four};
+      margin: 0 auto;
+      display: block;
+      margin: 0 0 12px 0;
+      overflow-x: hidden;
+      position: relative;
+    `};
 `;
 
 const SiteDate = styled.small`
   color: ${(props) => props.theme.color.text.paragraph};
+  margin-top: 0;
+  ${(props) =>
+    props.skeleton &&
+    css`
+      width: 30%;
+      height: 20px;
+      border-radius: 5px;
+      background: ${props.theme.color.gray.four};
+      margin: 0 auto;
+      display: block;
+      overflow-x: hidden;
+    //   ::after {
+    //     content: '';
+    //     position: absolute;
+    //     top: 0;
+    //     right: 0;
+    //     left: 0;
+    //     bottom: 0;
+    //     transform: translateX(-100%);
+    //     background-image: linear-gradient(
+    //       90deg,
+    //       rgba(255, 255, 255, 0) 0,
+    //       rgba(255, 255, 255, 0.2) 20%,
+    //       rgba(255, 255, 255, 0.5) 60%,
+    //       rgba(255, 255, 255, 0) 0
+    //     );
+    //     animation: ${shimmer} 5s infinite;
+    //   }
+    // `};
 `;
 
 const animation = keyframes`
