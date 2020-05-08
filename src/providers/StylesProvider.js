@@ -47,8 +47,7 @@ export const StylesProvider = (props) => {
 const StyleWrapper = styled.div`
   width: 100vw;
   overflow: hidden;
-  height: auto;
-  display: inline-block;
+  height: 100%;
   padding-right: ${(props) => props.width}px;
   p,
   small,

@@ -11,39 +11,31 @@ const FeaturesSection = ({ data }) => {
   return (
     <Section
       customStyles={`
-        margin-bottom: -360px;
-        padding-bottom: 360px;
         position: relative !important;
         z-index: 1 !important;
         display: block !important;
-        top: -110px !important;
+        padding-bottom: 150px;
+        margin-bottom: -150px;
   @media (min-width: 576px) {
-    margin-bottom: -360px !important;
-    padding-bottom: 360px;
+
   }
   @media (min-width: 670px) {
-    margin-bottom: -360px !important;
-    padding-bottom: 360px;
+
   }
   @media (min-width: 850px) {
-    margin-bottom: -360px !important;
-    padding-bottom: 360px;
+
   }
   @media (min-width: 1000px) {
-    margin-bottom: -360px !important;
-    padding-bottom: 360px;
+
   }
   @media (min-width: 1300px) {
-    margin-bottom: -360px !important;
-    padding-bottom: 360px;
+
   }
   @media (min-width: 1500px) {
-    margin-bottom: -360px !important;
-    padding-bottom: 360px;
+
   }
   @media (min-width: 1677px) {
-    margin-bottom: -360px !important;
-    padding-bottom: 360px;
+
   }
       `}
       background='#ffffff'

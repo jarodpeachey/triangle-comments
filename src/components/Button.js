@@ -75,14 +75,14 @@ const StyledButton = styled.button`
   padding: ${(props) =>
     props.small
       ? props.outlined
-        ? ' 6px 12px'
+        ? ' 5px 11px'
         : '7px 13px'
       : props.medium
       ? props.outlined
-        ? '8px 16px'
+        ? '7px 15px'
         : '9px 17px'
       : props.outlined
-      ? '13px 25px'
+      ? '12px 24px'
       : '14px 26px'} !important;
   border: none !important;
   text-transform: ${(props) => !props.gray && 'uppercase'} !important;

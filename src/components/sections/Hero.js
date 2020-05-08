@@ -84,7 +84,7 @@ const BackgroundImage = styled.div`
   position: absolute;
   top: -94px;
   z-index: 0;
-  height: calc(100% + 94px);
+  height: calc(100% + 94px + 150px);
   width: 100%;
   opacity: 1;
   background-size: cover;
@@ -103,16 +103,16 @@ const MainWrapper = styled.div`
   position: relative;
   align-items: center;
   margin-top: -60px;
-  margin-bottom: -60px;
-  padding-bottom: 180px;
-  @media (min-width: 576px) {
-    padding-bottom: 280px !important;
-  }
-  @media (min-width: 670px) {
-    padding-bottom: 220px !important;
-  }
-  @media (min-width: 750px) {
-    padding-bottom: 260px !important;
+  // margin-bottom: -60px;
+  padding-bottom: 60px;
+  // @media (min-width: 576px) {
+  //   padding-bottom: 150px !important;
+  // }
+  // @media (min-width: 670px) {
+  //   padding-bottom: 220px !important;
+  // }
+  @media (min-width: 769px) {
+    padding-bottom: 100px !important;
   }
 `;
 

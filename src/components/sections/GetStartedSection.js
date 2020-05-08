@@ -9,8 +9,8 @@ const GetStartedSection = ({ data }) => {
   return (
     <Section
       customStyles={`
-        margin-top: -60px;
         z-index: 999;
+        // margin-top: -110px;
         position: relative;
       `}
       dark

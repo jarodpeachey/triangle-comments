@@ -51,7 +51,7 @@ const SubTitle = styled.p`
   color: ${(props) =>
     props.dark ? '#ffffff90' : props.theme.color.text.heading} !important;
     margin: 0 auto;
-    max-width: 769px !important
+    max-width: 768px !important
 `;
 
 const StyledSection = styled.section`

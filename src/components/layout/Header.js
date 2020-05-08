@@ -343,7 +343,7 @@ const MobileMenuToggle = styled.div`
   z-index: 9999;
   width: 30px;
   height: 30px;
-  @media (max-width: 769px) {
+  @media (max-width: 768px) {
     display: block;
   }
   transform: rotate(0deg);
@@ -395,7 +395,7 @@ const MobileMenuRotate = styled.div`
 
 const MobileMenu = styled.div`
   display: none;
-  @media (max-width: 769px) {
+  @media (max-width: 768px) {
     display: block;
   }
   line-height: 1;

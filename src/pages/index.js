@@ -30,11 +30,10 @@ const IndexPage = ({ data }) => {
           <div id='wave'></div>
         </div> */}
         <div
-          className='mobile'
+          className='mobile block'
           style={{
             height: '150px',
             position: 'relative',
-            top: -110,
             overflow: 'hidden',
           }}
         >
@@ -50,11 +49,10 @@ const IndexPage = ({ data }) => {
           </svg>
         </div>
         <div
-          className='tablet'
+          className='tablet block'
           style={{
             height: '150px',
             position: 'relative',
-            top: -110,
             overflow: 'hidden',
           }}
         >
@@ -64,17 +62,16 @@ const IndexPage = ({ data }) => {
             style={{ height: '100%', width: '100%' }}
           >
             <path
-              d='M-20.03,63.64 C272.96,233.38 315.23,-14.30 514.94,15.28 L500.00,150.00 L0.00,150.00 Z'
+              d='M-13.11,93.25 C275.50,159.38 266.02,-5.42 518.58,54.77 L500.00,150.00 L0.00,150.00 Z'
               style={{ stroke: 'none', fill: '#fff' }}
             ></path>
           </svg>
         </div>
         <div
-          className='desktop'
+          className='desktop block'
           style={{
             height: '150px',
             position: 'relative',
-            top: -110,
             overflow: 'hidden',
           }}
         >
@@ -84,7 +81,7 @@ const IndexPage = ({ data }) => {
             style={{ height: '100%', width: '100%' }}
           >
             <path
-              d='M-0.35,84.38 C256.92,216.61 347.30,-66.61 508.37,29.11 L500.00,150.00 L0.00,150.00 Z'
+              d='M-13.11,93.25 C244.89,173.19 262.38,-30.09 550.29,48.84 L500.00,150.00 L0.00,150.00 Z'
               style={{ stroke: 'none', fill: '#fff' }}
             ></path>
           </svg>
@@ -93,13 +90,66 @@ const IndexPage = ({ data }) => {
       </BackgroundWrap>
 
       <FeaturesSection />
-      <SVGTwo xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'>
-        <path
-          fill={theme.color.primary.backgroundDark}
-          fill-opacity='1'
-          d='M0,0L48,10.7C96,21,192,43,288,74.7C384,107,480,149,576,181.3C672,213,768,235,864,229.3C960,224,1056,192,1152,181.3C1248,171,1344,181,1392,186.7L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'
-        ></path>
-      </SVGTwo>
+      <div
+        className='mobile block'
+        style={{
+          height: '150px',
+          position: 'relative',
+          // marginTop: '-110px',
+          overflow: 'hidden',
+        }}
+      >
+        <SVGTwo
+          viewBox='0 0 500 150'
+          preserveAspectRatio='none'
+          style={{ height: '100%', width: '100%' }}
+        >
+          <path
+            d='M-9.31,100.16 C223.76,158.38 294.86,23.19 520.97,52.78 L500.00,150.00 L0.00,150.00 Z'
+            style={{ stroke: 'none', fill: theme.color.primary.backgroundDark }}
+          ></path>
+        </SVGTwo>
+      </div>
+      <div
+        className='tablet block'
+        style={{
+          height: '150px',
+          position: 'relative',
+          // marginTop: '-110px',
+          overflow: 'hidden',
+        }}
+      >
+        <SVGTwo
+          viewBox='0 0 500 150'
+          preserveAspectRatio='none'
+          style={{ height: '100%', width: '100%' }}
+        >
+          <path
+            d='M-13.11,93.25 C275.50,159.38 266.02,-5.42 518.58,54.77 L500.00,150.00 L0.00,150.00 Z'
+            style={{ stroke: 'none', fill: theme.color.primary.backgroundDark }}
+          ></path>
+        </SVGTwo>
+      </div>
+      <div
+        className='desktop block'
+        style={{
+          height: '150px',
+          position: 'relative',
+          // marginTop: '-110px',
+          overflow: 'hidden',
+        }}
+      >
+        <SVGTwo
+          viewBox='0 0 500 150'
+          preserveAspectRatio='none'
+          style={{ height: '100%', width: '100%' }}
+        >
+          <path
+            d='M-13.11,93.25 C244.89,173.19 262.38,-30.09 550.29,48.84 L500.00,150.00 L0.00,150.00 Z'
+            style={{ stroke: 'none', fill: theme.color.primary.backgroundDark }}
+          ></path>
+        </SVGTwo>
+      </div>
       <GetStartedSection />
       <SEO title='Home' />
     </Wrapper>
@@ -150,11 +200,8 @@ const SVGOne = styled.svg`
 const SVGTwo = styled.svg`
   transform: scaleX(-1) !important;
   position: relative !important;
-  top: -60px !important;
+  top: 0 !important;
   z-index: 999;
-  @media (min-width: 576px) {
-    top: -50px !important;
-  }
   // @media (min-width: 670px) {
   //   top: 0 !important;
   // }
@@ -173,7 +220,6 @@ const SVGTwo = styled.svg`
   // @media (min-width: 1677px) {
   //   top: 0 !important;
   // }
-  margin-bottom: -5vw !important;
 `;
 
 const Wrapper = styled.div`
