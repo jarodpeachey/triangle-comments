@@ -40,7 +40,9 @@ const Account = () => {
       delay={3000}
       render={
         <div id='blur'>
-          {isBrowser() && /\/sites\/(.*)/.test(window.location.pathname) ? (
+          {isBrowser() &&
+          /\/sites\/(.*)/.test(window.location.pathname) &&
+          window.location.pathname !== '/dashboard/sites/' ? (
             <Site />
           ) : (
             <>

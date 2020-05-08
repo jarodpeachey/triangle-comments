@@ -14,6 +14,7 @@ import Card from '../Card';
 import Button from '../Button';
 import { AppContext } from '../../providers/AppProvider';
 import SiteComments from './SiteComments';
+import { formatSiteId } from '../../utils/formatSiteId';
 
 const Site = () => {
   const [activeTab, setActiveTab] = useState(
@@ -46,7 +47,10 @@ const Site = () => {
     userClient
       .query(
         q.Get(
-          q.Match(q.Index('site_by_id'), isBrowser() && q.Select(siteNameIndex, pathnames))
+          q.Match(
+            q.Index('site_by_id'),
+            isBrowser() && q.Select(siteNameIndex, pathnames)
+          )
         )
       )
       .then((response) => {
@@ -137,9 +141,7 @@ const Site = () => {
                         window.history.pushState(
                           {},
                           '',
-                          `/dashboard/sites/${site.data.name
-                            .toLowerCase()
-                            .replace(/ /g, '-')}`
+                          `/dashboard/sites/${formatSiteId(site.data.name)}`
                         );
                       }
                       setActiveTab('home');
@@ -155,9 +157,9 @@ const Site = () => {
                         window.history.pushState(
                           {},
                           '',
-                          `/dashboard/sites/${site.data.name
-                            .toLowerCase()
-                            .replace(/ /g, '-')}/comments`
+                          `/dashboard/sites/${formatSiteId(
+                            site.data.name
+                          )}/comments`
                         );
                       }
                       setActiveTab('comments');
@@ -173,9 +175,9 @@ const Site = () => {
                         window.history.pushState(
                           {},
                           '',
-                          `/dashboard/sites/${site.data.name
-                            .toLowerCase()
-                            .replace(/ /g, '-')}/settings`
+                          `/dashboard/sites/${formatSiteId(
+                            site.data.name
+                          )}/settings`
                         );
                       }
                       setActiveTab('settings');

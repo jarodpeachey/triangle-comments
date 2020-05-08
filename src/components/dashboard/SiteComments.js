@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-fragments */
 // src/pages/SiteComments.js
 import React, { useContext, useEffect, useState } from 'react';
 import { Router } from '@reach/router';
@@ -9,6 +10,7 @@ import Button from '../Button';
 import Spacer from '../Spacer';
 import { AppContext } from '../../providers/AppProvider';
 import { isBrowser } from '../../utils/isBrowser';
+import { shortenText } from '../../utils/shortenText';
 import { DatabaseContext } from '../../providers/DatabaseProvider';
 import Row from '../grid/Row';
 
@@ -36,10 +38,12 @@ const SiteComments = () => {
               {
                 comments: q.Get(q.Var('commentsRef')),
                 user: q.Get(q.Select(['data', 'user'], q.Var('comments'))),
+                site: q.Get(q.Select(['data', 'site'], q.Var('comments'))),
               },
               {
                 user: q.Select(['ref'], q.Var('user')),
-                comment: q.Select(['data', 'comment'], q.Var('comments')),
+                site: q.Select('ref', q.Var('site')),
+                data: q.Select(['data'], q.Var('comments')),
               }
             )
           )
@@ -120,11 +124,11 @@ const SiteComments = () => {
                     `/dashboard/sites/${site.id}/comments/published`
                   );
                 }
-                setActiveTab('general');
+                setActiveTab('published');
               }}
             >
-              <FontAwesomeIcon icon='home' />
-              General
+              <FontAwesomeIcon icon='check' />
+              Published
             </Tab>
             <Tab
               active={activeTab === 'held'}
@@ -136,7 +140,7 @@ const SiteComments = () => {
                     `/dashboard/sites/${site.id}/comments/held-for-review`
                   );
                 }
-                setActiveTab('api');
+                setActiveTab('held');
               }}
             >
               <FontAwesomeIcon icon='cog' />
@@ -146,19 +150,40 @@ const SiteComments = () => {
         </div>
         <div widths={[9]}>
           <SlideWrapper>
-            {activeTab === 'general' && (
-              <Card title='Account'>
-                <p className='small m-none'>
-                  Name: {user.data.name || 'Guest'}
-                </p>
-                <p className='small m-none'>Email: {user.data.email}</p>
-                <Spacer />
-                <Button onClick={() => openEditModal(true)} gray small>
-                  Edit
-                </Button>
-              </Card>
+            {activeTab === 'published' && (
+              // <Card title='Account'>
+              //   <p className='small m-none'>
+              //     Name: {user.data.name || 'Guest'}
+              //   </p>
+              //   <p className='small m-none'>Email: {user.data.email}</p>
+              //   <Spacer />
+              //   <Button onClick={() => openEditModal(true)} gray small>
+              //     Edit
+              //   </Button>
+              // </Card>
+              <>
+                {comments && comments.length ? (
+                  <>
+                    {comments.map((comment) => {
+                      console.log(comment);
+
+                      return (
+                        <CommentWrapper key={`comment-${comment.data.name}`}>
+                          <CommentTitle className='h3'>
+                            {comment.data.name}
+                          </CommentTitle>
+                          <p>{shortenText(comment.data.comment, 100)}</p>
+                          <small>- {comment.data.email}</small>
+                        </CommentWrapper>
+                      );
+                    })}
+                  </>
+                ) : (
+                  <Card>Looks like you have no comments on your site yet!</Card>
+                )}
+              </>
             )}
-            {activeTab === 'api' && (
+            {activeTab === 'held' && (
               <Card
                 title='API Keys'
                 subtitle='Your API keys grant access to all your comments. Keep them safe.'
@@ -182,6 +207,26 @@ const SiteComments = () => {
     </span>
   );
 };
+
+const CommentWrapper = styled.div`
+  // border: 2px solid ${(props) => props.theme.color.gray.two};
+  padding: 12px;
+  border-radius: 3px;
+  margin: 0 0 16px;
+  background: white;
+  border-radius: 5px;
+  border: 1px solid ${(props) => props.theme.color.gray.three};
+`;
+
+const CommentTitle = styled(Link)`
+  margin: 0;
+  margin-bottom: 8px;
+  text-decoration: none;
+  color: ${(props) => props.theme.color.text.heading} !important;
+  :hover {
+    color: ${(props) => props.theme.color.primary.main} !important;
+  }
+`;
 
 const Tabs = styled.div`
   width: 100%;
@@ -221,23 +266,6 @@ const APIKey = styled.p`
   border: 1px solid ${(props) => props.theme.color.gray.three};
   padding: 12px;
   margin: 16px 0;
-`;
-
-const CommentWrapper = styled.div`
-  border: 2px solid ${(props) => props.theme.color.gray.two};
-  padding: 12px;
-  border-radius: 3px;
-  margin: 16px 0;
-`;
-
-const CommentTitle = styled(Link)`
-  margin: 0;
-  margin-bottom: 8px;
-  text-decoration: none;
-  color: ${(props) => props.theme.color.text.heading} !important;
-  :hover {
-    color: ${(props) => props.theme.color.primary.main} !important;
-  }
 `;
 
 const animation = keyframes`

@@ -123,10 +123,7 @@ const AuthForm = () => {
                       q.Function('create_comment'),
                       'Jarod (Staticbox Founder)',
                       'jwpeachey107@aol.com',
-                      `Hey, ${q.Select(
-                        0,
-                        q.Var('data')
-                      )}! Welcome to Staticbox! This is your first comment. You can delete it if you'd like, and practice for all the comments you're going to get in the future 😉`,
+                      `Hey, ${`${name}'s Site`}! Welcome to Staticbox! This is your first comment. You can delete it if you'd like, and practice for all the comments you're going to get in the future 😉`,
                       q.Var('user'),
                       q.Var('site')
                     ),

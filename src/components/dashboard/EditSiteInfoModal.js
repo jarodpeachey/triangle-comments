@@ -9,10 +9,13 @@ import { FirebaseContext } from '../../providers/FirebaseProvider';
 import { isBrowser } from '../../utils/isBrowser';
 import Loader from '../Loader';
 import { DatabaseContext } from '../../providers/DatabaseProvider';
+import { formatSiteId } from '../../utils/formatSiteId';
 
 const EditSiteInfoModal = () => {
   const { firebase, firebaseUser } = useContext(FirebaseContext);
-  const { q, serverClient, faunaUser, state, dispatch } = useContext(DatabaseContext);
+  const { q, serverClient, faunaUser, state, dispatch } = useContext(
+    DatabaseContext
+  );
   const { siteClient, user, site } = state;
 
   const [stateName, setStateName] = useState(site.data.name || '');
@@ -35,13 +38,10 @@ const EditSiteInfoModal = () => {
       .query(
         q.Update(q.Ref(q.Collection('sites'), site.ref.value.id), {
           credentials: {
-            password: stateName
-              .toLowerCase()
-              .replace(/ /g, '-')
-              .replace("'", ''),
+            password: formatSiteId(stateName),
           },
           data: {
-            id: stateName.toLowerCase().replace(/ /g, '-').replace("'", ''),
+            id: formatSiteId(stateName),
             name: stateName,
           },
         })

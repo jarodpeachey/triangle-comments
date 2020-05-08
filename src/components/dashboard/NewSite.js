@@ -12,6 +12,7 @@ import { DatabaseContext } from '../../providers/DatabaseProvider';
 import Section from '../layout/Section';
 import Row from '../grid/Row';
 import Card from '../Card';
+import { formatSiteId } from '../../utils/formatSiteId';
 
 const NewSite = () => {
   const { firebase, firebaseUser } = useContext(FirebaseContext);
@@ -33,7 +34,7 @@ const NewSite = () => {
     setName(e.target.value);
     setError(false);
     setStateId(
-      `${e.target.value.toLowerCase().replace(/ /g, '-').replace("'", '')}`
+      `${formatSiteId(e.target.value)}`
     );
   };
 
@@ -48,10 +49,7 @@ const NewSite = () => {
                 q.Function('create_comment'),
                 'Jarod (Staticbox Founder)',
                 'jwpeachey107@aol.com',
-                `Hey, ${q.Select(
-                  ['data', 'name'],
-                  user
-                )}! Welcome to Staticbox! This is your first comment. You can delete it if you'd like, and practice for all the comments you're going to get in the future 😉`,
+                `Hey, ${name}! Welcome to Staticbox! This is your first comment. You can delete it if you'd like, and practice for all the comments you're going to get in the future 😉`,
                 user,
                 q.Var('site')
               ),
@@ -76,9 +74,7 @@ const NewSite = () => {
                 },
               });
 
-              window.location.href = `/dashboard/sites/${name
-                .toLowerCase()
-                .replace(/ /g, '-')}`;
+              window.location.href = `/dashboard/sites/${formatSiteId(name)}`;
             })
             .catch((errorTwo) => {
               console.log(errorTwo);

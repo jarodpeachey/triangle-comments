@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 /* eslint-disable react/jsx-fragments */
 // src/pages/Dashboard.js
 import React, { useContext, useEffect, useState } from 'react';
@@ -12,6 +13,7 @@ import { DatabaseContext } from '../../providers/DatabaseProvider';
 import Row from '../grid/Row';
 import { formatDate } from '../../utils/formatDate';
 import Spacer from '../Spacer';
+import { formatSiteId } from '../../utils/formatSiteId';
 
 const Dashboard = () => {
   const { setEditModalOpen } = useContext(AppContext);
@@ -79,10 +81,7 @@ const Dashboard = () => {
             return (
               <Site
                 widths={[12, 6, 4]}
-                to={`/dashboard/sites/${site.data.name
-                  .toLowerCase()
-                  .replace(/ /g, '-')
-                  .replace("'", '')}`}
+                to={`/dashboard/sites/${formatSiteId(site.data.name)}`}
               >
                 <Card
                   customStyles={`

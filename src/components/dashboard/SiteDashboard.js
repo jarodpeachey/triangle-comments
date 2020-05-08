@@ -14,6 +14,7 @@ import { FirebaseContext } from '../../providers/FirebaseProvider';
 import { isBrowser } from '../../utils/isBrowser';
 import { DatabaseContext } from '../../providers/DatabaseProvider';
 import Row from '../grid/Row';
+import { formatSiteId } from '../../utils/formatSiteId';
 
 const SiteDashboard = () => {
   const { setEditSiteInfoModalOpen } = useContext(AppContext);
@@ -72,9 +73,7 @@ const SiteDashboard = () => {
             </CommentWrapper>
             <Spacer />
             <Button
-              link={`/dashboard/sites/${site.data.name
-                .toLowerCase()
-                .replace(/ /g, '-')}/comments`}
+              link={`/dashboard/sites/${formatSiteId(site.data.name)}/comments`}
               gray
               small
             >
