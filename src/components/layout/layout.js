@@ -61,13 +61,6 @@ const Layout = (props) => {
   const { state, dispatch } = useContext(DatabaseContext);
   const { user, site } = state;
 
-  console.log(
-    'Test for',
-    window.location.pathname,
-    ': ',
-    /\/sites\/(.*)/.test(window.location.pathname)
-  );
-
   if (isBrowser() && !/\/sites\/(.*)/.test(window.location.pathname) && site) {
     // dispatch({ type: 'logoutSite', data: {} });
   } else {
