@@ -26,11 +26,7 @@ const Dashboard = ({ setSitesFunction, loadedSites }) => {
   const [animate, setAnimate] = useState(false);
   const [animateItems, setAnimateItems] = useState(false);
 
-  console.log(sites);
-
   useEffect(() => {
-    console.log(loadedSites);
-
     if (loadedSites && loadedSites.length > 0) {
       // setSites(loadedSites);
     } else {

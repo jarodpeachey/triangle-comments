@@ -21,8 +21,8 @@ const Settings = () => {
   const [keys, setKeys] = useState([]);
   const [key, setKey] = useState('');
 
-  const { state, userClient, q } = useContext(DatabaseContext);
-  const { user } = state;
+  const { state, q, serverClient } = useContext(DatabaseContext);
+  const { user, userClient } = state;
 
   useEffect(() => {
     setRender(false);
@@ -128,14 +128,8 @@ const Settings = () => {
 
         userClient
           .query(
-            q.Create(q.Collection('keys'), {
-              data: {
-                user: q.Select(
-                  'ref',
-                  q.Get(q.Match(q.Index('user_by_id'), user.data.id))
-                ),
-                key: secretResponse.secret,
-              },
+            q.Call(q.Function('create_key'), secretResponse.secret, user, {
+              ref: null,
             })
           )
           .then((commentsResponseTwo) => {
@@ -187,21 +181,6 @@ const Settings = () => {
               <FontAwesomeIcon icon='cog' />
               API
             </Tab>
-            {/* <Tab
-                      active={
-                        typeof window !== 'undefined' &&
-                        window.location.pathname.includes('/dashboard/settings')
-                      }
-                      onClick={() => {
-                        if (typeof window !== 'undefined') {
-                          window.history.pushState({}, '', '/dashboard/dashboard/billing');
-                        }
-                        setActiveTab('billing');
-                      }}
-                    >
-                      <FontAwesomeIcon icon='dollar-sign' />
-                      Billing
-                    </Tab> */}
           </Tabs>
         </div>
         <div widths={[9]}>

@@ -35,7 +35,6 @@ const Account = () => {
   const [sites, setSites] = useState([]);
 
   const setLoadedSites = (loadedSites) => {
-    console.log('Loaded sites in function: ', loadedSites);
     setSites(loadedSites);
   };
 
@@ -114,7 +113,7 @@ const Account = () => {
                               setActiveTab('billing');
                             }}
                           >
-                            <FontAwesomeIcon icon='comment' />
+                            <FontAwesomeIcon icon='dollar-sign' />
                             Billing
                           </Tab>
                           <Tab
