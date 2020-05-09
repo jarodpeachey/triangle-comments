@@ -13,7 +13,7 @@ import { DatabaseContext } from '../../providers/DatabaseProvider';
 import Row from '../grid/Row';
 
 const Settings = () => {
-  const { setEditModalOpen } = useContext(AppContext);
+  const { setEditUserInfoModalOpen } = useContext(AppContext);
   const [reRender, setRender] = useState(false);
   const [activeTab, setActiveTab] = useState(
     isBrowser() && window.location.pathname.includes('api') ? 'api' : 'general'
@@ -25,7 +25,6 @@ const Settings = () => {
   const { user, userClient } = state;
 
   useEffect(() => {
-
       userClient
         .query(
           q.Map(
@@ -104,8 +103,8 @@ const Settings = () => {
   //     .catch((keysError) => console.log(keysError));
   // }
 
-  const openEditModal = () => {
-    setEditModalOpen(true);
+  const openEditUserInfoModal = () => {
+    setEditUserInfoModalOpen(true);
   };
 
   const createAPIKey = () => {
@@ -183,7 +182,7 @@ const Settings = () => {
               <p className='small m-none'>Name: {user.data.name || 'Guest'}</p>
               <p className='small m-none'>Email: {user.data.email}</p>
               <Spacer />
-              <Button onClick={() => openEditModal(true)} gray small>
+              <Button onClick={() => openEditUserInfoModal(true)} gray small>
                 Edit
               </Button>
             </Card>

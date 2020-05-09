@@ -1,4 +1,4 @@
-// src/pages/SiteSettings.js
+// src/pages/Settings.js
 import React, { useContext, useEffect, useState } from 'react';
 import { Router } from '@reach/router';
 import { Link } from 'gatsby';
@@ -12,8 +12,8 @@ import { isBrowser } from '../../utils/isBrowser';
 import { DatabaseContext } from '../../providers/DatabaseProvider';
 import Row from '../grid/Row';
 
-const SiteSettings = () => {
-  const { setEditModalOpen } = useContext(AppContext);
+const Settings = () => {
+  const { setEditSiteInfoModalOpen } = useContext(AppContext);
   const [reRender, setRender] = useState(false);
   const [activeTab, setActiveTab] = useState(
     isBrowser() && window.location.pathname.includes('api') ? 'api' : 'general'
@@ -21,42 +21,37 @@ const SiteSettings = () => {
   const [keys, setKeys] = useState([]);
   const [key, setKey] = useState('');
 
-  const { state, userClient, q } = useContext(DatabaseContext);
-  const { user } = state;
+  const { state, q, serverClient } = useContext(DatabaseContext);
+  const { site, user, siteClient } = state;
+
+  console.log(siteClient);
 
   useEffect(() => {
-    setRender(false);
-
-    // console.log(faunaUser.ref);
-
-    // if (!reRender) {
-    //   serverClient
-    //     .query(
-    //       q.Map(
-    //         q.Paginate(q.Match(q.Index('all_keys'))),
-    //         q.Lambda(
-    //           'keysRef',
-    //           q.Let(
-    //             {
-    //               keys: q.Get(q.Var('keysRef')),
-    //               user: q.Get(q.Select(['data', 'user'], q.Var('keys'))),
-    //             },
-    //             {
-    //               user: q.Select(['ref'], q.Var('user')),
-    //               key: q.Select(['data', 'key'], q.Var('keys')),
-    //             }
-    //           )
-    //         )
-    //       ),
-    //       { secret: 'fnEDqswJoPACEgOmCb0MkAIUO0Mtcu5wDWGg5PSvigYek3Aac8s' }
-    //     )
-    //     .then((keysResponse) => {
-    //       console.log('Keys from user: ', keysResponse.data);
-    //       setKeys(keysResponse.data);
-    //     })
-    //     .catch((commentsError) => console.log(commentsError));
-    // }
-  }, [reRender]);
+    siteClient
+      .query(
+        q.Map(
+          q.Paginate(q.Match(q.Index('all_keys'))),
+          q.Lambda(
+            'keysRef',
+            q.Let(
+              {
+                keys: q.Get(q.Var('keysRef')),
+                site: q.Get(q.Select(['data', 'site'], q.Var('keys'))),
+              },
+              {
+                site: q.Select(['ref'], q.Var('site')),
+                key: q.Select(['data', 'key'], q.Var('keys')),
+              }
+            )
+          )
+        )
+      )
+      .then((keysResponse) => {
+        console.log('Keys from site: ', keysResponse.data);
+        setKeys(keysResponse.data);
+      })
+      .catch((keysError) => console.log(keysError));
+  }, []);
 
   // if (key) {
   //   serverClient
@@ -68,10 +63,10 @@ const SiteSettings = () => {
   //           q.Let(
   //             {
   //               keys: q.Get(q.Var('keysRef')),
-  //               user: q.Get(q.Select(['data', 'user'], q.Var('keys'))),
+  //               site: q.Get(q.Select(['data', 'site'], q.Var('keys'))),
   //             },
   //             {
-  //               user: q.Select(['data', 'name'], q.Var('user')),
+  //               site: q.Select(['data', 'name'], q.Var('site')),
   //               key: q.Select(['data', 'key'], q.Var('keys')),
   //             }
   //           )
@@ -80,7 +75,7 @@ const SiteSettings = () => {
   //       { secret: key }
   //     )
   //     .then((keysResponse) => {
-  //       console.log('Keys from user: ', keysResponse);
+  //       console.log('Keys from site: ', keysResponse);
   //       setKeys(keysResponse.data);
   //     })
   //     .catch((keysError) => console.log(keysError));
@@ -94,10 +89,10 @@ const SiteSettings = () => {
   //           q.Let(
   //             {
   //               keys: q.Get(q.Var('keysRef')),
-  //               user: q.Get(q.Select(['data', 'user'], q.Var('keys'))),
+  //               site: q.Get(q.Select(['data', 'site'], q.Var('keys'))),
   //             },
   //             {
-  //               user: q.Select(['data', 'name'], q.Var('user')),
+  //               site: q.Select(['data', 'name'], q.Var('site')),
   //               key: q.Select(['data', 'key'], q.Var('keys')),
   //             }
   //           )
@@ -105,20 +100,20 @@ const SiteSettings = () => {
   //       )
   //     )
   //     .then((keysResponse) => {
-  //       console.log('Keys from all users: ', keysResponse);
+  //       console.log('Keys from all sites: ', keysResponse);
   //     })
   //     .catch((keysError) => console.log(keysError));
   // }
 
-  const openEditModal = () => {
-    setEditModalOpen(true);
+  const openEditSiteInfoModal = () => {
+    setEditSiteInfoModalOpen(true);
   };
 
   const createAPIKey = () => {
-    userClient
+    siteClient
       .query(
-        q.Login(q.Match(q.Index('user_by_id'), user.data.id), {
-          password: user.data.id,
+        q.Login(q.Match(q.Index('site_by_id'), site.data.id), {
+          password: site.data.id,
         })
       )
       .then((secretResponse) => {
@@ -126,17 +121,9 @@ const SiteSettings = () => {
 
         alert(`New API key created: ${secretResponse.secret}`);
 
-        userClient
+        siteClient
           .query(
-            q.Create(q.Collection('keys'), {
-              data: {
-                user: q.Select(
-                  'ref',
-                  q.Get(q.Match(q.Index('user_by_id'), user.data.id))
-                ),
-                key: secretResponse.secret,
-              },
-            })
+            q.Call(q.Function('create_key'), secretResponse.secret, user, site)
           )
           .then((commentsResponseTwo) => {
             console.log(commentsResponseTwo);
@@ -156,18 +143,10 @@ const SiteSettings = () => {
         <div widths={[3]}>
           <Tabs>
             <Tab
-              active={
-                isBrowser() &&
-                window.location.pathname ===
-                  '/dashboard/sites/staticbox/settings'
-              }
+              active={activeTab === 'general'}
               onClick={() => {
                 if (typeof window !== 'undefined') {
-                  window.history.pushState(
-                    {},
-                    '',
-                    '/dashboard/sites/staticbox/settings'
-                  );
+                  window.history.pushState({}, '', `/dashboard/sites/${site.data.id}/settings`);
                 }
                 setActiveTab('general');
               }}
@@ -176,17 +155,10 @@ const SiteSettings = () => {
               General
             </Tab>
             <Tab
-              active={
-                isBrowser() &&
-                window.location.pathname.includes('/settings/api')
-              }
+              active={activeTab === 'api'}
               onClick={() => {
-                if (isBrowser()) {
-                  window.history.pushState(
-                    {},
-                    '',
-                    '/dashboard/sites/staticbox/settings/api'
-                  );
+                if (typeof window !== 'undefined') {
+                  window.history.pushState({}, '', `/dashboard/sites/${site.data.id}/settings/api`);
                 }
                 setActiveTab('api');
               }}
@@ -194,30 +166,14 @@ const SiteSettings = () => {
               <FontAwesomeIcon icon='cog' />
               API
             </Tab>
-            {/* <Tab
-                      active={
-                        typeof window !== 'undefined' &&
-                        window.location.pathname.includes('/dashboard/settings')
-                      }
-                      onClick={() => {
-                        if (typeof window !== 'undefined') {
-                          window.history.pushState({}, '', '/dashboard/dashboard/billing');
-                        }
-                        setActiveTab('billing');
-                      }}
-                    >
-                      <FontAwesomeIcon icon='dollar-sign' />
-                      Billing
-                    </Tab> */}
           </Tabs>
         </div>
         <div widths={[9]}>
           {activeTab === 'general' && (
             <Card title='Account'>
-              <p className='small m-none'>Name: {user.data.name || 'Guest'}</p>
-              <p className='small m-none'>Email: {user.data.email}</p>
+              <p className='small m-none'>Name: {site.data.name || 'Guest'}</p>
               <Spacer />
-              <Button onClick={() => openEditModal(true)} gray small>
+              <Button onClick={() => openEditSiteInfoModal(true)} gray small>
                 Edit
               </Button>
             </Card>
@@ -316,4 +272,4 @@ const SlideWrapper = styled.div`
   animation: ${animation} 250ms ease-out;
 `;
 
-export default SiteSettings;
+export default Settings;
