@@ -55,7 +55,12 @@ const StyleWrapper = styled.div`
     color: ${(props) => props.theme.color.text.paragraph};
   }
   strong {
-    color: ${props => props.theme.color.text.dark};
+    color: ${(props) => props.theme.color.text.dark};
+  }
+  p, small, span, div, select, input {
+    font-family: 'Heebo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
+    font-size: 16px;
   }
   h1,
   h2,

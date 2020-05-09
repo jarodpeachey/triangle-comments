@@ -1,4 +1,4 @@
-// src/pages/Settings.js
+// src/pages/settings.js
 import React, { useContext, useEffect, useState } from 'react';
 import { Router } from '@reach/router';
 import { Link } from 'gatsby';
@@ -12,45 +12,47 @@ import { isBrowser } from '../../utils/isBrowser';
 import { DatabaseContext } from '../../providers/DatabaseProvider';
 import Row from '../grid/Row';
 
-const Settings = () => {
+const SiteSettings = ({ setLoadedKeys, loadedKeys }) => {
   const { setEditSiteInfoModalOpen } = useContext(AppContext);
   const [reRender, setRender] = useState(false);
   const [activeTab, setActiveTab] = useState(
     isBrowser() && window.location.pathname.includes('api') ? 'api' : 'general'
   );
   const [keys, setKeys] = useState([]);
-  const [key, setKey] = useState('');
 
   const { state, q, serverClient } = useContext(DatabaseContext);
   const { site, user, siteClient } = state;
 
-  console.log(siteClient);
-
   useEffect(() => {
-    siteClient
-      .query(
-        q.Map(
-          q.Paginate(q.Match(q.Index('all_keys'))),
-          q.Lambda(
-            'keysRef',
-            q.Let(
-              {
-                keys: q.Get(q.Var('keysRef')),
-                site: q.Get(q.Select(['data', 'site'], q.Var('keys'))),
-              },
-              {
-                site: q.Select(['ref'], q.Var('site')),
-                key: q.Select(['data', 'key'], q.Var('keys')),
-              }
+    if (loadedKeys && loadedKeys.length > 0) {
+      setKeys(loadedKeys);
+    } else {
+      siteClient
+        .query(
+          q.Map(
+            q.Paginate(q.Match(q.Index('all_keys'))),
+            q.Lambda(
+              'keysRef',
+              q.Let(
+                {
+                  keys: q.Get(q.Var('keysRef')),
+                  site: q.Get(q.Select(['data', 'site'], q.Var('keys'))),
+                },
+                {
+                  site: q.Select(['ref'], q.Var('site')),
+                  key: q.Select(['data', 'key'], q.Var('keys')),
+                }
+              )
             )
           )
         )
-      )
-      .then((keysResponse) => {
-        console.log('Keys from site: ', keysResponse.data);
-        setKeys(keysResponse.data);
-      })
-      .catch((keysError) => console.log(keysError));
+        .then((keysResponse) => {
+          console.log('Keys from site: ', keysResponse.data);
+          setLoadedKeys(keysResponse.data);
+          setKeys(keysResponse.data);
+        })
+        .catch((keysError) => console.log(keysError));
+    }
   }, []);
 
   // if (key) {
@@ -125,13 +127,17 @@ const Settings = () => {
           .query(
             q.Call(q.Function('create_key'), secretResponse.secret, user, site)
           )
-          .then((commentsResponseTwo) => {
-            console.log(commentsResponseTwo);
+          .then((keysResponseTwo) => {
+            console.log(keysResponseTwo);
 
-            setKey(secretResponse.secret);
+            const oldKeys = [...keys];
+
+            oldKeys.push(keysResponseTwo.data);
+
+            setKeys(oldKeys);
             // setRender(true);
           })
-          .catch((commentsErrorTwo) => console.log(commentsErrorTwo));
+          .catch((keysErrorTwo) => console.log(keysErrorTwo));
       })
       .catch((secretErr) => console.log(secretErr));
   };
@@ -146,7 +152,11 @@ const Settings = () => {
               active={activeTab === 'general'}
               onClick={() => {
                 if (typeof window !== 'undefined') {
-                  window.history.pushState({}, '', `/dashboard/sites/${site.data.id}/settings`);
+                  window.history.pushState(
+                    {},
+                    '',
+                    `/dashboard/sites/${site.data.id}/settings`
+                  );
                 }
                 setActiveTab('general');
               }}
@@ -158,7 +168,11 @@ const Settings = () => {
               active={activeTab === 'api'}
               onClick={() => {
                 if (typeof window !== 'undefined') {
-                  window.history.pushState({}, '', `/dashboard/sites/${site.data.id}/settings/api`);
+                  window.history.pushState(
+                    {},
+                    '',
+                    `/dashboard/sites/${site.data.id}/settings/api`
+                  );
                 }
                 setActiveTab('api');
               }}
@@ -170,8 +184,8 @@ const Settings = () => {
         </div>
         <div widths={[9]}>
           {activeTab === 'general' && (
-            <Card title='Account'>
-              <p className='small m-none'>Name: {site.data.name || 'Guest'}</p>
+            <Card title='Details'>
+              <p className='small m-none'>Site Name: {site.data.name || 'Guest'}</p>
               <Spacer />
               <Button onClick={() => openEditSiteInfoModal(true)} gray small>
                 Edit
@@ -181,7 +195,7 @@ const Settings = () => {
           {activeTab === 'api' && (
             <Card
               title='API Keys'
-              subtitle='Your API keys grant access to all your comments. Keep them safe.'
+              subtitle='Your API keys grant access to all your keys. Keep them safe.'
             >
               {keys.map((key) => {
                 return (
@@ -272,4 +286,4 @@ const SlideWrapper = styled.div`
   animation: ${animation} 250ms ease-out;
 `;
 
-export default Settings;
+export default SiteSettings;

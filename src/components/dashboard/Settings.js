@@ -4,6 +4,7 @@ import { Router } from '@reach/router';
 import { Link } from 'gatsby';
 import styled, { keyframes } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import MUIDataTable from 'mui-datatables';
 import Card from '../Card';
 import Button from '../Button';
 import Spacer from '../Spacer';
@@ -11,20 +12,22 @@ import { AppContext } from '../../providers/AppProvider';
 import { isBrowser } from '../../utils/isBrowser';
 import { DatabaseContext } from '../../providers/DatabaseProvider';
 import Row from '../grid/Row';
+import KeyTable from '../KeyTable';
 
-const Settings = () => {
+const Settings = ({ loadedKeys, setLoadedKeys }) => {
+  const { state, q, serverClient } = useContext(DatabaseContext);
+  const { site, user, userClient } = state;
+
   const { setEditUserInfoModalOpen } = useContext(AppContext);
-  const [reRender, setRender] = useState(false);
   const [activeTab, setActiveTab] = useState(
     isBrowser() && window.location.pathname.includes('api') ? 'api' : 'general'
   );
   const [keys, setKeys] = useState([]);
-  const [key, setKey] = useState('');
-
-  const { state, q, serverClient } = useContext(DatabaseContext);
-  const { user, userClient } = state;
 
   useEffect(() => {
+    if (loadedKeys && loadedKeys.length > 0) {
+      setKeys(loadedKeys);
+    } else {
       userClient
         .query(
           q.Map(
@@ -46,62 +49,12 @@ const Settings = () => {
         )
         .then((keysResponse) => {
           console.log('Keys from user: ', keysResponse.data);
+          setLoadedKeys(keysResponse.data);
           setKeys(keysResponse.data);
         })
         .catch((keysError) => console.log(keysError));
+    }
   }, []);
-
-  // if (key) {
-  //   serverClient
-  //     .query(
-  //       q.Map(
-  //         q.Paginate(q.Match(q.Index('all_keys'))),
-  //         q.Lambda(
-  //           'keysRef',
-  //           q.Let(
-  //             {
-  //               keys: q.Get(q.Var('keysRef')),
-  //               user: q.Get(q.Select(['data', 'user'], q.Var('keys'))),
-  //             },
-  //             {
-  //               user: q.Select(['data', 'name'], q.Var('user')),
-  //               key: q.Select(['data', 'key'], q.Var('keys')),
-  //             }
-  //           )
-  //         )
-  //       ),
-  //       { secret: key }
-  //     )
-  //     .then((keysResponse) => {
-  //       console.log('Keys from user: ', keysResponse);
-  //       setKeys(keysResponse.data);
-  //     })
-  //     .catch((keysError) => console.log(keysError));
-  // } else {
-  //   serverClient
-  //     .query(
-  //       q.Map(
-  //         q.Paginate(q.Match(q.Index('all_keys'))),
-  //         q.Lambda(
-  //           'keysRef',
-  //           q.Let(
-  //             {
-  //               keys: q.Get(q.Var('keysRef')),
-  //               user: q.Get(q.Select(['data', 'user'], q.Var('keys'))),
-  //             },
-  //             {
-  //               user: q.Select(['data', 'name'], q.Var('user')),
-  //               key: q.Select(['data', 'key'], q.Var('keys')),
-  //             }
-  //           )
-  //         )
-  //       )
-  //     )
-  //     .then((keysResponse) => {
-  //       console.log('Keys from all users: ', keysResponse);
-  //     })
-  //     .catch((keysError) => console.log(keysError));
-  // }
 
   const openEditUserInfoModal = () => {
     setEditUserInfoModalOpen(true);
@@ -125,15 +78,41 @@ const Settings = () => {
               ref: null,
             })
           )
-          .then((commentsResponseTwo) => {
-            console.log(commentsResponseTwo);
+          .then((keysResponseTwo) => {
+            console.log(keysResponseTwo);
 
-            setKey(secretResponse.secret);
+            const oldKeys = [...keys];
+
+            oldKeys.push(keysResponseTwo.data);
+
+            setKeys(oldKeys);
             // setRender(true);
           })
-          .catch((commentsErrorTwo) => console.log(commentsErrorTwo));
+          .catch((keysErrorTwo) => console.log(keysErrorTwo));
       })
       .catch((secretErr) => console.log(secretErr));
+  };
+
+  const formatKeys = () => {
+    const newKeys = [];
+
+    keys.forEach((key) => {
+      if (key.site) {
+        newKeys.push({
+          key: key.key,
+          type: 'Site',
+          site: site.data.value.id,
+        });
+      } else {
+        newKeys.push({
+          key: key.key,
+          type: 'User',
+          site: null,
+        });
+      }
+    });
+
+    return newKeys;
   };
 
   return (
@@ -192,13 +171,17 @@ const Settings = () => {
               title='API Keys'
               subtitle='Your API keys grant access to all your comments. Keep them safe.'
             >
-              {keys.map((key) => {
+              {/* {keys.map((key) => {
                 return (
                   <APIKey key={`api-key-${key.key}`}>
                     <strong>Key:</strong> {key.key}
                   </APIKey>
                 );
-              })}
+              })} */}
+              <KeyTable
+                title='Keys'
+                data={formatKeys()}
+              />
               {/* <Spacer /> */}
               <Button onClick={() => createAPIKey()} small>
                 Create New

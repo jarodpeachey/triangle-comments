@@ -32,11 +32,8 @@ const Account = () => {
   );
   const { state, dispatch } = useContext(DatabaseContext);
   const { user, site } = state;
-  const [sites, setSites] = useState([]);
-
-  const setLoadedSites = (loadedSites) => {
-    setSites(loadedSites);
-  };
+  const [loadedSites, setLoadedSites] = useState([]);
+  const [loadedKeys, setLoadedKeys] = useState([]);
 
   return (
     <DelayedLoad
@@ -166,11 +163,16 @@ const Account = () => {
                       <DelayedLoad> */}
                       {activeTab === 'sites' && (
                         <Dashboard
-                          loadedSites={sites}
+                          loadedSites={loadedSites}
                           setSitesFunction={setLoadedSites}
                         />
                       )}
-                      {activeTab === 'settings' && <Settings />}
+                      {activeTab === 'settings' && (
+                        <Settings
+                          setLoadedKeys={setLoadedKeys}
+                          loadedKeys={loadedKeys}
+                        />
+                      )}
                       {/* {activeTab === 'billing' && <Billing />} */}
                       {/* </DelayedLoad>
                     </Router> */}

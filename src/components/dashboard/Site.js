@@ -17,6 +17,12 @@ import SiteComments from './SiteComments';
 import { formatSiteId } from '../../utils/formatSiteId';
 
 const Site = () => {
+  const { setNotificationMessage, setNotificationType } = useContext(
+    AppContext
+  );
+  const { state, q, dispatch } = useContext(DatabaseContext);
+  const { user, site, userClient } = state;
+
   const [activeTab, setActiveTab] = useState(
     isBrowser() && window.location.pathname.includes('comments')
       ? 'comments'
@@ -27,16 +33,10 @@ const Site = () => {
   const [loading, setLoading] = useState(true);
   const [headerHeight, setHeaderHeight] = useState(0);
   const [siteNameIndex, setSiteNameIndex] = useState(3);
-  const { setNotificationMessage, setNotificationType } = useContext(
-    AppContext
-  );
-  const { state, q, dispatch } = useContext(DatabaseContext);
-  const { user, site, userClient, siteClient } = state;
+  const [loadedKeys, setLoadedKeys] = useState([]);
 
   useEffect(() => {
     const pathnames = window.location.pathname.split('/');
-
-    console.log(pathnames);
 
     pathnames.forEach((item, index) => {
       if (item === 'sites') {
@@ -224,7 +224,12 @@ const Site = () => {
               {/* <Router>
                       <DelayedLoad> */}
               {activeTab === 'home' && <SiteDashboard />}
-              {activeTab === 'settings' && <SiteSettings />}
+              {activeTab === 'settings' && (
+                <SiteSettings
+                  loadedKeys={loadedKeys}
+                  setLoadedKeys={setLoadedKeys}
+                />
+              )}
               {activeTab === 'comments' && <SiteComments />}
               {/* {activeTab === 'billing' && <Billing />} */}
               {/* </DelayedLoad>
