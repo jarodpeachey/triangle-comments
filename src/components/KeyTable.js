@@ -8,6 +8,13 @@ const KeyTable = ({ data }) => {
   const [isItemChecked, setIsItemChecked] = useState(false);
   const [selectedKeys, setSelectedKeys] = useState([]);
   const [dataToShow, setDataToShow] = useState(data);
+  const [selectedType, setSelectedType] = useState('all');
+
+  useEffect(() => {
+    if (data.length !== dataToShow.length) {
+      setDataToShow(data);
+    }
+  }, [data]);
 
   const onCheck = (key, e) => {
     if (e.target.checked) {
@@ -43,65 +50,99 @@ const KeyTable = ({ data }) => {
     setSelectedKeys(newKeys);
   };
 
+  const onSelectChange = (e) => {
+    setSelectedType(e.target.value);
+
+    if (e.target.value === 'user') {
+      const newKeys = [...data];
+      console.log(newKeys);
+      setDataToShow(
+        newKeys.filter((value) => value.type.toLowerCase() === e.target.value)
+      );
+    }
+
+    if (e.target.value === 'all') {
+      console.log(data);
+      setDataToShow(data);
+    } else {
+      const newKeys = [...data];
+      console.log(newKeys);
+      setDataToShow(
+        newKeys.filter((value) => value.type.toLowerCase() === e.target.value)
+      );
+    }
+  };
+
   console.log(selectedKeys);
 
   return (
     <span>
-      {data && data.length ? (
-        <Table>
-          <TableHead>
-            <HeaderColumn>
-              <Checkbox>
-                <input type='checkbox' onChange={checkAll} />
-                <span className='checkmark'>
-                  <div className='icon'>
-                    <FontAwesomeIcon icon='check' />
-                  </div>
-                </span>
-              </Checkbox>
-            </HeaderColumn>
-            <HeaderColumn className='second-child'>Key</HeaderColumn>
-            <HeaderColumn className='second-child'>
-              <Select>
-                <option>User Keys</option>
-                <option>Site Keys</option>
-                <option>All Keys</option>
-              </Select>
-            </HeaderColumn>
-            <HeaderColumn className='second-child'>Site</HeaderColumn>
-          </TableHead>
-          <TableBody>
-            {data.map((key) => {
-              return (
-                <TableRow>
-                  <BodyColumn>
-                    <Checkbox>
-                      <input
-                        className='checkbox'
-                        onChange={(e) => onCheck(key.key, e)}
-                        type='checkbox'
-                        dataKey={key.key}
-                      />
-                      <span className='checkmark'>
-                        <div className='icon'>
-                          <FontAwesomeIcon icon='check' />
-                        </div>
-                      </span>
-                    </Checkbox>
-                  </BodyColumn>
-                  <BodyColumn className='second-child'>
-                    {shortenText(key.key, 200)}
-                  </BodyColumn>
-                  <BodyColumn>{key.type}</BodyColumn>
-                  <BodyColumn fullWidth>{key.site}</BodyColumn>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      ) : (
-        <Card>No data.</Card>
-      )}
+      <Table>
+        <TableHead>
+          <HeaderColumn className='hide-on-mobile'>
+            <Checkbox>
+              <input type='checkbox' onChange={checkAll} />
+              <span className='checkmark'>
+                <div className='icon'>
+                  <FontAwesomeIcon icon='check' />
+                </div>
+              </span>
+            </Checkbox>
+          </HeaderColumn>
+          <HeaderColumn className='second-child hide-on-mobile'>
+            Key
+          </HeaderColumn>
+          <HeaderColumn>
+            <Select value={selectedType} onChange={onSelectChange}>
+              <option value='user'>User Keys</option>
+              <option value='site'>Site Keys</option>
+              <option value='all'>All Keys</option>
+            </Select>
+          </HeaderColumn>
+          <HeaderColumn className='hide-on-mobile'>Site</HeaderColumn>
+        </TableHead>
+        <TableBody>
+          {dataToShow && dataToShow.length > 0 ? (
+            <>
+              {dataToShow.map((key) => {
+                return (
+                  <TableRow>
+                    <BodyColumn>
+                      <Checkbox>
+                        <input
+                          className='checkbox'
+                          onChange={(e) => onCheck(key.key, e)}
+                          type='checkbox'
+                          dataKey={key.key}
+                        />
+                        <span className='checkmark'>
+                          <div className='icon'>
+                            <FontAwesomeIcon icon='check' />
+                          </div>
+                        </span>
+                      </Checkbox>
+                    </BodyColumn>
+                    <BodyColumn className='second-child'>
+                      <div className='label'>Key</div>
+                      {shortenText(key.key, 35)}
+                    </BodyColumn>
+                    <BodyColumn>
+                      <div className='label'>Type</div>
+                      {key.type}
+                    </BodyColumn>
+                    <BodyColumn fullWidth>
+                      <div className='label'>Site</div>
+                      {key.site || 'None'}
+                    </BodyColumn>
+                  </TableRow>
+                );
+              })}
+            </>
+          ) : (
+            <Card>No data.</Card>
+          )}
+        </TableBody>
+      </Table>
     </span>
   );
 };
@@ -109,6 +150,7 @@ const KeyTable = ({ data }) => {
 const Select = styled.select`
   border: none;
   outline: none;
+  cursor: pointer;
 `;
 
 const Checkbox = styled.div`
@@ -163,19 +205,41 @@ const Checkbox = styled.div`
 const Table = styled.table`
   border-spacing: 0px;
   margin-bottom: 36px;
+  @media (max-width: 769px) {
+    display: block;
+    width: 100%;
+  }
 `;
 const TableHead = styled.thead`
   width: 100%;
   font-weight: 400 !important;
 `;
-const TableBody = styled.tbody``;
+const TableBody = styled.tbody`
+  @media (max-width: 769px) {
+    display: block;
+    width: 100%;
+  }
+`;
 const TableRow = styled.tr`
   :nth-child(odd) {
     background: ${(props) => props.theme.color.primary.main}05;
   }
+  @media (max-width: 769px) {
+    margin: 12px 0;
+    border-radius: 10px;
+    border: 1px solid ${(props) => props.theme.color.gray.five};
+    padding: 12px;
+    display: block !important;
+    width: 100% !important;
+    max-width: 999px !important;
+    margin: 12px auto;
+    :nth-child(odd) {
+      background: white !important;
+    }
+  }
 `;
 const HeaderColumn = styled.th`
-  padding: 12px 36px 12px 0px;
+  padding: 12px 26px 12px 0px;
   width: fit-content;
   font-weight: 500;
   * {
@@ -195,14 +259,29 @@ const HeaderColumn = styled.th`
   :last-child {
     padding-right: 12px;
   }
+  @media (max-width: 769px) {
+    display: inline-block;
+    border-bottom: 0;
+    margin: 12px auto;
+    :nth-child(odd) {
+      background: white !important;
+    }
+    &.hide-on-mobile {
+      display: none;
+    }
+  }
 `;
 const BodyColumn = styled.td`
-  padding: 12px 36px 12px 0px;
+  padding: 12px 26px 12px 0px;
   border-bottom: 1px solid ${(props) => props.theme.color.gray.four};
   text-align: right;
+  overflow-x: auto;
+  word-wrap: none;
+  white-space: nowrap;
   &.second-child {
     padding-left: 12px;
     text-align: left;
+    margin-right: 36px;
   }
   :first-child {
     padding: 12px;
@@ -210,7 +289,26 @@ const BodyColumn = styled.td`
   :last-child {
     padding-right: 12px;
   }
-  width: ${(props) => (props.fullWidth ? '100%' : 'fit-content')};
+  .label {
+    display: none;
+  }
+  @media (max-width: 769px) {
+    display: block;
+    width: 100%;
+    margin: 0;
+    background: white !important;
+    text-align: left;
+    border-bottom: none;
+    padding: 6px 12px;
+    .label {
+      display: block;
+      font-weight: 600;
+    }
+    :first-child {
+      display: none;
+    }
+  }
+  width: ${(props) => (props.fullWidth ? '50%' : 'fit-content')};
 `;
 
 export default KeyTable;

@@ -125,7 +125,13 @@ const SiteSettings = ({ setLoadedKeys, loadedKeys }) => {
 
         siteClient
           .query(
-            q.Call(q.Function('create_key'), secretResponse.secret, user, site)
+            q.Call(
+              q.Function('create_key'),
+              secretResponse.secret,
+              user,
+              site,
+              'site'
+            )
           )
           .then((keysResponseTwo) => {
             console.log(keysResponseTwo);
@@ -185,7 +191,9 @@ const SiteSettings = ({ setLoadedKeys, loadedKeys }) => {
         <div widths={[9]}>
           {activeTab === 'general' && (
             <Card title='Details'>
-              <p className='small m-none'>Site Name: {site.data.name || 'Guest'}</p>
+              <p className='small m-none'>
+                Site Name: {site.data.name || 'Guest'}
+              </p>
               <Spacer />
               <Button onClick={() => openEditSiteInfoModal(true)} gray small>
                 Edit
