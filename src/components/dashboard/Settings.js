@@ -22,7 +22,17 @@ const Settings = ({ loadedKeys, setLoadedKeys }) => {
   const [activeTab, setActiveTab] = useState(
     isBrowser() && window.location.pathname.includes('api') ? 'api' : 'general'
   );
-  const [keys, setKeys] = useState([]);
+  const [keys, setKeys] = useState(
+    loadedKeys && loadedKeys.length > 0 ? loadedKeys : []
+  );
+  const [loading, setLoading] = useState(
+    !(loadedKeys && loadedKeys.length > 0)
+  );
+  const [showItems, setShowItems] = useState(
+    loadedKeys && loadedKeys.length > 0
+  );
+  const [animate, setAnimate] = useState(false);
+  const [animateItems, setAnimateItems] = useState(false);
 
   useEffect(() => {
     if (loadedKeys && loadedKeys.length > 0) {
@@ -88,8 +98,36 @@ const Settings = ({ loadedKeys, setLoadedKeys }) => {
               console.log(resTwo);
               setLoadedKeys(resTwo.data.concat(keysResponse.data));
               setKeys(resTwo.data.concat(keysResponse.data));
+
+              console.log(resTwo);
+              setLoadedKeys(resTwo.data.concat(keysResponse.data));
+              setKeys(resTwo.data.concat(keysResponse.data));
+              setTimeout(() => {
+                setShowItems(true);
+                setAnimate(true);
+                // setTimeout(() => {
+                setAnimateItems(true);
+                // }, 200);
+                // setTimeout(() => {
+                setLoading(false);
+                setAnimate(false);
+                setAnimateItems(false);
+                // }, 200);
+              }, 1000);
             })
-            .catch((errTwo) => console.log(errTwo));
+            .catch((errTwo) => {
+              console.log(errTwo);
+              setShowItems(true);
+              setAnimate(true);
+              setTimeout(() => {
+                setAnimateItems(true);
+              }, 200);
+              setTimeout(() => {
+                setLoading(false);
+                setAnimate(false);
+                setAnimateItems(false);
+              }, 200);
+            });
         })
         .catch((keysError) => console.log(keysError));
     }
@@ -222,7 +260,15 @@ const Settings = ({ loadedKeys, setLoadedKeys }) => {
                   </APIKey>
                 );
               })} */}
-              <KeyTable title='Keys' data={formatKeys()} />
+              <KeyTable
+                user={user}
+                animate={animate}
+                animateItems={animateItems}
+                showItems={showItems}
+                loading={loading}
+                title='Keys'
+                data={formatKeys()}
+              />
               {/* <Spacer /> */}
               <Button onClick={() => createAPIKey()} small>
                 Create New

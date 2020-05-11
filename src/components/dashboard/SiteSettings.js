@@ -11,6 +11,7 @@ import { AppContext } from '../../providers/AppProvider';
 import { isBrowser } from '../../utils/isBrowser';
 import { DatabaseContext } from '../../providers/DatabaseProvider';
 import Row from '../grid/Row';
+import SiteKeyTable from '../SiteKeyTable';
 
 const SiteSettings = ({ setLoadedKeys, loadedKeys }) => {
   const { setEditSiteInfoModalOpen } = useContext(AppContext);
@@ -18,7 +19,17 @@ const SiteSettings = ({ setLoadedKeys, loadedKeys }) => {
   const [activeTab, setActiveTab] = useState(
     isBrowser() && window.location.pathname.includes('api') ? 'api' : 'general'
   );
-  const [keys, setKeys] = useState([]);
+  const [keys, setKeys] = useState(
+    loadedKeys && loadedKeys.length > 0 ? loadedKeys : []
+  );
+  const [loading, setLoading] = useState(
+    !(loadedKeys && loadedKeys.length > 0)
+  );
+  const [showItems, setShowItems] = useState(
+    loadedKeys && loadedKeys.length > 0
+  );
+  const [animate, setAnimate] = useState(false);
+  const [animateItems, setAnimateItems] = useState(false);
 
   const { state, q, serverClient } = useContext(DatabaseContext);
   const { site, user, siteClient } = state;
@@ -46,66 +57,42 @@ const SiteSettings = ({ setLoadedKeys, loadedKeys }) => {
             )
           )
         )
-        .then((keysResponse) => {
-          console.log('Keys from site: ', keysResponse.data);
-          setLoadedKeys(keysResponse.data);
-          setKeys(keysResponse.data);
+        .then((resTwo) => {
+          console.log(resTwo);
+          setLoadedKeys(resTwo.data);
+          setKeys(resTwo.data);
+
+          console.log(resTwo);
+          setLoadedKeys(resTwo.data);
+          setKeys(resTwo.data);
+          setTimeout(() => {
+            setShowItems(true);
+            setAnimate(true);
+            // setTimeout(() => {
+            setAnimateItems(true);
+            // }, 200);
+            // setTimeout(() => {
+            setLoading(false);
+            setAnimate(false);
+            setAnimateItems(false);
+            // }, 200);
+          }, 1000);
         })
-        .catch((keysError) => console.log(keysError));
+        .catch((errTwo) => {
+          console.log(errTwo);
+          setShowItems(true);
+          setAnimate(true);
+          setTimeout(() => {
+            setAnimateItems(true);
+          }, 200);
+          setTimeout(() => {
+            setLoading(false);
+            setAnimate(false);
+            setAnimateItems(false);
+          }, 200);
+        });
     }
   }, []);
-
-  // if (key) {
-  //   serverClient
-  //     .query(
-  //       q.Map(
-  //         q.Paginate(q.Match(q.Index('all_keys'))),
-  //         q.Lambda(
-  //           'keysRef',
-  //           q.Let(
-  //             {
-  //               keys: q.Get(q.Var('keysRef')),
-  //               site: q.Get(q.Select(['data', 'site'], q.Var('keys'))),
-  //             },
-  //             {
-  //               site: q.Select(['data', 'name'], q.Var('site')),
-  //               key: q.Select(['data', 'key'], q.Var('keys')),
-  //             }
-  //           )
-  //         )
-  //       ),
-  //       { secret: key }
-  //     )
-  //     .then((keysResponse) => {
-  //       console.log('Keys from site: ', keysResponse);
-  //       setKeys(keysResponse.data);
-  //     })
-  //     .catch((keysError) => console.log(keysError));
-  // } else {
-  //   serverClient
-  //     .query(
-  //       q.Map(
-  //         q.Paginate(q.Match(q.Index('all_keys'))),
-  //         q.Lambda(
-  //           'keysRef',
-  //           q.Let(
-  //             {
-  //               keys: q.Get(q.Var('keysRef')),
-  //               site: q.Get(q.Select(['data', 'site'], q.Var('keys'))),
-  //             },
-  //             {
-  //               site: q.Select(['data', 'name'], q.Var('site')),
-  //               key: q.Select(['data', 'key'], q.Var('keys')),
-  //             }
-  //           )
-  //         )
-  //       )
-  //     )
-  //     .then((keysResponse) => {
-  //       console.log('Keys from all sites: ', keysResponse);
-  //     })
-  //     .catch((keysError) => console.log(keysError));
-  // }
 
   const openEditSiteInfoModal = () => {
     setEditSiteInfoModalOpen(true);
@@ -146,6 +133,29 @@ const SiteSettings = ({ setLoadedKeys, loadedKeys }) => {
           .catch((keysErrorTwo) => console.log(keysErrorTwo));
       })
       .catch((secretErr) => console.log(secretErr));
+  };
+
+  const formatKeys = () => {
+    const newKeys = [];
+
+    keys.forEach((key) => {
+      console.log(key);
+      if (key.site) {
+        newKeys.push({
+          key: key.key,
+          type: 'Site',
+          site: key.site.name,
+        });
+      } else {
+        newKeys.push({
+          key: key.key,
+          type: 'User',
+          site: null,
+        });
+      }
+    });
+
+    return newKeys;
   };
 
   return (
@@ -203,15 +213,23 @@ const SiteSettings = ({ setLoadedKeys, loadedKeys }) => {
           {activeTab === 'api' && (
             <Card
               title='API Keys'
-              subtitle='Your API keys grant access to all your keys. Keep them safe.'
+              subtitle='Your API keys grant access to all your comments. Keep them safe.'
             >
-              {keys.map((key) => {
+              {/* {keys.map((key) => {
                 return (
                   <APIKey key={`api-key-${key.key}`}>
                     <strong>Key:</strong> {key.key}
                   </APIKey>
                 );
-              })}
+              })} */}
+              <SiteKeyTable
+                animate={animate}
+                animateItems={animateItems}
+                showItems={showItems}
+                loading={loading}
+                title='Keys'
+                data={formatKeys()}
+              />
               {/* <Spacer /> */}
               <Button onClick={() => createAPIKey()} small>
                 Create New

@@ -18,8 +18,11 @@ import {
   faComment,
   faCommentAlt,
   faCheck,
+  faTrash,
+  faCopy,
 } from '@fortawesome/free-solid-svg-icons';
 import { fab, faLinkedin, faGithub } from '@fortawesome/free-brands-svg-icons';
+import { far } from '@fortawesome/free-regular-svg-icons';
 import Footer from './Footer';
 import Header from './Header';
 import { AppContext } from '../../providers/AppProvider';
@@ -47,7 +50,10 @@ library.add(
   faTimes,
   faComment,
   faCommentAlt,
-  faCheck
+  faCheck,
+  faTrash,
+  faCopy,
+  far
 );
 
 const Layout = (props) => {

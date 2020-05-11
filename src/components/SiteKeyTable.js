@@ -1,18 +1,10 @@
-/* eslint-disable react/jsx-fragments */
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Card from './Card';
 import { shortenText } from '../utils/shortenText';
 
-const KeyTable = ({
-  data,
-  animate,
-  animateItems,
-  showItems,
-  loading,
-  user,
-}) => {
+const KeyTable = ({ data, animate, animateItems, showItems, loading }) => {
   const [isItemChecked, setIsItemChecked] = useState(false);
   const [selectedKeys, setSelectedKeys] = useState([]);
   const [dataToShow, setDataToShow] = useState(data);
@@ -24,14 +16,11 @@ const KeyTable = ({
     }
   }, [data]);
 
-  useEffect(() => {
-    console.log(selectedKeys);
-  }, [selectedKeys]);
-
   const onCheck = (key, e) => {
     if (e.target.checked) {
-      const newKeys = selectedKeys.filter((newKey) => newKey !== 'undefined');
+      const newKeys = selectedKeys;
       newKeys.push(key);
+
       console.log(newKeys);
       setSelectedKeys(newKeys);
     } else if (selectedKeys.length > 0) {
@@ -86,9 +75,6 @@ const KeyTable = ({
 
   console.log(selectedKeys);
 
-  const deleteKeys = () => {};
-  const copyKeys = () => {};
-
   return (
     <span>
       <Card
@@ -102,19 +88,6 @@ const KeyTable = ({
       >
         No API Keys
       </Card>
-      {/* <h4 style={{ marginBottom: 0 }}>Filter</h4> */}
-      <HeaderColumn
-        style={{ display: 'flex', marginTop: -12 }}
-        skeleton={loading}
-      >
-        <SelectWrapper>
-          <Select value={selectedType} onChange={onSelectChange}>
-            <option value='user'>User Keys</option>
-            <option value='site'>Site Keys</option>
-            <option value='all'>All Keys</option>
-          </Select>
-        </SelectWrapper>
-      </HeaderColumn>
       <Table
         style={{
           display: `${
@@ -127,95 +100,22 @@ const KeyTable = ({
         }}
       >
         <TableHead skeleton={loading}>
-          {selectedKeys.length > 0 ? (
-            <>
-              <HeaderColumn skeleton={loading} className='hide-on-mobile'>
-                <Checkbox>
-                  <input type='checkbox' onChange={checkAll} />
-                  <span className='checkmark'>
-                    <div className='icon'>
-                      <FontAwesomeIcon icon='check' />
-                    </div>
-                  </span>
-                </Checkbox>
-              </HeaderColumn>
-              <HeaderColumn
-                // fullWidth
-                skeleton={loading}
-                className='second-child hide-on-mobile'
-              >
-                <span>Key</span>
-              </HeaderColumn>
-              {/* <HeaderColumn style={{ display: 'flex' }} skeleton={loading}>
-                <span>Type:</span>
-                <span>
-                  <Select value={selectedType} onChange={onSelectChange}>
-                    <option value='user'>User Keys</option>
-                    <option value='site'>Site Keys</option>
-                    <option value='all'>All Keys</option>
-                  </Select>
-                </span>
-              </HeaderColumn> */}
-              <HeaderColumn
-                // fullWidth
-                skeleton={loading}
-                className='hide-on-mobile'
-                style={{
-                  paddingTop: 0,
-                  paddingBottom: 0,
-                  width: 'fit-content',
-                }}
-              >
-                <span
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                    width: 'fit-content',
-                    marginLeft: 'auto',
-                  }}
-                >
-                  <IconButton onClick={copyKeys}>
-                    <FontAwesomeIcon icon={['far', 'copy']} />
-                  </IconButton>
-                  <IconButton error onClick={deleteKeys}>
-                    <FontAwesomeIcon icon='trash' />
-                  </IconButton>
-                </span>
-              </HeaderColumn>
-            </>
-          ) : (
-            <>
-              <HeaderColumn skeleton={loading} className='hide-on-mobile'>
-                <Checkbox>
-                  <input type='checkbox' onChange={checkAll} />
-                  <span className='checkmark'>
-                    <div className='icon'>
-                      <FontAwesomeIcon icon='check' />
-                    </div>
-                  </span>
-                </Checkbox>
-              </HeaderColumn>
-              <HeaderColumn
-                skeleton={loading}
-                className='second-child hide-on-mobile'
-              >
-                <span>Key</span>
-              </HeaderColumn>
-              {/* <HeaderColumn style={{ display: 'flex' }} skeleton={loading}>
-                <span>Type:</span>
-                <span>
-                  <Select value={selectedType} onChange={onSelectChange}>
-                    <option value='user'>User Keys</option>
-                    <option value='site'>Site Keys</option>
-                    <option value='all'>All Keys</option>
-                  </Select>
-                </span>
-              </HeaderColumn> */}
-              <HeaderColumn skeleton={loading} className='hide-on-mobile'>
-                <span>Owner</span>
-              </HeaderColumn>
-            </>
-          )}
+          <HeaderColumn fullWidth skeleton={loading} className='hide-on-mobile'>
+            <Checkbox>
+              <input type='checkbox' onChange={checkAll} />
+              <span className='checkmark'>
+                <div className='icon'>
+                  <FontAwesomeIcon icon='check' />
+                </div>
+              </span>
+            </Checkbox>
+          </HeaderColumn>
+          <HeaderColumn
+            skeleton={loading}
+            className='second-child hide-on-mobile'
+          >
+            <span>Key</span>
+          </HeaderColumn>
         </TableHead>
         <TableBody>
           {loading && (
@@ -240,14 +140,6 @@ const KeyTable = ({
                     )}
                   </span>
                 </BodyColumn>
-                <BodyColumn skeleton>
-                  <div className='label'>Type</div>
-                  <span>Type</span>
-                </BodyColumn>
-                <BodyColumn skeleton fullWidth>
-                  <div className='label'>Site</div>
-                  <span>None</span>
-                </BodyColumn>
               </TableRow>
               <TableRow skeleton animate={animate}>
                 <BodyColumn skeleton>
@@ -268,14 +160,6 @@ const KeyTable = ({
                       35
                     )}
                   </span>
-                </BodyColumn>
-                <BodyColumn skeleton>
-                  <div className='label'>Type</div>
-                  <span>Type</span>
-                </BodyColumn>
-                <BodyColumn skeleton fullWidth>
-                  <div className='label'>Owner</div>
-                  <span>None</span>
                 </BodyColumn>
               </TableRow>
             </>
@@ -315,10 +199,6 @@ const KeyTable = ({
                           <div className='label'>Key</div>
                           {shortenText(key.key, 100)}
                         </BodyColumn>
-                        <BodyColumn fullWidth>
-                          <div className='label'>Owner</div>
-                          {key.site || user.data.name}
-                        </BodyColumn>
                       </TableRow>
                     );
                   })}
@@ -332,74 +212,17 @@ const KeyTable = ({
   );
 };
 
-const IconButton = styled.button`
-  border-radius: 50px;
-  color: ${(props) =>
-    props.error ? props.theme.color.error : props.theme.color.text.heading};
-  background: transparent;
-  padding: 8px;
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  width: 42px;
-  height: 42px;
-  margin: 4px 2px;
-  // margin-left: auto;
-  :last-child {
-    margin-right: -8px;
-  }
-  :hover {
-    background: ${(props) =>
-      props.error ? props.theme.color.error : props.theme.color.text.heading}30;
-    cursor: pointer;
-  }
-`;
-
 const Select = styled.select`
   border: none;
   outline: none;
-  font-weight: normal !important;
   cursor: pointer;
-  border-radius: 50px;
-  position: relative;
-  padding: 4px 12px;
-  background: ${(props) => props.theme.color.primary.backgroundDark};
-  // -webkit-appearance: none;
-  color: ${props => props.theme.color.primary.backgroundDark};
-  font-size: 16px;
-  line-height: 1;
-  border: 0;
-  width: 130px;
-  border-radius: 5px;
-  height: 34px;
-  background: url(http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png)
-    no-repeat right ${props => props.theme.color.gray.three};
-  -webkit-appearance: none;
-  background-position-x: 106px;
-`;
-
-const SelectWrapper = styled.span`
-  position: relative;
-  display: block;
-  width: fit-content;
-  // ::after {
-  //   display: block;
-  //   position: absolute;
-  //   content: '';
-  //   right: 9px;
-  //   top: calc(50% - 2px);
-  //   border: 4px solid transparent;
-  //   border-top: 4px solid white;
-  // }
 `;
 
 const Checkbox = styled.div`
   display: block;
   position: relative;
-  width: 19px;
-  height: 19px;
+  width: 20px;
+  height: 20px;
   cursor: pointer;
   input {
     position: absolute;
@@ -450,9 +273,8 @@ const shimmer = keyframes`
   }
 `;
 
-const Table = styled.div`
+const Table = styled.table`
   border-spacing: 0px;
-  display: block !important;
   margin-bottom: 36px;
   position: relative;
   overflow: hidden;
@@ -462,10 +284,8 @@ const Table = styled.div`
     margin-bottom: 22px;
   }
 `;
-const TableHead = styled.div`
+const TableHead = styled.thead`
   width: 100%;
-  display: flex;
-  align-items: space-between;
   font-weight: 400 !important;
   ${(props) =>
     props.skeleton &&
@@ -495,20 +315,16 @@ const TableHead = styled.div`
       }
     `};
 `;
-const TableBody = styled.div`
-  margin-top: -12px;
+const TableBody = styled.tbody`
   @media (max-width: 769px) {
     display: block;
     width: 100%;
   }
 `;
-const TableRow = styled.div`
-  border: 1px solid #e8e8e8;
-  // border-radius: 10px;
-  margin: 8px 0;
-  display: flex;
-  align-items: center;
-  width: 100%;
+const TableRow = styled.tr`
+  :nth-child(odd) {
+    background: ${(props) => props.theme.color.primary.main}05;
+  }
   @media (max-width: 769px) {
     margin: 12px 0;
     border-radius: 10px;
@@ -517,6 +333,7 @@ const TableRow = styled.div`
     display: block !important;
     width: 100% !important;
     max-width: 999px !important;
+    overflow: hidden;
     margin: 12px auto;
     :nth-child(odd) {
       background: white !important;
@@ -551,23 +368,24 @@ const TableRow = styled.div`
       }
     `};
 `;
-const HeaderColumn = styled.div`
+const HeaderColumn = styled.th`
   padding: 12px 26px 12px 0px;
-  width: 100%;
+  width: fit-content;
   font-weight: 500;
   * {
     font-weight: 500 !important;
   }
   text-align: left;
+  border-bottom: 1px solid ${(props) => props.theme.color.gray.four};
   text-align: right;
   margin: 0;
   &.second-child {
     padding-left: 12px;
     text-align: left;
+    width: 100%;
   }
   :first-child {
     padding: 12px;
-    width: fit-content;
   }
   :last-child {
     padding-right: 12px;
@@ -617,22 +435,25 @@ const HeaderColumn = styled.div`
       }
     `};
 `;
-const BodyColumn = styled.div`
+const BodyColumn = styled.td`
   padding: 12px 26px 12px 0px;
-  width: fit-content;
-  height: 100%;
+  border-bottom: 1px solid ${(props) => props.theme.color.gray.four};
+  text-align: right;
+  overflow: hidden
+  word-wrap: break-word;
+  width: ${(props) => (props.fullWidth ? '100% !important' : null)};
+  // white-space: nowrap;
   &.second-child {
     padding-left: 12px;
     text-align: left;
-    // margin-right: 36px;
+    margin-right: 36px;
+    width: 100%;
   }
   :first-child {
     padding: 12px;
-    width: fit-content;
   }
   :last-child {
     padding-right: 12px;
-    margin-left: auto;
   }
   .label {
     display: none;
@@ -653,7 +474,7 @@ const BodyColumn = styled.div`
       display: none;
     }
   }
-  // width: ${(props) => (props.fullWidth ? '50%' : 'fit-content')};
+  width: ${(props) => (props.fullWidth ? '50%' : 'fit-content')};
   ${(props) =>
     props.skeleton &&
     css`
