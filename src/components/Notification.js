@@ -31,7 +31,7 @@ const StyledNotification = styled.span`
   width: fit-content;
   margin: 0 auto;
   z-index: 999;
-  border-radius: 3px;
+  border-radius: 5px;
   animation: ${slide} .3s ease-out;
   background: ${props => props.type === 'success' ? props.theme.color.success : props.type === 'error' ? props.theme.color.error : props.theme.color.primary.light};
   color: white;

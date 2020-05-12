@@ -20,6 +20,11 @@ import {
   faCheck,
   faTrash,
   faCopy,
+  faSearch,
+  faBinoculars,
+  faPalette,
+  faPaintBrush,
+  faBrush,
 } from '@fortawesome/free-solid-svg-icons';
 import { fab, faLinkedin, faGithub } from '@fortawesome/free-brands-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
@@ -53,7 +58,12 @@ library.add(
   faCheck,
   faTrash,
   faCopy,
-  far
+  far,
+  faSearch,
+  faBinoculars,
+  faPalette,
+  faBrush,
+  faPaintBrush
 );
 
 const Layout = (props) => {

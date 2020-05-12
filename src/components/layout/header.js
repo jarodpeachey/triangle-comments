@@ -290,7 +290,7 @@ const SiteTitle = styled.h1`
   margin: 0;
   margin-bottom: -1px;
   transition: all 0.25s ease-in;
-  // letter-spacing: 3px;
+  // letter-spacing: 5px;
   text-transform: uppercase;
   font-size: 22px;
   margin-left: -8px;
@@ -358,7 +358,7 @@ const MobileMenuToggle = styled.div`
     height: 4px;
     width: 100%;
     background: ${(props) => props.theme.color.text.heading};
-    border-radius: 9px;
+    border-radius: 10px;
     opacity: 1;
     left: 0;
     transform: rotate(0deg);
@@ -428,7 +428,7 @@ const AccountMenu = styled.div`
   z-index: 99999999999999999;
   transition: ${(props) =>
     props.open ? 'all 0.25s ease-out' : 'all 0.6s ease-out'};
-  border-radius: 3px;
+  border-radius: 5px;
   box-shadow: 2px 2px 20px -5px #00000050;
   right: 0;
   min-width: 150px;
@@ -444,7 +444,7 @@ const AccountMenuItem = styled(Link)`
   border-bottom: 1px solid #e8e8e8;
   display: block;
   padding: 16px 24px;
-  border-radius: 3px;
+  border-radius: 5px;
   width: 100%;
   :last-child {
     border: none;

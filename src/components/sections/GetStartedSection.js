@@ -19,10 +19,7 @@ const GetStartedSection = ({ data }) => {
       subtitle='Staticbox is the simplest, most intuive commenting system built specifically with static websites in mind.'
     >
       <br />
-      <Button
-        link='https://trianglecomments.memberful.com/checkout?plan=47429'
-        center
-      >
+      <Button link='/signup' center>
         Start Now
       </Button>
     </Section>

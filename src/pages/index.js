@@ -11,6 +11,7 @@ import GetStartedSection from '../components/sections/GetStartedSection';
 // import { AuthContext } from '../providers/AuthProvider';
 import AboutSection from '../components/sections/AboutSection';
 import { ThemeContext } from '../components/theme';
+import CustomizeSection from '../components/sections/CustomizeSection';
 
 const IndexPage = ({ data }) => {
   const theme = useContext(ThemeContext);
@@ -90,6 +91,7 @@ const IndexPage = ({ data }) => {
       </BackgroundWrap>
 
       <FeaturesSection />
+      <CustomizeSection />
       <div
         className='mobile block'
         style={{

@@ -57,7 +57,7 @@ const Hero = ({ children }) => {
               </SubTitle>
               <ButtonFlex>
                 <ButtonWrapper>
-                  <Button secondary link='/signup'>
+                  <Button primary link='/signup'>
                     Get Started
                   </Button>
                 </ButtonWrapper>

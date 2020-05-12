@@ -243,7 +243,7 @@ const Tab = styled.div`
   text-align: center;
   padding: 8px 16px;
   border-radius: 50px;
-  margin-right: 8px;
+  margin-right: 8px; 
   transition-duration: 0.25s;
   color: ${(props) => (props.active ? 'white' : '#ffffff90')};
   :hover {

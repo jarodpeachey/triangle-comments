@@ -469,7 +469,7 @@ const HiddenText = styled.span`
 const Card = styled.div`
   padding: 18px 24px;
   width: 100%;
-  border-radius: 3px;
+  border-radius: 5px;
   box-shadow: 1px 0px 80px -5px #e8e8e8;
   backdrop-filter: blur(6px);
   background: white;
@@ -519,7 +519,7 @@ const ErrorText = styled.p`
   color: white;
   font-weight: 500;
   font-size: 17px;
-  border-radius: 3px;
+  border-radius: 5px;
   margin: 12px 0 24px;
 `;
 

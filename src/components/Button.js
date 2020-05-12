@@ -96,7 +96,7 @@ const StyledButton = styled.button`
   overflow: hidden !important;
   position: relative !important;
   outline: none !important;
-  border-radius: 4px !important;
+  border-radius: 5px !important;
   margin: ${(props) => (props.margin ? '0 8px' : 0)};
   background: ${(props) =>
     props.outlined

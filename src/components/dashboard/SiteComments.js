@@ -209,7 +209,7 @@ const SiteComments = () => {
 const CommentWrapper = styled.div`
   // border: 2px solid ${(props) => props.theme.color.gray.two};
   padding: 12px;
-  border-radius: 3px;
+  border-radius: 5px;
   margin: 0 0 16px;
   background: white;
   border-radius: 5px;
