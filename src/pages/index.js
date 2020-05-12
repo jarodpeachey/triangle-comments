@@ -45,7 +45,7 @@ const IndexPage = ({ data }) => {
           >
             <path
               d='M-9.31,100.16 C223.76,158.38 294.86,23.19 520.97,52.78 L500.00,150.00 L0.00,150.00 Z'
-              style={{ stroke: 'none', fill: '#fff' }}
+              style={{ stroke: 'none', fill: '#fafafa' }}
             ></path>
           </svg>
         </div>
@@ -64,7 +64,7 @@ const IndexPage = ({ data }) => {
           >
             <path
               d='M-13.11,93.25 C275.50,159.38 266.02,-5.42 518.58,54.77 L500.00,150.00 L0.00,150.00 Z'
-              style={{ stroke: 'none', fill: '#fff' }}
+              style={{ stroke: 'none', fill: '#fafafa' }}
             ></path>
           </svg>
         </div>
@@ -83,7 +83,7 @@ const IndexPage = ({ data }) => {
           >
             <path
               d='M-13.11,93.25 C244.89,173.19 262.38,-30.09 550.29,48.84 L500.00,150.00 L0.00,150.00 Z'
-              style={{ stroke: 'none', fill: '#fff' }}
+              style={{ stroke: 'none', fill: '#fafafa' }}
             ></path>
           </svg>
         </div>

@@ -15,6 +15,9 @@ import Row from '../grid/Row';
 import KeyTable from '../KeyTable';
 
 const Settings = ({ loadedKeys, setLoadedKeys }) => {
+  const { setNotificationMessage, setNotificationType } = useContext(
+    AppContext
+  );
   const { state, q, serverClient } = useContext(DatabaseContext);
   const { site, user, userClient } = state;
 
@@ -33,6 +36,7 @@ const Settings = ({ loadedKeys, setLoadedKeys }) => {
   );
   const [animate, setAnimate] = useState(false);
   const [animateItems, setAnimateItems] = useState(false);
+  const [reRender, setRender] = useState(true);
 
   useEffect(() => {
     if (loadedKeys && loadedKeys.length > 0) {
@@ -52,9 +56,10 @@ const Settings = ({ loadedKeys, setLoadedKeys }) => {
                   user: q.Get(q.Match(q.Index('all_users'))),
                 },
                 {
-                  user: q.Select(['data'], q.Var('user')),
-                  key: q.Select(['data', 'key'], q.Var('keys')),
+                  user: q.Var('user'),
                   type: q.Var('type'),
+                  ref: q.Select('ref', q.Var('keys')),
+                  key: q.Select(['data', 'key'], q.Var('keys')),
                 }
               )
             )
@@ -85,10 +90,11 @@ const Settings = ({ loadedKeys, setLoadedKeys }) => {
                       ),
                     },
                     {
-                      user: q.Select(['data'], q.Var('user')),
-                      site: q.Select(['data'], q.Var('site')),
-                      key: q.Select(['data', 'key'], q.Var('keys')),
+                      user: q.Var('user'),
                       type: q.Var('type'),
+                      site: q.Var('site'),
+                      ref: q.Select('ref', q.Var('keys')),
+                      key: q.Select(['data', 'key'], q.Var('keys')),
                     }
                   )
                 )
@@ -113,7 +119,7 @@ const Settings = ({ loadedKeys, setLoadedKeys }) => {
                 setAnimate(false);
                 setAnimateItems(false);
                 // }, 200);
-              }, 1000);
+              }, 10000000000000000);
             })
             .catch((errTwo) => {
               console.log(errTwo);
@@ -133,6 +139,107 @@ const Settings = ({ loadedKeys, setLoadedKeys }) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (reRender) {
+      console.log('Getting keys!');
+      userClient
+        .query(
+          q.Map(
+            q.Paginate(q.Match(q.Index('keys_by_type'), 'user')),
+            q.Lambda(
+              'keysRef',
+              q.Let(
+                {
+                  keys: q.Get(q.Var('keysRef')),
+                  userRef: q.Get(q.Select(['data', 'user'], q.Var('keys'))),
+                  type: q.Select(['data', 'type'], q.Var('keys')),
+                  user: q.Get(q.Match(q.Index('all_users'))),
+                },
+                {
+                  user: q.Var('user'),
+                  type: q.Var('type'),
+                  ref: q.Select('ref', q.Var('keys')),
+                  key: q.Select(['data', 'key'], q.Var('keys')),
+                }
+              )
+            )
+          )
+        )
+        .then((keysResponse) => {
+          console.log(keysResponse);
+          userClient
+            .query(
+              q.Map(
+                q.Paginate(q.Match(q.Index('keys_by_type'), 'site')),
+                q.Lambda(
+                  'keysRef',
+                  q.Let(
+                    {
+                      keys: q.Get(q.Var('keysRef')),
+                      userRef: q.Get(q.Select(['data', 'user'], q.Var('keys'))),
+                      siteRef: q.Get(q.Select(['data', 'site'], q.Var('keys'))),
+                      type: q.Select(['data', 'type'], q.Var('keys')),
+                      user: q.Get(q.Match(q.Index('all_users'))),
+                      site: q.Get(
+                        q.Ref(
+                          q.Collection('sites'),
+                          // q.Select(
+                          q.Select('id', q.Select('ref', q.Var('siteRef')))
+                          // )
+                        )
+                      ),
+                    },
+                    {
+                      user: q.Var('user'),
+                      type: q.Var('type'),
+                      site: q.Var('site'),
+                      ref: q.Select('ref', q.Var('keys')),
+                      key: q.Select(['data', 'key'], q.Var('keys')),
+                    }
+                  )
+                )
+              )
+            )
+            .then((resTwo) => {
+              console.log(resTwo);
+              setLoadedKeys(resTwo.data.concat(keysResponse.data));
+              setKeys(resTwo.data.concat(keysResponse.data));
+
+              console.log(resTwo);
+              setLoadedKeys(resTwo.data.concat(keysResponse.data));
+              setKeys(resTwo.data.concat(keysResponse.data));
+              setTimeout(() => {
+                setShowItems(true);
+                setAnimate(true);
+                // setTimeout(() => {
+                setAnimateItems(true);
+                // }, 200);
+                // setTimeout(() => {
+                setLoading(false);
+                setAnimate(false);
+                setAnimateItems(false);
+                // }, 200);
+              }, 10000000000000000000);
+            })
+            .catch((errTwo) => {
+              console.log(errTwo);
+              setShowItems(true);
+              setAnimate(true);
+              setTimeout(() => {
+                setAnimateItems(true);
+              }, 200);
+              setTimeout(() => {
+                setLoading(false);
+                setAnimate(false);
+                setAnimateItems(false);
+              }, 200);
+            });
+        })
+        .catch((keysError) => console.log(keysError));
+      setRender(false);
+    }
+  }, [reRender]);
+
   const openEditUserInfoModal = () => {
     setEditUserInfoModalOpen(true);
   };
@@ -146,8 +253,10 @@ const Settings = ({ loadedKeys, setLoadedKeys }) => {
       )
       .then((secretResponse) => {
         console.log('Secret: ', secretResponse);
-
-        alert(`New API key created: ${secretResponse.secret}`);
+        setNotificationType('success');
+        setNotificationMessage(
+          `Successfully created key: ${secretResponse.secret}`
+        );
 
         userClient
           .query(
@@ -166,7 +275,7 @@ const Settings = ({ loadedKeys, setLoadedKeys }) => {
 
             oldKeys.push(keysResponseTwo.data);
 
-            setKeys(oldKeys);
+            setRender(true);
             // setRender(true);
           })
           .catch((keysErrorTwo) => console.log(keysErrorTwo));
@@ -179,22 +288,9 @@ const Settings = ({ loadedKeys, setLoadedKeys }) => {
 
     keys.forEach((key) => {
       console.log(key);
-      if (key.site) {
-        newKeys.push({
-          key: key.key,
-          type: 'Site',
-          site: key.site.name,
-        });
-      } else {
-        newKeys.push({
-          key: key.key,
-          type: 'User',
-          site: null,
-        });
-      }
     });
 
-    return newKeys;
+    return keys;
   };
 
   return (
@@ -268,8 +364,9 @@ const Settings = ({ loadedKeys, setLoadedKeys }) => {
                 loading={loading}
                 title='Keys'
                 data={formatKeys()}
+                setRender={setRender}
               />
-              {/* <Spacer /> */}
+              <Spacer height={16} />
               <Button onClick={() => createAPIKey()} small>
                 Create New
               </Button>
@@ -300,9 +397,9 @@ const Tab = styled.div`
   :hover {
     cursor: pointer;
     background: ${(props) =>
-      props.active
-        ? `${props.theme.color.primary.backgroundDark}`
-        : props.theme.color.gray.three};
+      props.active ?
+        `${props.theme.color.primary.backgroundDark}` :
+        props.theme.color.gray.three};
     transition-duration: 0.25s;
   }
   svg {

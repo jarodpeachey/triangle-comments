@@ -1,9 +1,11 @@
 /* eslint-disable react/jsx-fragments */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Card from './Card';
+import { DatabaseContext } from '../providers/DatabaseProvider';
 import { shortenText } from '../utils/shortenText';
+import { AppContext } from '../providers/AppProvider';
 
 const KeyTable = ({
   data,
@@ -12,11 +14,19 @@ const KeyTable = ({
   showItems,
   loading,
   user,
+  setRender,
 }) => {
   const [isItemChecked, setIsItemChecked] = useState(false);
   const [selectedKeys, setSelectedKeys] = useState([]);
   const [dataToShow, setDataToShow] = useState(data);
   const [selectedType, setSelectedType] = useState('all');
+  const { setNotificationMessage, setNotificationType } = useContext(
+    AppContext
+  );
+  const { state, q } = useContext(DatabaseContext);
+  const { userClient } = state;
+
+  console.log(dataToShow);
 
   useEffect(() => {
     if (data.length !== dataToShow.length) {
@@ -86,105 +96,113 @@ const KeyTable = ({
 
   console.log(selectedKeys);
 
-  const deleteKeys = () => {};
+  const deleteKeys = () => {
+    const allCheckboxes = document.querySelectorAll('.checkbox');
+    console.log(selectedKeys);
+
+    if (confirm('Are you sure you want to delete these keys?')) {
+      const keysToDelete = [];
+
+      selectedKeys.forEach((key) => {
+        data.forEach((newKey) => {
+          if (newKey.key === key) {
+            keysToDelete.push(newKey.ref.value.id);
+          }
+        });
+      });
+
+      console.log(keysToDelete);
+
+      userClient
+        .query(
+          q.Map(
+            keysToDelete,
+            q.Lambda(
+              'data',
+              q.Delete(q.Ref(q.Collection('keys'), q.Var('data')))
+            )
+          )
+        )
+        .then((response) => {
+          console.log(response);
+          setRender(true);
+
+          setNotificationType('success');
+          setNotificationMessage('Successfully deleted keys');
+          setSelectedKeys([]);
+          checkAll({
+            checked: false,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
   const copyKeys = () => {};
 
   return (
     <span>
-      <Card
-        style={{
-          display: `${!loading && dataToShow.length === 0 ? 'block' : 'none'}`,
-        }}
-        customStyles={`
-          margin-bottom: 16px;
+      {/* <h4 style={{ marginBottom: 0 }}>Filter</h4> */}
+      {(loading || data.length > 0) && (
+        <HeaderColumn
+          style={{ display: 'flex', marginTop: -12 }}
+          skeleton={loading}
+        >
+          <SelectWrapper>
+            <Select value={selectedType} onChange={onSelectChange}>
+              <option value='user'>User Keys</option>
+              <option value='site'>Site Keys</option>
+              <option value='all'>All Keys</option>
+            </Select>
+          </SelectWrapper>
+          {selectedKeys.length > 0 && (
+            <span
+              style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                width: 'fit-content',
+                marginLeft: '6px',
+              }}
+            >
+              <IconButton onClick={copyKeys}>
+                <FontAwesomeIcon icon={['far', 'copy']} />
+              </IconButton>
+              <IconButton error onClick={deleteKeys}>
+                <FontAwesomeIcon icon='trash' />
+              </IconButton>
+            </span>
+          )}
+        </HeaderColumn>
+      )}
+      {!loading && dataToShow.length === 0 && (
+        <Card
+          style={{
+            display: `${
+              !loading && dataToShow.length === 0 ? 'block' : 'none'
+            }`,
+          }}
+          customStyles={`
           display: ${!loading && dataToShow.length === 0 ? 'block' : 'none'};
         `}
-      >
-        No API Keys
-      </Card>
-      {/* <h4 style={{ marginBottom: 0 }}>Filter</h4> */}
-      <HeaderColumn
-        style={{ display: 'flex', marginTop: -12 }}
-        skeleton={loading}
-      >
-        <SelectWrapper>
-          <Select value={selectedType} onChange={onSelectChange}>
-            <option value='user'>User Keys</option>
-            <option value='site'>Site Keys</option>
-            <option value='all'>All Keys</option>
-          </Select>
-        </SelectWrapper>
-      </HeaderColumn>
-      <Table
-        style={{
-          display: `${
-            !loading && dataToShow.length === 0
-              ? 'none'
-              : window.innerWidth > 769
-              ? 'table'
-              : 'block'
-          }`,
-        }}
-      >
-        <TableHead skeleton={loading}>
-          {selectedKeys.length > 0 ? (
-            <>
-              <HeaderColumn skeleton={loading} className='hide-on-mobile'>
-                <Checkbox>
-                  <input type='checkbox' onChange={checkAll} />
-                  <span className='checkmark'>
-                    <div className='icon'>
-                      <FontAwesomeIcon icon='check' />
-                    </div>
-                  </span>
-                </Checkbox>
-              </HeaderColumn>
-              <HeaderColumn
-                // fullWidth
-                skeleton={loading}
-                className='second-child hide-on-mobile'
-              >
-                <span>Key</span>
-              </HeaderColumn>
-              {/* <HeaderColumn style={{ display: 'flex' }} skeleton={loading}>
-                <span>Type:</span>
-                <span>
-                  <Select value={selectedType} onChange={onSelectChange}>
-                    <option value='user'>User Keys</option>
-                    <option value='site'>Site Keys</option>
-                    <option value='all'>All Keys</option>
-                  </Select>
-                </span>
-              </HeaderColumn> */}
-              <HeaderColumn
-                // fullWidth
-                skeleton={loading}
-                className='hide-on-mobile'
-                style={{
-                  paddingTop: 0,
-                  paddingBottom: 0,
-                  width: 'fit-content',
-                }}
-              >
-                <span
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                    width: 'fit-content',
-                    marginLeft: 'auto',
-                  }}
-                >
-                  <IconButton onClick={copyKeys}>
-                    <FontAwesomeIcon icon={['far', 'copy']} />
-                  </IconButton>
-                  <IconButton error onClick={deleteKeys}>
-                    <FontAwesomeIcon icon='trash' />
-                  </IconButton>
-                </span>
-              </HeaderColumn>
-            </>
-          ) : (
-            <>
+        >
+          {data.length > 0 ? `No ${selectedType} keys.` : 'No API keys.'}
+        </Card>
+      )}
+      {(loading || dataToShow.length > 0) && (
+        <>
+          <Table
+            style={{
+              display: `${
+                !loading && dataToShow.length === 0
+                  ? 'none'
+                  : window.innerWidth > 769
+                  ? 'table'
+                  : 'block'
+              }`,
+            }}
+          >
+            <TableHead skeleton={loading}>
               <HeaderColumn skeleton={loading} className='hide-on-mobile'>
                 <Checkbox>
                   <input type='checkbox' onChange={checkAll} />
@@ -214,120 +232,121 @@ const KeyTable = ({
               <HeaderColumn skeleton={loading} className='hide-on-mobile'>
                 <span>Owner</span>
               </HeaderColumn>
-            </>
-          )}
-        </TableHead>
-        <TableBody>
-          {loading && (
-            <>
-              <TableRow skeleton animate={animate}>
-                <BodyColumn skeleton>
-                  <Checkbox>
-                    <input className='checkbox' />
-                    <span className='checkmark'>
-                      <div className='icon'>
-                        <FontAwesomeIcon icon='check' />
-                      </div>
-                    </span>
-                  </Checkbox>
-                </BodyColumn>
-                <BodyColumn skeleton className='second-child'>
-                  <div className='label'>Key</div>
-                  <span>
-                    {shortenText(
-                      'jsdfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
-                      35
-                    )}
-                  </span>
-                </BodyColumn>
-                <BodyColumn skeleton>
-                  <div className='label'>Type</div>
-                  <span>Type</span>
-                </BodyColumn>
-                <BodyColumn skeleton fullWidth>
-                  <div className='label'>Site</div>
-                  <span>None</span>
-                </BodyColumn>
-              </TableRow>
-              <TableRow skeleton animate={animate}>
-                <BodyColumn skeleton>
-                  <Checkbox>
-                    <input className='checkbox' />
-                    <span className='checkmark'>
-                      <div className='icon'>
-                        <FontAwesomeIcon icon='check' />
-                      </div>
-                    </span>
-                  </Checkbox>
-                </BodyColumn>
-                <BodyColumn skeleton className='second-child'>
-                  <div className='label'>Key</div>
-                  <span>
-                    {shortenText(
-                      'jsdfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
-                      35
-                    )}
-                  </span>
-                </BodyColumn>
-                <BodyColumn skeleton>
-                  <div className='label'>Type</div>
-                  <span>Type</span>
-                </BodyColumn>
-                <BodyColumn skeleton fullWidth>
-                  <div className='label'>Owner</div>
-                  <span>None</span>
-                </BodyColumn>
-              </TableRow>
-            </>
-          )}
-          {showItems && (
-            <>
-              {dataToShow && dataToShow.length > 0 ? (
+            </TableHead>
+            <TableBody>
+              {loading && (
                 <>
-                  {dataToShow.map((key) => {
-                    return (
-                      <TableRow
-                        animateItems={animateItems}
-                        style={{
-                          transform: `scale(${
-                            animateItems ? 1 : loading ? 0 : 1
-                          })`,
-                          transition: `transform .2s ease-out`,
-                          position: animateItems ? 'absolute' : 'static',
-                        }}
-                      >
-                        <BodyColumn>
-                          <Checkbox>
-                            <input
-                              className='checkbox'
-                              onChange={(e) => onCheck(key.key, e)}
-                              type='checkbox'
-                              dataKey={key.key}
-                            />
-                            <span className='checkmark'>
-                              <div className='icon'>
-                                <FontAwesomeIcon icon='check' />
-                              </div>
-                            </span>
-                          </Checkbox>
-                        </BodyColumn>
-                        <BodyColumn className='second-child'>
-                          <div className='label'>Key</div>
-                          {shortenText(key.key, 100)}
-                        </BodyColumn>
-                        <BodyColumn fullWidth>
-                          <div className='label'>Owner</div>
-                          {key.site || user.data.name}
-                        </BodyColumn>
-                      </TableRow>
-                    );
-                  })}
+                  <TableRow skeleton animate={animate}>
+                    <BodyColumn skeleton>
+                      <Checkbox>
+                        <input className='checkbox' />
+                        <span className='checkmark'>
+                          <div className='icon'>
+                            <FontAwesomeIcon icon='check' />
+                          </div>
+                        </span>
+                      </Checkbox>
+                    </BodyColumn>
+                    <BodyColumn skeleton className='second-child'>
+                      <div className='label'>Key</div>
+                      <span>
+                        {shortenText(
+                          'jsdfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+                          35
+                        )}
+                      </span>
+                    </BodyColumn>
+                    <BodyColumn skeleton>
+                      <div className='label'>Type</div>
+                      <span>Type</span>
+                    </BodyColumn>
+                    <BodyColumn skeleton fullWidth>
+                      <div className='label'>Site</div>
+                      <span>None</span>
+                    </BodyColumn>
+                  </TableRow>
+                  <TableRow skeleton animate={animate}>
+                    <BodyColumn skeleton>
+                      <Checkbox>
+                        <input className='checkbox' />
+                        <span className='checkmark'>
+                          <div className='icon'>
+                            <FontAwesomeIcon icon='check' />
+                          </div>
+                        </span>
+                      </Checkbox>
+                    </BodyColumn>
+                    <BodyColumn skeleton className='second-child'>
+                      <div className='label'>Key</div>
+                      <span>
+                        {shortenText(
+                          'jsdfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+                          35
+                        )}
+                      </span>
+                    </BodyColumn>
+                    <BodyColumn skeleton>
+                      <div className='label'>Type</div>
+                      <span>Type</span>
+                    </BodyColumn>
+                    <BodyColumn skeleton fullWidth>
+                      <div className='label'>Owner</div>
+                      <span>None</span>
+                    </BodyColumn>
+                  </TableRow>
                 </>
-              ) : null}
-            </>
-          )}
-        </TableBody>
-      </Table>
+              )}
+              {showItems && (
+                <>
+                  {dataToShow && dataToShow.length > 0 ? (
+                    <>
+                      {dataToShow.map((key) => {
+                        console.log('Key for display: ', key);
+                        return (
+                          <TableRow
+                            animateItems={animateItems}
+                            style={{
+                              transform: `scale(${
+                                animateItems ? 1 : loading ? 0 : 1
+                              })`,
+                              transition: `transform .2s ease-out`,
+                              position: animateItems ? 'absolute' : 'static',
+                            }}
+                          >
+                            <BodyColumn>
+                              <Checkbox>
+                                <input
+                                  className='checkbox'
+                                  onChange={(e) => onCheck(key.key, e)}
+                                  type='checkbox'
+                                  dataKey={key.key}
+                                />
+                                <span className='checkmark'>
+                                  <div className='icon'>
+                                    <FontAwesomeIcon icon='check' />
+                                  </div>
+                                </span>
+                              </Checkbox>
+                            </BodyColumn>
+                            <BodyColumn className='second-child'>
+                              <div className='label'>Key</div>
+                              {shortenText(key.key, 100)}
+                            </BodyColumn>
+                            <BodyColumn fullWidth>
+                              <div className='label'>Owner</div>
+                              {key.site ? key.site.data.name : user.data.name}
+                            </BodyColumn>
+                          </TableRow>
+                        );
+                      })}
+                    </>
+                  ) : null}
+                </>
+              )}
+            </TableBody>
+          </Table>
+        </>
+      )}
     </span>
   );
 };
@@ -343,9 +362,9 @@ const IconButton = styled.button`
   align-items: center;
   justify-content: center;
   border: none;
-  width: 42px;
-  height: 42px;
-  margin: 4px 2px;
+  width: 34px;
+  height: 34px;
+  margin: 0 2px;
   // margin-left: auto;
   :last-child {
     margin-right: -8px;
@@ -367,7 +386,7 @@ const Select = styled.select`
   padding: 4px 12px;
   background: ${(props) => props.theme.color.primary.backgroundDark};
   // -webkit-appearance: none;
-  color: ${props => props.theme.color.primary.backgroundDark};
+  color: ${(props) => props.theme.color.primary.backgroundDark};
   font-size: 16px;
   line-height: 1;
   border: 0;
@@ -375,7 +394,7 @@ const Select = styled.select`
   border-radius: 5px;
   height: 34px;
   background: url(http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png)
-    no-repeat right ${props => props.theme.color.gray.three};
+    no-repeat right ${(props) => props.theme.color.gray.three};
   -webkit-appearance: none;
   background-position-x: 106px;
 `;
@@ -453,7 +472,6 @@ const shimmer = keyframes`
 const Table = styled.div`
   border-spacing: 0px;
   display: block !important;
-  margin-bottom: 36px;
   position: relative;
   overflow: hidden;
   @media (max-width: 769px) {
@@ -505,6 +523,7 @@ const TableBody = styled.div`
 const TableRow = styled.div`
   border: 1px solid #e8e8e8;
   // border-radius: 10px;
+  border-radius: 5px;
   margin: 8px 0;
   display: flex;
   align-items: center;

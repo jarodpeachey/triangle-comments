@@ -39,7 +39,7 @@ const FeaturesSection = ({ data }) => {
 
   }
       `}
-      background='#ffffff'
+      background='#fafafa'
     >
       <h1 className='center'>Built for modern development</h1>
       <p className='center'>

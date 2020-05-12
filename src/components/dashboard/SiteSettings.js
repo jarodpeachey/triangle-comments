@@ -14,8 +14,13 @@ import Row from '../grid/Row';
 import SiteKeyTable from '../SiteKeyTable';
 
 const SiteSettings = ({ setLoadedKeys, loadedKeys }) => {
+  const { setNotificationMessage, setNotificationType } = useContext(
+    AppContext
+  );
+  const { state, q, serverClient } = useContext(DatabaseContext);
+  const { site, user, siteClient } = state;
+
   const { setEditSiteInfoModalOpen } = useContext(AppContext);
-  const [reRender, setRender] = useState(false);
   const [activeTab, setActiveTab] = useState(
     isBrowser() && window.location.pathname.includes('api') ? 'api' : 'general'
   );
@@ -30,9 +35,7 @@ const SiteSettings = ({ setLoadedKeys, loadedKeys }) => {
   );
   const [animate, setAnimate] = useState(false);
   const [animateItems, setAnimateItems] = useState(false);
-
-  const { state, q, serverClient } = useContext(DatabaseContext);
-  const { site, user, siteClient } = state;
+  const [reRender, setRender] = useState(true);
 
   useEffect(() => {
     if (loadedKeys && loadedKeys.length > 0) {
@@ -47,10 +50,24 @@ const SiteSettings = ({ setLoadedKeys, loadedKeys }) => {
               q.Let(
                 {
                   keys: q.Get(q.Var('keysRef')),
-                  site: q.Get(q.Select(['data', 'site'], q.Var('keys'))),
+                  userRef: q.Get(q.Select(['data', 'user'], q.Var('keys'))),
+                  siteRef: q.Get(q.Select(['data', 'site'], q.Var('keys'))),
+                  type: q.Select(['data', 'type'], q.Var('keys')),
+                  user: q.Get(q.Match(q.Index('all_users'))),
+                  site: q.Get(
+                    q.Ref(
+                      q.Collection('sites'),
+                      // q.Select(
+                      q.Select('id', q.Select('ref', q.Var('siteRef')))
+                      // )
+                    )
+                  ),
                 },
                 {
-                  site: q.Select(['ref'], q.Var('site')),
+                  user: q.Var('user'),
+                  type: q.Var('type'),
+                  site: q.Var('site'),
+                  ref: q.Select('ref', q.Var('keys')),
                   key: q.Select(['data', 'key'], q.Var('keys')),
                 }
               )
@@ -76,7 +93,7 @@ const SiteSettings = ({ setLoadedKeys, loadedKeys }) => {
             setAnimate(false);
             setAnimateItems(false);
             // }, 200);
-          }, 1000);
+          }, 10000000000000000);
         })
         .catch((errTwo) => {
           console.log(errTwo);
@@ -94,6 +111,80 @@ const SiteSettings = ({ setLoadedKeys, loadedKeys }) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (reRender) {
+      console.log('Getting keys!');
+      siteClient
+        .query(
+          q.Map(
+            q.Paginate(q.Match(q.Index('all_keys'))),
+            q.Lambda(
+              'keysRef',
+              q.Let(
+                {
+                  keys: q.Get(q.Var('keysRef')),
+                  userRef: q.Get(q.Select(['data', 'user'], q.Var('keys'))),
+                  siteRef: q.Get(q.Select(['data', 'site'], q.Var('keys'))),
+                  type: q.Select(['data', 'type'], q.Var('keys')),
+                  user: q.Get(q.Match(q.Index('all_users'))),
+                  site: q.Get(
+                    q.Ref(
+                      q.Collection('sites'),
+                      // q.Select(
+                      q.Select('id', q.Select('ref', q.Var('siteRef')))
+                      // )
+                    )
+                  ),
+                },
+                {
+                  user: q.Var('user'),
+                  type: q.Var('type'),
+                  site: q.Var('site'),
+                  ref: q.Select('ref', q.Var('keys')),
+                  key: q.Select(['data', 'key'], q.Var('keys')),
+                }
+              )
+            )
+          )
+        )
+        .then((resTwo) => {
+          console.log(resTwo);
+          setLoadedKeys(resTwo.data);
+          setKeys(resTwo.data);
+
+          console.log(resTwo);
+          setLoadedKeys(resTwo.data);
+          setKeys(resTwo.data);
+          setTimeout(() => {
+            setShowItems(true);
+            setAnimate(true);
+            // setTimeout(() => {
+            setAnimateItems(true);
+            // }, 200);
+            // setTimeout(() => {
+            setLoading(false);
+            setAnimate(false);
+            setAnimateItems(false);
+            // }, 200);
+          }, 10000000000000000000);
+        })
+        .catch((errTwo) => {
+          console.log(errTwo);
+          setShowItems(true);
+          setAnimate(true);
+          setTimeout(() => {
+            setAnimateItems(true);
+          }, 200);
+          setTimeout(() => {
+            setLoading(false);
+            setAnimate(false);
+            setAnimateItems(false);
+          }, 200);
+        });
+      setRender(false);
+    }
+  }, [reRender]);
+
   const openEditSiteInfoModal = () => {
     setEditSiteInfoModalOpen(true);
   };
@@ -108,7 +199,10 @@ const SiteSettings = ({ setLoadedKeys, loadedKeys }) => {
       .then((secretResponse) => {
         console.log('Secret: ', secretResponse);
 
-        alert(`New API key created: ${secretResponse.secret}`);
+        setNotificationType('success');
+        setNotificationMessage(
+          `Successfully created key: ${secretResponse.secret}`
+        );
 
         siteClient
           .query(
@@ -140,22 +234,9 @@ const SiteSettings = ({ setLoadedKeys, loadedKeys }) => {
 
     keys.forEach((key) => {
       console.log(key);
-      if (key.site) {
-        newKeys.push({
-          key: key.key,
-          type: 'Site',
-          site: key.site.name,
-        });
-      } else {
-        newKeys.push({
-          key: key.key,
-          type: 'User',
-          site: null,
-        });
-      }
     });
 
-    return newKeys;
+    return keys;
   };
 
   return (
@@ -223,14 +304,16 @@ const SiteSettings = ({ setLoadedKeys, loadedKeys }) => {
                 );
               })} */}
               <SiteKeyTable
+                user={user}
                 animate={animate}
                 animateItems={animateItems}
                 showItems={showItems}
                 loading={loading}
                 title='Keys'
                 data={formatKeys()}
+                setRender={setRender}
               />
-              {/* <Spacer /> */}
+              <Spacer height={16} />
               <Button onClick={() => createAPIKey()} small>
                 Create New
               </Button>

@@ -39,7 +39,7 @@ const CustomizeSection = ({ data }) => {
 
   }
       `}
-      background={`${theme.color.gray.one}90`}
+      background='#ffffff'
     >
       <h1>Fully Customizable</h1>
       <p className='subtitle'>
@@ -107,7 +107,7 @@ const Feature = styled.div`
   width: 100%;
   text-align: left;
   display: flex;
-  margin: 12px 0;
+  margin: 18px 0;
   align-items: flex-start;
   :first-child {
     margin-top: 0;
