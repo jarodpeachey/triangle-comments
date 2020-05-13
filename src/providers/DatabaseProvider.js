@@ -62,12 +62,71 @@ export const DatabaseReducer = (state, action) => {
         setCookie('site_secret', action.data.secret);
         setCookie('site_id', action.data.site.data.id);
       }
+
+      const siteClient = new faunadb.Client({
+        secret: action.data.secret,
+      });
+
+      siteClient
+        .query(
+          q.Map(
+            [
+              [
+                'Jarod (Founder)',
+                'jwpeachey107@aol.com',
+                'Hey! This is another comment!',
+                state.user,
+                action.data.site,
+              ],
+              [
+                'Jarod (Founder)',
+                'jwpeachey107@aol.com',
+                'Hey! This is another comment!',
+                state.user,
+                action.data.site,
+              ],
+              [
+                'Jarod (Founder)',
+                'jwpeachey107@aol.com',
+                'Hey! This is another comment!',
+                state.user,
+                action.data.site,
+              ],
+              [
+                'Jarod (Founder)',
+                'jwpeachey107@aol.com',
+                'Hey! This is another comment!',
+                state.user,
+                action.data.site,
+              ],
+              [
+                'Jarod (Founder)',
+                'jwpeachey107@aol.com',
+                'Hey! This is another comment!',
+                state.user,
+                action.data.site,
+              ],
+            ],
+            q.Lambda(
+              'data',
+              q.Call(
+                q.Function('create_comment'),
+                q.Select(0, q.Var('data')),
+                q.Select(1, q.Var('data')),
+                q.Select(2, q.Var('data')),
+                q.Select(3, q.Var('data')),
+                q.Select(4, q.Var('data'))
+              )
+            )
+          )
+        )
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+
       return {
         ...state,
         site: action.data.site,
-        siteClient: new faunadb.Client({
-          secret: action.data.secret,
-        }),
+        siteClient,
       };
     }
     case 'updateSite': {

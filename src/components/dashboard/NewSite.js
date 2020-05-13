@@ -33,9 +33,7 @@ const NewSite = () => {
   const onNameChange = (e) => {
     setName(e.target.value);
     setError(false);
-    setStateId(
-      `${formatSiteId(e.target.value)}`
-    );
+    setStateId(`${formatSiteId(e.target.value)}`);
   };
 
   const addSite = (e) => {
@@ -66,6 +64,7 @@ const NewSite = () => {
             .query(q.Get(q.Match(q.Index('site_by_id'), stateId)))
             .then((responseTwo) => {
               console.log(responseTwo);
+
               dispatch({
                 type: 'loginSite',
                 data: {

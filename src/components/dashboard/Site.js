@@ -34,6 +34,7 @@ const Site = () => {
   const [headerHeight, setHeaderHeight] = useState(0);
   const [siteNameIndex, setSiteNameIndex] = useState(3);
   const [loadedKeys, setLoadedKeys] = useState([]);
+  const [loadedComments, setLoadedComments] = useState([]);
 
   useEffect(() => {
     const pathnames = window.location.pathname.split('/');
@@ -230,7 +231,12 @@ const Site = () => {
                   setLoadedKeys={setLoadedKeys}
                 />
               )}
-              {activeTab === 'comments' && <SiteComments />}
+              {activeTab === 'comments' && (
+                <SiteComments
+                  loadedComments={loadedComments}
+                  setLoadedComments={setLoadedComments}
+                />
+              )}
               {/* {activeTab === 'billing' && <Billing />} */}
               {/* </DelayedLoad>
                     </Router> */}

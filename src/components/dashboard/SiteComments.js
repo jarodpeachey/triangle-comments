@@ -13,100 +13,245 @@ import { isBrowser } from '../../utils/isBrowser';
 import { shortenText } from '../../utils/shortenText';
 import { DatabaseContext } from '../../providers/DatabaseProvider';
 import Row from '../grid/Row';
+import CommentsTable, { SelectColumnFilter } from '../CommentsTable';
 
-const SiteComments = () => {
-  const { setEditModalOpen } = useContext(AppContext);
-  const [reRender, setRender] = useState(false);
+const SiteComments = ({ loadedComments, setLoadedComments }) => {
   const [activeTab, setActiveTab] = useState(
     isBrowser() && window.location.pathname.includes('held-for-review')
       ? 'held'
       : 'published'
   );
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState(
+    loadedComments && loadedComments.length > 0 ? loadedComments : []
+  );
+  const [commentsToShow, setCommentsToShow] = useState(comments || []);
+  const [loading, setLoading] = useState(
+    !(loadedComments && loadedComments.length > 0)
+  );
+  const [showItems, setShowItems] = useState(
+    loadedComments && loadedComments.length > 0
+  );
+  const [animate, setAnimate] = useState(false);
+  const [animateItems, setAnimateItems] = useState(false);
+  const [reRender, setRender] = useState(true);
 
   const { state, q } = useContext(DatabaseContext);
   const { user, site, siteClient, userClient } = state;
 
   useEffect(() => {
-    siteClient
-      .query(
-        q.Map(
-          q.Paginate(q.Match(q.Index('all_comments'))),
-          q.Lambda(
-            'commentsRef',
-            q.Let(
-              {
-                comments: q.Get(q.Var('commentsRef')),
-                user: q.Get(q.Select(['data', 'user'], q.Var('comments'))),
-                site: q.Get(q.Select(['data', 'site'], q.Var('comments'))),
-              },
-              {
-                user: q.Select(['ref'], q.Var('user')),
-                site: q.Select('ref', q.Var('site')),
-                data: q.Select(['data'], q.Var('comments')),
-              }
+    if (loadedComments && loadedComments.length > 0) {
+      setComments(loadedComments);
+    } else {
+      siteClient
+        .query(
+          q.Map(
+            q.Paginate(q.Match(q.Index('all_comments'))),
+            q.Lambda(
+              'commentsRef',
+              q.Let(
+                {
+                  comments: q.Get(q.Var('commentsRef')),
+                  user: q.Get(q.Select(['data', 'user'], q.Var('comments'))),
+                  site: q.Get(q.Select(['data', 'site'], q.Var('comments'))),
+                },
+                {
+                  user: q.Select(['ref'], q.Var('user')),
+                  site: q.Select('ref', q.Var('site')),
+                  data: q.Select(['data'], q.Var('comments')),
+                }
+              )
             )
           )
         )
-      )
-      .then((response) => {
-        console.log('Comments from user: ', response.data);
-        setComments(response.data);
-      })
-      .catch((error) => console.log(error));
+        .then((response) => {
+          setComments(response.data);
+          setCommentsToShow(response.data);
+          setLoadedComments(response.data);
+          setTimeout(() => {
+            setShowItems(true);
+            setAnimate(true);
+            // setTimeout(() => {
+            setAnimateItems(true);
+            // }, 200);
+            // setTimeout(() => {
+            setLoading(false);
+            setAnimate(false);
+            setAnimateItems(false);
+            // }, 200);
+          }, 200);
+        })
+        .catch((error) => {
+          console.log(error);
+          setShowItems(true);
+          setAnimate(true);
+          setTimeout(() => {
+            setAnimateItems(true);
+          }, 200);
+          setTimeout(() => {
+            setLoading(false);
+            setAnimate(false);
+            setAnimateItems(false);
+          }, 200);
+        });
+    }
   }, []);
 
-  // if (key) {
-  //   serverClient
-  //     .query(
-  //       q.Map(
-  //         q.Paginate(q.Match(q.Index('all_keys'))),
-  //         q.Lambda(
-  //           'keysRef',
-  //           q.Let(
-  //             {
-  //               keys: q.Get(q.Var('keysRef')),
-  //               user: q.Get(q.Select(['data', 'user'], q.Var('keys'))),
-  //             },
-  //             {
-  //               user: q.Select(['data', 'name'], q.Var('user')),
-  //               key: q.Select(['data', 'key'], q.Var('keys')),
-  //             }
-  //           )
-  //         )
-  //       ),
-  //       { secret: key }
-  //     )
-  //     .then((keysResponse) => {
-  //       console.log('Keys from user: ', keysResponse);
-  //       setKeys(keysResponse.data);
-  //     })
-  //     .catch((keysError) => console.log(keysError));
-  // } else {
-  //   serverClient
-  //     .query(
-  //       q.Map(
-  //         q.Paginate(q.Match(q.Index('all_keys'))),
-  //         q.Lambda(
-  //           'keysRef',
-  //           q.Let(
-  //             {
-  //               keys: q.Get(q.Var('keysRef')),
-  //               user: q.Get(q.Select(['data', 'user'], q.Var('keys'))),
-  //             },
-  //             {
-  //               user: q.Select(['data', 'name'], q.Var('user')),
-  //               key: q.Select(['data', 'key'], q.Var('keys')),
-  //             }
-  //           )
-  //         )
-  //       )
-  //     )
-  //     .then((keysResponse) => {
-  //       console.log('Keys from all users: ', keysResponse);
-  //     })
-  //     .catch((keysError) => console.log(keysError));
-  // }
+  useEffect(() => {
+    if (reRender) {
+      siteClient
+        .query(
+          q.Map(
+            q.Paginate(q.Match(q.Index('all_comments'))),
+            q.Lambda(
+              'commentsRef',
+              q.Let(
+                {
+                  comments: q.Get(q.Var('commentsRef')),
+                  user: q.Get(q.Select(['data', 'user'], q.Var('comments'))),
+                  site: q.Get(q.Select(['data', 'site'], q.Var('comments'))),
+                },
+                {
+                  user: q.Select(['ref'], q.Var('user')),
+                  site: q.Select('ref', q.Var('site')),
+                  data: q.Select(['data'], q.Var('comments')),
+                }
+              )
+            )
+          )
+        )
+        .then((response) => {
+          setComments(response.data);
+          setCommentsToShow(response.data);
+          setLoadedComments(response.data);
+          setTimeout(() => {
+            setShowItems(true);
+            setAnimate(true);
+            // setTimeout(() => {
+            setAnimateItems(true);
+            // }, 200);
+            // setTimeout(() => {
+            setLoading(false);
+            setAnimate(false);
+            setAnimateItems(false);
+            // }, 200);
+          }, 200);
+        })
+        .catch((error) => {
+          console.log(error);
+          setShowItems(true);
+          setAnimate(true);
+          setTimeout(() => {
+            setAnimateItems(true);
+          }, 200);
+          setTimeout(() => {
+            setLoading(false);
+            setAnimate(false);
+            setAnimateItems(false);
+          }, 200);
+        });
+    }
+  }, [reRender]);
+
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: 'Name',
+        accessor: 'name',
+        // Use a two-stage aggregator here to first
+        // count the total rows being aggregated,
+        // then sum any of those counts if they are
+        // aggregated further
+        aggregate: 'count',
+        Aggregated: ({ value }) => `${value} Names`,
+      },
+      {
+        Header: 'Email',
+        accessor: 'email',
+        // Use our custom `fuzzyText` filter on this column
+        // filter: 'fuzzyText',
+        // Use another two-stage aggregator here to
+        // first count the UNIQUE values from the rows
+        // being aggregated, then sum those counts if
+        // they are aggregated further
+        aggregate: 'uniqueCount',
+        Aggregated: ({ value }) => `${value} Unique Names`,
+      },
+      {
+        Header: 'Page Path',
+        accessor: 'path',
+        // Use a two-stage aggregator here to first
+        // count the total rows being aggregated,
+        // then sum any of those counts if they are
+        // aggregated further
+        aggregate: 'count',
+        Aggregated: ({ value }) => `${value} Pages`,
+      },
+      {
+        Header: 'Status',
+        accessor: 'status',
+        Filter: SelectColumnFilter,
+        filter: 'includes',
+      },
+    ],
+    []
+  );
+
+  // We need to keep the table from resetting the pageIndex when we
+  // Update data. So we can keep track of that flag with a ref.
+  const skipResetRef = React.useRef(false);
+
+  // When our cell renderer calls updateMyData, we'll use
+  // the rowIndex, columnId and new value to update the
+  // original data
+  const updateMyData = (rowIndex, columnId, value) => {
+    // We also turn on the flag to not reset the page
+    skipResetRef.current = true;
+    setData((old) =>
+      old.map((row, index) => {
+        if (index === rowIndex) {
+          return {
+            ...row,
+            [columnId]: value,
+          };
+        }
+        return row;
+      })
+    );
+  };
+
+  // After data changes, we turn the flag back off
+  // so that if data actually changes when we're not
+  // editing it, the page is reset
+  React.useEffect(() => {
+    skipResetRef.current = false;
+  }, [commentsToShow]);
+
+  // Let's add a data resetter/randomizer to help
+  // illustrate that flow...
+  const resetData = () => {
+    // Don't reset the page when we do this
+    skipResetRef.current = true;
+    setCommentsToShow(comments);
+  };
+
+  console.log(comments);
+  console.log(commentsToShow);
+
+  const formatComments = () => {
+    const newComments = [];
+    commentsToShow &&
+      commentsToShow.length > 0 &&
+      commentsToShow.forEach((comment) => {
+        newComments.push({
+          name: comment.data.name,
+          email: comment.data.email,
+          path: comment.data.path || '/',
+          status: comment.data.status || 'published',
+        });
+      });
+
+    return newComments;
+  };
 
   return (
     // <DelayedLoad>
@@ -160,46 +305,20 @@ const SiteComments = () => {
             //     Edit
             //   </Button>
             // </Card>
-            <>
+            <Card title='Comments'>
               {comments && comments.length ? (
-                <>
-                  {comments.map((comment) => {
-                    console.log(comment);
-
-                    return (
-                      <CommentWrapper key={`comment-${comment.data.name}`}>
-                        <CommentTitle className='h3'>
-                          {comment.data.name}
-                        </CommentTitle>
-                        <p>{shortenText(comment.data.comment, 100)}</p>
-                        <small>- {comment.data.email}</small>
-                      </CommentWrapper>
-                    );
-                  })}
-                </>
+                <CommentsTable
+                  columns={columns}
+                  data={formatComments()}
+                  updateMyData={updateMyData}
+                  skipReset={skipResetRef.current}
+                />
               ) : (
                 <Card>Looks like you have no comments on your site yet!</Card>
               )}
-            </>
-          )}
-          {activeTab === 'held' && (
-            <Card
-              title='API Keys'
-              subtitle='Your API keys grant access to all your comments. Keep them safe.'
-            >
-              {keys.map((key) => {
-                return (
-                  <APIKey key={`api-key-${key.key}`}>
-                    <strong>Key:</strong> {key.key}
-                  </APIKey>
-                );
-              })}
-              {/* <Spacer /> */}
-              <Button onClick={() => createAPIKey()} small>
-                Create New
-              </Button>
             </Card>
           )}
+          {activeTab === 'held' && <h1>Held For Review</h1>}
         </div>
       </Row>
     </span>

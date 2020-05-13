@@ -281,15 +281,17 @@ const SiteSettings = ({ setLoadedKeys, loadedKeys }) => {
         </div>
         <div widths={[9]}>
           {activeTab === 'general' && (
-            <Card title='Details'>
-              <p className='small m-none'>
-                Site Name: {site.data.name || 'Guest'}
-              </p>
-              <Spacer />
-              <Button onClick={() => openEditSiteInfoModal(true)} gray small>
-                Edit
-              </Button>
-            </Card>
+            <>
+              <Card title='Details'>
+                <p className='small m-none'>
+                  Site Name: {site.data.name || 'Guest'}
+                </p>
+                <Spacer />
+                <Button onClick={() => openEditSiteInfoModal(true)} gray small>
+                  Edit
+                </Button>
+              </Card>
+            </>
           )}
           {activeTab === 'api' && (
             <Card
@@ -335,7 +337,7 @@ const Tab = styled.div`
   width: 100%;
   display: block;
   padding: 8px 16px;
-  border-radius: 50px;
+  border-radius: 5px;
   margin-right: 8px;
   transition-duration: 0.25s;
   background: ${(props) =>

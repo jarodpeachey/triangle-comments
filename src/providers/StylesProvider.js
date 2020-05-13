@@ -62,7 +62,9 @@ const StyleWrapper = styled.div`
   span,
   div,
   select,
-  input {
+  input,
+  td,
+  th {
     font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
       Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',
       sans-serif !important;
@@ -70,8 +72,9 @@ const StyleWrapper = styled.div`
     font-weight: 400;
   }
   .title {
-    font-family: 'Fira Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-      Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
+    font-family: 'Fira Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+      Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',
+      sans-serif !important;
   }
   .subtitle {
     font-family: 'Heebo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
