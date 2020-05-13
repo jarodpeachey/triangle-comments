@@ -50,10 +50,10 @@ const Hero = ({ children }) => {
           <BackgroundImage heroImage={heroImageTwo} />
           <HeroContainer>
             <ChildContainer className='container'>
-              <Title>A Blazing Fast Commenting System for your Website</Title>
+              <Title>A Modern Commenting System for Modern Static Sites</Title>
               <SubTitle>
-                A uniquely different commenting system built on customizability,
-                simplicity and performance.
+                A blazing-fast commenting system built on customizability,
+                simplicity and performance. Static sites just got even cooler.
               </SubTitle>
               <ButtonFlex>
                 <ButtonWrapper>
@@ -115,8 +115,8 @@ const MainWrapper = styled.div`
     padding-bottom: 100px !important;
   }
   p {
-    line-height: 27px;
-    font-size: 20px !important;
+    line-height: 30px;
+    font-size: 24px !important;
   }
 `;
 
