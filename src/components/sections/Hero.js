@@ -114,6 +114,10 @@ const MainWrapper = styled.div`
   @media (min-width: 769px) {
     padding-bottom: 100px !important;
   }
+  p {
+    line-height: 27px;
+    font-size: 20px !important;
+  }
 `;
 
 const HeroContainer = styled.div`
