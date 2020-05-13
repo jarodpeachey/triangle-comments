@@ -64,6 +64,7 @@
     "react-dom": "^16.10.2",
     "react-helmet": "^6.0.0",
     "react-table": "^7.0.4",
+    "recompose": "^0.30.0",
     "styled-components": "^5.0.1"
   },
   "publishConfig": {

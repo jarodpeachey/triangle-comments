@@ -60,7 +60,11 @@ const Header = ({ siteTitle }) => {
   };
 
   const onScroll = () => {
-    if (window.scrollY > 40) {
+    if (
+      window.scrollY > 40 &&
+      isBrowser() &&
+      !window.location.pathname.includes('dashboard')
+    ) {
       setScrolled(true);
     } else {
       setScrolled(false);
