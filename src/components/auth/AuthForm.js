@@ -121,9 +121,11 @@ const AuthForm = () => {
                     ),
                     comment: q.Call(
                       q.Function('create_comment'),
-                      'Jarod (Staticbox Founder)',
-                      'jwpeachey107@aol.com',
-                      `Hey, ${`${name}'s Site`}! Welcome to Staticbox! This is your first comment. You can delete it if you'd like, and practice for all the comments you're going to get in the future 😉`,
+                      'Jarod (Founder)',
+                      'Hey! Welcome to this comment. It\'s a long one, because I need to test the ability to shorten it so the table actually works.',
+                      new Date().getTime(),
+                      '/best-react-tools',
+                      false,
                       q.Var('user'),
                       q.Var('site')
                     ),

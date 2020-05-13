@@ -92,10 +92,10 @@ const Site = () => {
 
   useEffect(() => {
     window.addEventListener('resize', onResize);
-    document.addEventListener('readystatechange', onResize);
   }, []);
 
   const onResize = () => {
+    console.log('Resize!');
     setHeaderHeight(document.getElementById('background').clientHeight);
   };
 

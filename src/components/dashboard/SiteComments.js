@@ -21,10 +21,8 @@ const SiteComments = ({ loadedComments, setLoadedComments }) => {
       ? 'held'
       : 'published'
   );
-  const [comments, setComments] = useState(
-    loadedComments && loadedComments.length > 0 ? loadedComments : []
-  );
-  const [commentsToShow, setCommentsToShow] = useState(comments || []);
+  const [comments, setComments] = useState([]);
+  const [commentsToShow, setCommentsToShow] = useState(comments);
   const [loading, setLoading] = useState(
     !(loadedComments && loadedComments.length > 0)
   );
@@ -39,6 +37,7 @@ const SiteComments = ({ loadedComments, setLoadedComments }) => {
   const { user, site, siteClient, userClient } = state;
 
   useEffect(() => {
+    console.log(loadedComments);
     if (loadedComments && loadedComments.length > 0) {
       setComments(loadedComments);
     } else {
@@ -64,6 +63,7 @@ const SiteComments = ({ loadedComments, setLoadedComments }) => {
           )
         )
         .then((response) => {
+          console.log('Comments from site: ', response.data);
           setComments(response.data);
           setCommentsToShow(response.data);
           setLoadedComments(response.data);
@@ -94,7 +94,7 @@ const SiteComments = ({ loadedComments, setLoadedComments }) => {
           }, 200);
         });
     }
-  }, []);
+  }, [loadedComments]);
 
   useEffect(() => {
     if (reRender) {
@@ -120,6 +120,7 @@ const SiteComments = ({ loadedComments, setLoadedComments }) => {
           )
         )
         .then((response) => {
+          console.log('Comments from site: ', response.data);
           setComments(response.data);
           setCommentsToShow(response.data);
           setLoadedComments(response.data);
@@ -165,8 +166,8 @@ const SiteComments = ({ loadedComments, setLoadedComments }) => {
         Aggregated: ({ value }) => `${value} Names`,
       },
       {
-        Header: 'Email',
-        accessor: 'email',
+        Header: 'Comment',
+        accessor: 'comment',
         // Use our custom `fuzzyText` filter on this column
         // filter: 'fuzzyText',
         // Use another two-stage aggregator here to
@@ -174,7 +175,7 @@ const SiteComments = ({ loadedComments, setLoadedComments }) => {
         // being aggregated, then sum those counts if
         // they are aggregated further
         aggregate: 'uniqueCount',
-        Aggregated: ({ value }) => `${value} Unique Names`,
+        Aggregated: ({ value }) => `${value} Unique Comments`,
       },
       {
         Header: 'Page Path',
@@ -234,9 +235,6 @@ const SiteComments = ({ loadedComments, setLoadedComments }) => {
     setCommentsToShow(comments);
   };
 
-  console.log(comments);
-  console.log(commentsToShow);
-
   const formatComments = () => {
     const newComments = [];
     commentsToShow &&
@@ -244,9 +242,10 @@ const SiteComments = ({ loadedComments, setLoadedComments }) => {
       commentsToShow.forEach((comment) => {
         newComments.push({
           name: comment.data.name,
-          email: comment.data.email,
+          comment: shortenText(comment.data.comment, 50),
+          date: comment.data.date,
           path: comment.data.path || '/',
-          status: comment.data.status || 'published',
+          status: comment.data.draft ? 'Draft' : 'Published',
         });
       });
 

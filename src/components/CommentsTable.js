@@ -387,7 +387,6 @@ function CommentsTable({ columns, data, updateMyData, skipReset }) {
         </THead>
         <TBody {...getTableBodyProps()}>
           {page.map((row) => {
-            console.log(row);
             prepareRow(row);
             return (
               <TR {...row.getRowProps()}>
@@ -696,7 +695,7 @@ const TH = styled.th`
   }
   padding: 4px 24px 4px 0;
   font-weight: 800 !important;
-  text-align: right;
+  text-align: left;
   margin: 0;
   width: fit-content;
 
@@ -709,10 +708,24 @@ const TH = styled.th`
     text-align: left;
     padding-left: 12px;
   }
+  :nth-child(3) {
+    min-width: 15% !important;
+    width: 70% !important;
+    max-width: 250px !important;
+    white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+    white-space: -pre-wrap; /* Opera 4-6 */
+    white-space: -o-pre-wrap; /* Opera 7 */
+    white-space: pre-wrap; /* css-3 */
+    word-wrap: break-word; /* Internet Explorer 5.5+ */
+    white-space: -webkit-pre-wrap; /* Newer versions of Chrome/Safari*/
+    word-break: break-all;
+    white-space: normal;
+  }
   :nth-child(4) {
-    width: 100%;
+    width: 70%;
   }
   :last-child {
+    text-align: right;
     // width: auto;
     // min-width: 50%;
     // width: fit-content;
@@ -730,7 +743,7 @@ const TD = styled.td`
   font-weight: 400;
   padding: 4px 24px 4px 0;
   font-weight: 500;
-  text-align: right;
+  text-align: left;
   margin: 0;
   // width: 100%;
   width: fit-content;
@@ -743,10 +756,24 @@ const TD = styled.td`
     text-align: left;
     padding-left: 12px;
   }
+  :nth-child(3) {
+    min-width: 15% !important;
+    width: 70% !important;
+    max-width: 250px !important;
+    white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+    white-space: -pre-wrap; /* Opera 4-6 */
+    white-space: -o-pre-wrap; /* Opera 7 */
+    white-space: pre-wrap; /* css-3 */
+    word-wrap: break-word; /* Internet Explorer 5.5+ */
+    white-space: -webkit-pre-wrap; /* Newer versions of Chrome/Safari*/
+    word-break: break-all;
+    white-space: normal;
+  }
   :nth-child(4) {
-    width: 100%;
+    width: 70%;
   }
   :last-child {
+    text-align: right;
     // width: auto;
     // min-width: 50%;
     // width: fit-content;

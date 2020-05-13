@@ -73,36 +73,46 @@ export const DatabaseReducer = (state, action) => {
             [
               [
                 'Jarod (Founder)',
-                'jwpeachey107@aol.com',
-                'Hey! This is another comment!',
+                'Hey! Welcome to this comment. It\'s a long one, because I need to test the ability to shorten it so the table actually works.',
+                new Date().getTime(),
+                '/10-best-things-about-javascript',
+                false,
                 state.user,
                 action.data.site,
               ],
               [
                 'Jarod (Founder)',
-                'jwpeachey107@aol.com',
-                'Hey! This is another comment!',
+                'Hey! Welcome to this comment. It\'s a long one, because I need to test the ability to shorten it so the table actually works.',
+                new Date().getTime(),
+                '/styled-components',
+                true,
                 state.user,
                 action.data.site,
               ],
               [
                 'Jarod (Founder)',
-                'jwpeachey107@aol.com',
-                'Hey! This is another comment!',
+                'Hey! Welcome to this comment. It\'s a long one, because I need to test the ability to shorten it so the table actually works.',
+                new Date().getTime(),
+                '/10-programming-languages',
+                true,
                 state.user,
                 action.data.site,
               ],
               [
                 'Jarod (Founder)',
-                'jwpeachey107@aol.com',
-                'Hey! This is another comment!',
+                'Hey! Welcome to this comment. It\'s a long one, because I need to test the ability to shorten it so the table actually works.',
+                new Date().getTime(),
+                '/best-react-tools',
+                false,
                 state.user,
                 action.data.site,
               ],
               [
                 'Jarod (Founder)',
-                'jwpeachey107@aol.com',
-                'Hey! This is another comment!',
+                'Hey! Welcome to this comment. It\'s a long one, because I need to test the ability to shorten it so the table actually works.',
+                new Date().getTime(),
+                '/10-best-things-about-javascript',
+                false,
                 state.user,
                 action.data.site,
               ],
@@ -115,7 +125,9 @@ export const DatabaseReducer = (state, action) => {
                 q.Select(1, q.Var('data')),
                 q.Select(2, q.Var('data')),
                 q.Select(3, q.Var('data')),
-                q.Select(4, q.Var('data'))
+                q.Select(4, q.Var('data')),
+                q.Select(5, q.Var('data')),
+                q.Select(6, q.Var('data'))
               )
             )
           )
