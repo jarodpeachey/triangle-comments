@@ -106,7 +106,7 @@ const Wrapper = styled.div`
   justify-content: flex-start;
   min-height: 100vh;
   max-height: 99999999999999999px !important;
-  width: 100vw;
+  width: 100%;
   overflow: hidden;
   height: 100%;
   padding-right: ${(props) => props.width}px;

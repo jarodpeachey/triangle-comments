@@ -3,5 +3,9 @@
   functions = "functions"
   publish = "public"
 
+[[redirects]]
+  from = "/dashboard/*"
+  to = "/dashboard"
+
 [[plugins]]
   package = "@netlify/plugin-functions-install-core"
