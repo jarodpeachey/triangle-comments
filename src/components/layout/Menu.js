@@ -65,7 +65,7 @@ const Menu = ({ scrolled }) => {
           <MenuItem>
             <Link to='/'>Home</Link>
           </MenuItem>
-          <MenuItem button>
+          {/* <MenuItem button>
             <Button link='/signup' small outlined>
               Sign Up
             </Button>
@@ -74,7 +74,7 @@ const Menu = ({ scrolled }) => {
             <Button link='/login' margin small>
               Log In
             </Button>
-          </MenuItem>
+          </MenuItem> */}
         </>
       )}
     </MenuWrapper>

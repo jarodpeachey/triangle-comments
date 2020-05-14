@@ -194,7 +194,7 @@ const Header = ({ siteTitle }) => {
                       breakpoints={[0, 576]}
                       flexDirections={['row', 'column']}
                     >
-                      <div widths={[6, 12]}>
+                      {/* <div widths={[6, 12]}>
                         <Button
                           light={
                             isBrowser() &&
@@ -217,7 +217,7 @@ const Header = ({ siteTitle }) => {
                         >
                           Log In
                         </Button>
-                      </div>
+                      </div> */}
                     </Row>
                   </div>
                 )}

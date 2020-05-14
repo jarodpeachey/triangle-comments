@@ -197,7 +197,7 @@ const Account = () => {
               This page is only available to Triangle users. You can join the
               club by signing up for an dashboard.
             </p>
-            <Button link='/signup' secondary>
+            <Button link='/' secondary>
               Let's Go!
             </Button>
           </Card>
