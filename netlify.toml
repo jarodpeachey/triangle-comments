@@ -3,5 +3,5 @@
   functions = "functions"
   publish = "public"
 
-[[rewrites]]
+[[redirects]]
   /*    /index.html   200
