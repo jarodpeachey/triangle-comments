@@ -1,7 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 // For more info, check https://www.netlify.com/docs/functions/#javascript-lambda-functions
 require('dotenv').config();
-const qs = require('querystring');
 const sgMail = require('@sendgrid/mail');
 
 exports.handler = function (event, context, callback) {
