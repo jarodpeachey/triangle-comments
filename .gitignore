@@ -12,3 +12,5 @@ packages/cli/forestry/.env
 public
 **/public
 .faunarc
+sendgrid.env
+sendgrid.env

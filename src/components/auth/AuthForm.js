@@ -52,26 +52,6 @@ const AuthForm = () => {
     setEmail(e.target.value);
   };
 
-  const queryMoreItems = (user, comments, keys) => {
-    serverClient
-      .query(
-        q.Create(q.Collection('comments'), {
-          data: {
-            user: q.Select('ref', user),
-            comments,
-          },
-        }),
-        q.Create(q.Collection('keys'), {
-          data: {
-            user: q.Select('ref', user),
-            keys,
-          },
-        })
-      )
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-  };
-
   const handleSignup = (e) => {
     e.preventDefault();
 
@@ -122,7 +102,7 @@ const AuthForm = () => {
                     comment: q.Call(
                       q.Function('create_comment'),
                       'Jarod (Founder)',
-                      'Hey! Welcome to this comment. It\'s a long one, because I need to test the ability to shorten it so the table actually works.',
+                      "Hey! Welcome to this comment. It's a long one, because I need to test the ability to shorten it so the table actually works.",
                       new Date().getTime(),
                       '/best-react-tools',
                       false,
@@ -169,30 +149,28 @@ const AuthForm = () => {
                 console.log(faunaErr);
               });
 
-            // userClient.query(
-            //   q.Map(
-            //     q.Paginate(q.Match(q.Index('all_sites'))),
-            //     q.Lambda(
-            //       'sitesRef',
-            //       q.Let(
-            //         {
-            //           sites: q.Get(q.Var('sitesRef')),
-            //           user: q.Get(q.Select(['data', 'user'], q.Var('sites'))),
-            //         },
-            //         {
-            //           user: q.Select(['ref'], q.Var('user')),
-            //           site: q.Var('sites'),
-            //         }
-            //       )
-            //     )
-            //   )
-            // );
+            fetch('/.netlify/functions/send_email', {
+              method: 'POST',
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ name, nameLowerCase: name.toLowerCase() }),
+            })
+              .then((res) => console.log(res))
+              .catch((err) => console.log(err));
 
             setLoading(false);
             setShowForm(false);
             setMessage(
-              "We've sent a confirmation email to you. Please open it and click the link to verify your dashboard."
+              <>
+                <Loader size={50} />
+                <p>Redirecting...</p>
+              </>
             );
+            setTimeout(() => {
+              window.location.href = '/dashboard';
+            }, 1000);
           })
           .catch((faunaErr) => {
             console.log('Error: ', faunaErr);
