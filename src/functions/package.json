@@ -1,0 +1,13 @@
+{
+  "name": "root",
+  "description": "A modern, blazing fast and intuitive CMS",
+  "main": "index.js",
+  "author": "Jarod Peachey",
+  "license": "ISC",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@sendgrid/mail": "^7.1.0"
+  }
+}
