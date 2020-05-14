@@ -13,4 +13,6 @@ public
 **/public
 .faunarc
 sendgrid.env
-sendgrid.env
+.env.development
+.env.production
+.env

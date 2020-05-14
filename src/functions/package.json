@@ -8,6 +8,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@sendgrid/mail": "^7.1.0"
+    "@sendgrid/mail": "^7.1.0",
+    "dotenv": "^8.2.0"
   }
 }

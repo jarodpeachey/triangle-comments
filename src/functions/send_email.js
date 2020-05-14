@@ -1,12 +1,10 @@
 /* eslint-disable import/prefer-default-export */
 // For more info, check https://www.netlify.com/docs/functions/#javascript-lambda-functions
-// require('dotenv').config();
+require('dotenv').config();
 const sgMail = require('@sendgrid/mail');
 
 exports.handler = function (event, context, callback) {
-  sgMail.setApiKey(
-    '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'
-  );
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
   const json = JSON.parse(event.body);
 
