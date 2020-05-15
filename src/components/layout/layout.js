@@ -25,6 +25,8 @@ import {
   faPalette,
   faPaintBrush,
   faBrush,
+  faArrowDown,
+  faChevronDown,
 } from '@fortawesome/free-solid-svg-icons';
 import { fab, faLinkedin, faGithub } from '@fortawesome/free-brands-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
@@ -63,7 +65,8 @@ library.add(
   faBinoculars,
   faPalette,
   faBrush,
-  faPaintBrush
+  faPaintBrush,
+  faChevronDown
 );
 
 const Layout = (props) => {
@@ -125,7 +128,7 @@ const Wrapper = styled.div`
   select,
   input,
   td,
-  th {
+  th, button {
     font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
       Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',
       sans-serif !important;

@@ -19,6 +19,7 @@ import {
 } from 'react-table';
 import matchSorter from 'match-sorter';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Card from './Card';
 
 // Create an editable cell renderer
 const DefaultCell = ({
@@ -238,7 +239,13 @@ function fuzzyTextFilterFn(rows, id, filterValue) {
 fuzzyTextFilterFn.autoRemove = (val) => !val;
 
 // Be sure to pass our updateMyData and the skipReset option
-function CommentsTable({ columns, data, updateMyData, skipReset }) {
+function CommentsTable({
+  columns,
+  data,
+  updateMyData,
+  skipReset,
+  deleteComments,
+}) {
   const filterTypes = React.useMemo(
     () => ({
       // Add a new fuzzyTextFilterFn filter type.
@@ -258,6 +265,49 @@ function CommentsTable({ columns, data, updateMyData, skipReset }) {
     }),
     []
   );
+
+  const actionsMenuComponent = (selectedFlatRows) => {
+    const [open, setOpen] = useState(false);
+
+    return (
+      <div
+        style={{
+          position: 'relative',
+          width: 'fit-content',
+          margin: '0 0 12px 0',
+        }}
+      >
+        <ActionsWrapper open={open} onClick={() => setOpen(!open)}>
+          Actions
+          <FontAwesomeIcon icon='chevron-down' />
+        </ActionsWrapper>
+        <Card
+          customStyles={`
+        padding: 4px 0;
+        display: ${open ? 'block' : 'block'};
+        visibility: ${open ? 'visible' : 'hidden'};
+        position: absolute;
+        bottom: 0;
+        z-index: 99999;
+        width: 120%;
+        box-shadow: 2px 2px 15px -5px #e8e8e8;
+        box-shadow: 0 6px 12px rgba(0,0,0,.08);
+        left: 0;
+        border-radius: 5px;
+        transform: scale(${open ? 1 : 0.6});
+        transition: transform 0.05s ease-out !important;
+        top: 110%;
+        height: fit-content;
+      `}
+        >
+          <Action onClick={() => deleteComments(selectedFlatRows)}>
+            Delete
+          </Action>
+          <Action>Approve</Action>
+        </Card>
+      </div>
+    );
+  };
 
   const defaultColumn = React.useMemo(
     () => ({
@@ -287,6 +337,7 @@ function CommentsTable({ columns, data, updateMyData, skipReset }) {
     nextPage,
     previousPage,
     setPageSize,
+    selectedFlatRows,
     state: {
       pageIndex,
       pageSize,
@@ -295,6 +346,7 @@ function CommentsTable({ columns, data, updateMyData, skipReset }) {
       expanded,
       filters,
       selectedRowIds,
+      selectedComments,
     },
   } = useTable(
     {
@@ -353,6 +405,7 @@ function CommentsTable({ columns, data, updateMyData, skipReset }) {
   // Render the UI for your table
   return (
     <>
+      {actionsMenuComponent(selectedFlatRows)}
       <Table {...getTableProps()}>
         <THead>
           {headerGroups.map((headerGroup) => (
@@ -388,8 +441,9 @@ function CommentsTable({ columns, data, updateMyData, skipReset }) {
         <TBody {...getTableBodyProps()}>
           {page.map((row) => {
             prepareRow(row);
+
             return (
-              <TR {...row.getRowProps()}>
+              <TR dataRef={row.original.ref} {...row.getRowProps()}>
                 {row.cells.map((cell) => {
                   return (
                     <TD {...cell.getCellProps()}>
@@ -548,14 +602,14 @@ const IndeterminateCheckbox = React.forwardRef(
   }
 );
 
-const Select = styled.select`
+const ActionsWrapper = styled.button`
   border: none;
   outline: none;
   font-weight: normal !important;
   cursor: pointer;
   border-radius: 50px;
   position: relative;
-  padding: 2px 8px;
+  padding: 4px 12px 4px 12px;
   background: ${(props) => props.theme.color.primary.backgroundDark};
   // -webkit-appearance: none;
   color: ${(props) => props.theme.color.primary.backgroundDark};
@@ -564,29 +618,37 @@ const Select = styled.select`
   border: 0;
   width: auto;
   border-radius: 5px;
-  height: 26px;
-  background: url(http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png)
-    no-repeat right ${(props) => props.theme.color.gray.three};
+  height: 32px;
+  background: ${(props) => props.theme.color.gray.three};
   -webkit-appearance: none;
   background-size: 12px;
   background-position-x: 90%;
   margin-top: 4px;
+  svg {
+    // padding: 0px 12px;
+    margin-left: 6px;
+    // position: relative;
+    top: 2px;
+    font-size: 14px;
+    transform: rotate(${(props) => (props.open ? '180deg' : '0deg')});
+    transition: all 0.1s;
+  }
 `;
 
-const SelectWrapper = styled.span`
-  position: relative;
-  display: block;
-  margin-left: auto;
-  width: fit-content;
-  // ::after {
-  //   display: block;
-  //   position: absolute;
-  //   content: '';
-  //   right: 9px;
-  //   top: calc(50% - 2px);
-  //   border: 4px solid transparent;
-  //   border-top: 4px solid white;
-  // }
+const ActionsMenu = styled.div``;
+
+const Action = styled.button`
+  border: none;
+  padding: 8px 12px;
+  background: white;
+  margin: 0;
+  cursor: pointer;
+  font-family: 'Open Sans';
+  width: 100%;
+  text-align: left;
+  :hover {
+    background: ${(props) => props.theme.color.gray.three};
+  }
 `;
 
 const Input = styled.input`

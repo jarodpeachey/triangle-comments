@@ -15,7 +15,7 @@ import { DatabaseContext } from '../../providers/DatabaseProvider';
 import Row from '../grid/Row';
 import CommentsTable, { SelectColumnFilter } from '../CommentsTable';
 
-const SiteComments = ({ loadedComments, setLoadedComments }) => {
+const SiteComments = () => {
   const [activeTab, setActiveTab] = useState(
     isBrowser() && window.location.pathname.includes('held-for-review')
       ? 'held'
@@ -23,39 +23,31 @@ const SiteComments = ({ loadedComments, setLoadedComments }) => {
   );
   const [comments, setComments] = useState([]);
   const [commentsToShow, setCommentsToShow] = useState(comments);
-  const [loading, setLoading] = useState(
-    !(loadedComments && loadedComments.length > 0)
-  );
-  const [showItems, setShowItems] = useState(
-    loadedComments && loadedComments.length > 0
-  );
-  const [animate, setAnimate] = useState(false);
-  const [animateItems, setAnimateItems] = useState(false);
   const [reRender, setRender] = useState(true);
 
   const { state, q } = useContext(DatabaseContext);
   const { user, site, siteClient, userClient } = state;
 
+  const loadedComments = [];
+
   useEffect(() => {
-    console.log(loadedComments);
     if (loadedComments && loadedComments.length > 0) {
-      setComments(loadedComments);
+      // setComments(loadedComments);
     } else {
       siteClient
         .query(
           q.Map(
-            q.Paginate(q.Match(q.Index('all_comments'))),
+            q.Paginate(q.Match(q.Index('all_comments')), { size: 10000 }),
             q.Lambda(
               'commentsRef',
               q.Let(
                 {
                   comments: q.Get(q.Var('commentsRef')),
-                  user: q.Get(q.Select(['data', 'user'], q.Var('comments'))),
-                  site: q.Get(q.Select(['data', 'site'], q.Var('comments'))),
+                  // user: q.Get(q.Select(['data', 'user'], q.Var('comments'))),
+                  // site: q.Get(q.Select(['data', 'site'], q.Var('comments'))),
                 },
                 {
-                  user: q.Select(['ref'], q.Var('user')),
-                  site: q.Select('ref', q.Var('site')),
+                  ref: q.Select(['ref'], q.Var('comments')),
                   data: q.Select(['data'], q.Var('comments')),
                 }
               )
@@ -63,38 +55,47 @@ const SiteComments = ({ loadedComments, setLoadedComments }) => {
           )
         )
         .then((response) => {
-          console.log('Comments from site: ', response.data);
           setComments(response.data);
           setCommentsToShow(response.data);
-          setLoadedComments(response.data);
-          setTimeout(() => {
-            setShowItems(true);
-            setAnimate(true);
-            // setTimeout(() => {
-            setAnimateItems(true);
-            // }, 200);
-            // setTimeout(() => {
-            setLoading(false);
-            setAnimate(false);
-            setAnimateItems(false);
-            // }, 200);
-          }, 200);
+          const dataToDelete = [];
+
+          response.data.map((newData) =>
+            dataToDelete.push(newData.ref.value.id)
+          );
+
+          siteClient
+            .query(
+              q.Map(
+                dataToDelete,
+                q.Lambda(
+                  'data',
+                  q.Delete(
+                    q.Ref(
+                      q.Collection('comments'),
+                      // q.Select(
+                      //   ['id'],
+                      q.Var('data')
+                      // )
+                    )
+                  )
+                )
+              )
+            )
+            .then((responseTwo) => {
+              console.log(responseTwo);
+              setRender(true);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         })
         .catch((error) => {
           console.log(error);
-          setShowItems(true);
-          setAnimate(true);
-          setTimeout(() => {
-            setAnimateItems(true);
-          }, 200);
-          setTimeout(() => {
-            setLoading(false);
-            setAnimate(false);
-            setAnimateItems(false);
-          }, 200);
         });
     }
-  }, [loadedComments]);
+  }, []);
+
+  console.log('ALL COMMENTS: ', comments);
 
   useEffect(() => {
     if (reRender) {
@@ -111,8 +112,7 @@ const SiteComments = ({ loadedComments, setLoadedComments }) => {
                   site: q.Get(q.Select(['data', 'site'], q.Var('comments'))),
                 },
                 {
-                  user: q.Select(['ref'], q.Var('user')),
-                  site: q.Select('ref', q.Var('site')),
+                  ref: q.Select(['ref'], q.Var('comments')),
                   data: q.Select(['data'], q.Var('comments')),
                 }
               )
@@ -120,35 +120,12 @@ const SiteComments = ({ loadedComments, setLoadedComments }) => {
           )
         )
         .then((response) => {
-          console.log('Comments from site: ', response.data);
+          console.log('Response comments: ', response.data);
           setComments(response.data);
           setCommentsToShow(response.data);
-          setLoadedComments(response.data);
-          setTimeout(() => {
-            setShowItems(true);
-            setAnimate(true);
-            // setTimeout(() => {
-            setAnimateItems(true);
-            // }, 200);
-            // setTimeout(() => {
-            setLoading(false);
-            setAnimate(false);
-            setAnimateItems(false);
-            // }, 200);
-          }, 200);
         })
         .catch((error) => {
           console.log(error);
-          setShowItems(true);
-          setAnimate(true);
-          setTimeout(() => {
-            setAnimateItems(true);
-          }, 200);
-          setTimeout(() => {
-            setLoading(false);
-            setAnimate(false);
-            setAnimateItems(false);
-          }, 200);
         });
     }
   }, [reRender]);
@@ -186,12 +163,6 @@ const SiteComments = ({ loadedComments, setLoadedComments }) => {
         // aggregated further
         aggregate: 'count',
         Aggregated: ({ value }) => `${value} Pages`,
-      },
-      {
-        Header: 'Status',
-        accessor: 'status',
-        Filter: SelectColumnFilter,
-        filter: 'includes',
       },
     ],
     []
@@ -235,21 +206,72 @@ const SiteComments = ({ loadedComments, setLoadedComments }) => {
     setCommentsToShow(comments);
   };
 
-  const formatComments = () => {
+  const formatCommentsApproved = () => {
     const newComments = [];
     commentsToShow &&
       commentsToShow.length > 0 &&
-      commentsToShow.forEach((comment) => {
-        newComments.push({
-          name: comment.data.name,
-          comment: shortenText(comment.data.comment, 50),
-          date: comment.data.date,
-          path: comment.data.path || '/',
-          status: comment.data.draft ? 'Draft' : 'Published',
+      commentsToShow
+        .filter((comment) => !comment.data.draft)
+        .forEach((comment) => {
+          newComments.push({
+            name: comment.data.name,
+            comment: shortenText(comment.data.comment, 50),
+            date: comment.data.date,
+            path: comment.data.path || '/',
+            ref: comment.ref.value.id,
+          });
         });
-      });
 
     return newComments;
+  };
+
+  const formatCommentsHeld = () => {
+    const newComments = [];
+    commentsToShow &&
+      commentsToShow.length > 0 &&
+      commentsToShow
+        .filter((comment) => comment.data.draft)
+        .forEach((comment) => {
+          newComments.push({
+            name: comment.data.name,
+            comment: shortenText(comment.data.comment, 50),
+            date: comment.data.date,
+            path: comment.data.path || '/',
+            ref: comment.ref.value.id,
+          });
+        });
+
+    return newComments;
+  };
+
+  const deleteComments = (selectedComments) => {
+    const allCheckboxes = document.querySelectorAll('.checkbox');
+
+    if (confirm('Are you sure you want to delete these comments?')) {
+      const commentsToDelete = [];
+
+      selectedComments.forEach((comment) => {
+        commentsToDelete.push(comment.original.ref);
+      });
+
+      siteClient
+        .query(
+          q.Map(
+            commentsToDelete,
+            q.Lambda(
+              'data',
+              q.Delete(q.Ref(q.Collection('comments'), q.Var('data')))
+            )
+          )
+        )
+        .then((response) => {
+          console.log(response);
+          setRender(true);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   return (
@@ -265,7 +287,7 @@ const SiteComments = ({ loadedComments, setLoadedComments }) => {
                   window.history.pushState(
                     {},
                     '',
-                    `/dashboard/sites/${site.id}/comments/published`
+                    `/dashboard/sites/${site.data.id}/comments/published`
                   );
                 }
                 setActiveTab('published');
@@ -281,7 +303,7 @@ const SiteComments = ({ loadedComments, setLoadedComments }) => {
                   window.history.pushState(
                     {},
                     '',
-                    `/dashboard/sites/${site.id}/comments/held-for-review`
+                    `/dashboard/sites/${site.data.id}/comments/held-for-review`
                   );
                 }
                 setActiveTab('held');
@@ -294,30 +316,43 @@ const SiteComments = ({ loadedComments, setLoadedComments }) => {
         </div>
         <div widths={[9]}>
           {activeTab === 'published' && (
-            // <Card title='Account'>
-            //   <p className='small m-none'>
-            //     Name: {user.data.name || 'Guest'}
-            //   </p>
-            //   <p className='small m-none'>Email: {user.data.email}</p>
-            //   <Spacer />
-            //   <Button onClick={() => openEditModal(true)} gray small>
-            //     Edit
-            //   </Button>
-            // </Card>
-            <Card title='Comments'>
-              {comments && comments.length ? (
-                <CommentsTable
-                  columns={columns}
-                  data={formatComments()}
-                  updateMyData={updateMyData}
-                  skipReset={skipResetRef.current}
-                />
-              ) : (
-                <Card>Looks like you have no comments on your site yet!</Card>
-              )}
-            </Card>
+            <>
+              <h1 className='m-none'>Approved Comments</h1>
+              <Spacer height={24} />
+              <Card>
+                {comments && comments.length ? (
+                  <CommentsTable
+                    deleteComments={deleteComments}
+                    columns={columns}
+                    data={formatCommentsApproved()}
+                    updateMyData={updateMyData}
+                    skipReset={skipResetRef.current}
+                  />
+                ) : (
+                  <Card>Looks like you have no comments on your site yet!</Card>
+                )}
+              </Card>
+            </>
           )}
-          {activeTab === 'held' && <h1>Held For Review</h1>}
+          {activeTab === 'held' && (
+            <>
+              <h1 className='m-none'>Held For Review</h1>
+              <Spacer height={24} />
+              <Card>
+                {comments && comments.length ? (
+                  <CommentsTable
+                    deleteComments={deleteComments}
+                    columns={columns}
+                    data={formatCommentsHeld()}
+                    updateMyData={updateMyData}
+                    skipReset={skipResetRef.current}
+                  />
+                ) : (
+                  <Card>Looks like you have no comments on your site yet!</Card>
+                )}
+              </Card>
+            </>
+          )}
         </div>
       </Row>
     </span>
@@ -354,7 +389,7 @@ const Tab = styled.div`
   width: 100%;
   display: block;
   padding: 8px 16px;
-  border-radius: 50px;
+  border-radius: 5px;
   margin-right: 8px;
   transition-duration: 0.25s;
   background: ${(props) =>

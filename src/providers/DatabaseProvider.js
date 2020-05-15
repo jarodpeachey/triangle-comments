@@ -67,73 +67,73 @@ export const DatabaseReducer = (state, action) => {
         secret: action.data.secret,
       });
 
-      siteClient
-        .query(
-          q.Map(
-            [
-              [
-                'Jarod (Founder)',
-                'Hey! Welcome to this comment. It\'s a long one, because I need to test the ability to shorten it so the table actually works.',
-                new Date().getTime(),
-                '/10-best-things-about-javascript',
-                false,
-                state.user,
-                action.data.site,
-              ],
-              [
-                'Jarod (Founder)',
-                'Hey! Welcome to this comment. It\'s a long one, because I need to test the ability to shorten it so the table actually works.',
-                new Date().getTime(),
-                '/styled-components',
-                true,
-                state.user,
-                action.data.site,
-              ],
-              [
-                'Jarod (Founder)',
-                'Hey! Welcome to this comment. It\'s a long one, because I need to test the ability to shorten it so the table actually works.',
-                new Date().getTime(),
-                '/10-programming-languages',
-                true,
-                state.user,
-                action.data.site,
-              ],
-              [
-                'Jarod (Founder)',
-                'Hey! Welcome to this comment. It\'s a long one, because I need to test the ability to shorten it so the table actually works.',
-                new Date().getTime(),
-                '/best-react-tools',
-                false,
-                state.user,
-                action.data.site,
-              ],
-              [
-                'Jarod (Founder)',
-                'Hey! Welcome to this comment. It\'s a long one, because I need to test the ability to shorten it so the table actually works.',
-                new Date().getTime(),
-                '/10-best-things-about-javascript',
-                false,
-                state.user,
-                action.data.site,
-              ],
-            ],
-            q.Lambda(
-              'data',
-              q.Call(
-                q.Function('create_comment'),
-                q.Select(0, q.Var('data')),
-                q.Select(1, q.Var('data')),
-                q.Select(2, q.Var('data')),
-                q.Select(3, q.Var('data')),
-                q.Select(4, q.Var('data')),
-                q.Select(5, q.Var('data')),
-                q.Select(6, q.Var('data'))
-              )
-            )
-          )
-        )
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
+      // siteClient
+      //   .query(
+      //     q.Map(
+      //       [
+      //         [
+      //           'Jarod (Founder)',
+      //           'Hey! Welcome to this comment. It\'s a long one, because I need to test the ability to shorten it so the table actually works.',
+      //           new Date().getTime(),
+      //           '/10-best-things-about-javascript',
+      //           false,
+      //           state.user,
+      //           action.data.site,
+      //         ],
+      //         [
+      //           'Jarod (Founder)',
+      //           'Hey! Welcome to this comment. It\'s a long one, because I need to test the ability to shorten it so the table actually works.',
+      //           new Date().getTime(),
+      //           '/styled-components',
+      //           true,
+      //           state.user,
+      //           action.data.site,
+      //         ],
+      //         [
+      //           'Jarod (Founder)',
+      //           'Hey! Welcome to this comment. It\'s a long one, because I need to test the ability to shorten it so the table actually works.',
+      //           new Date().getTime(),
+      //           '/10-programming-languages',
+      //           true,
+      //           state.user,
+      //           action.data.site,
+      //         ],
+      //         [
+      //           'Jarod (Founder)',
+      //           'Hey! Welcome to this comment. It\'s a long one, because I need to test the ability to shorten it so the table actually works.',
+      //           new Date().getTime(),
+      //           '/best-react-tools',
+      //           false,
+      //           state.user,
+      //           action.data.site,
+      //         ],
+      //         [
+      //           'Jarod (Founder)',
+      //           'Hey! Welcome to this comment. It\'s a long one, because I need to test the ability to shorten it so the table actually works.',
+      //           new Date().getTime(),
+      //           '/10-best-things-about-javascript',
+      //           false,
+      //           state.user,
+      //           action.data.site,
+      //         ],
+      //       ],
+      //       q.Lambda(
+      //         'data',
+      //         q.Call(
+      //           q.Function('create_comment'),
+      //           q.Select(0, q.Var('data')),
+      //           q.Select(1, q.Var('data')),
+      //           q.Select(2, q.Var('data')),
+      //           q.Select(3, q.Var('data')),
+      //           q.Select(4, q.Var('data')),
+      //           q.Select(5, q.Var('data')),
+      //           q.Select(6, q.Var('data'))
+      //         )
+      //       )
+      //     )
+      //   )
+      //   .then((res) => console.log(res))
+      //   .catch((err) => console.log(err));
 
       return {
         ...state,
