@@ -40,6 +40,7 @@ import PasswordModal from '../auth/PasswordModal';
 import { isBrowser } from '../../utils/isBrowser';
 import EditSiteInfoModal from '../dashboard/EditSiteInfoModal';
 import { DatabaseContext } from '../../providers/DatabaseProvider';
+import { Helmet } from 'react-helmet';
 
 library.add(
   faBars,
@@ -128,7 +129,8 @@ const Wrapper = styled.div`
   select,
   input,
   td,
-  th, button {
+  th,
+  button {
     font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
       Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',
       sans-serif !important;

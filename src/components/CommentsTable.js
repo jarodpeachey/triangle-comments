@@ -7,7 +7,7 @@
 /* eslint-disable react/jsx-key */
 /* eslint-disable react/jsx-fragments */
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { css, ThemeContext, keyframes } from 'styled-components';
 import {
   useTable,
   usePagination,
@@ -20,6 +20,8 @@ import {
 import matchSorter from 'match-sorter';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Card from './Card';
+import { useContext } from 'react';
+import Loader from './Loader';
 
 // Create an editable cell renderer
 const DefaultCell = ({
@@ -73,34 +75,6 @@ const EditableCell = ({
 
   return <input value={value} onChange={onChange} onBlur={onBlur} />;
 };
-
-// Define a default UI for filtering
-function DefaultColumnFilter({
-  column: { filterValue, preFilteredRows, setFilter },
-}) {
-  const count = preFilteredRows.length;
-  const [showFilter, setShowFilter] = useState(true);
-
-  if (showFilter) {
-    return (
-      <>
-        <Input
-          style={{
-            width: 70,
-          }}
-          value={filterValue || ''}
-          onChange={(e) => {
-            setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
-          }}
-          placeholder={`Filter ${count} results...`}
-        />
-        {/* <FontAwesomeIcon onClick={() => setShowFilter(false)} icon='cog' /> */}
-      </>
-    );
-  }
-
-  // return <FontAwesomeIcon onClick={() => setShowFilter(true)} icon='search' />;
-}
 
 // This is a custom filter UI for selecting
 // a unique option from a list
@@ -245,6 +219,10 @@ function CommentsTable({
   updateMyData,
   skipReset,
   deleteComments,
+  approveComments,
+  unapproveComments,
+  mode,
+  loading,
 }) {
   const filterTypes = React.useMemo(
     () => ({
@@ -265,6 +243,35 @@ function CommentsTable({
     }),
     []
   );
+  const theme = useContext(ThemeContext);
+
+  // Define a default UI for filtering
+  function DefaultColumnFilter({
+    column: { filterValue, preFilteredRows, setFilter },
+  }) {
+    const count = preFilteredRows.length;
+    const [showFilter, setShowFilter] = useState(true);
+
+    if (showFilter) {
+      return (
+        <>
+          <Input
+            style={{
+              width: 70,
+            }}
+            value={filterValue || ''}
+            onChange={(e) => {
+              setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
+            }}
+            placeholder={`Filter ${count} results...`}
+          />
+          {/* <FontAwesomeIcon onClick={() => setShowFilter(false)} icon='cog' /> */}
+        </>
+      );
+    }
+
+    // return <FontAwesomeIcon onClick={() => setShowFilter(true)} icon='search' />;
+  }
 
   const actionsMenuComponent = (selectedFlatRows) => {
     const [open, setOpen] = useState(false);
@@ -277,7 +284,11 @@ function CommentsTable({
           margin: '0 0 12px 0',
         }}
       >
-        <ActionsWrapper open={open} onClick={() => setOpen(!open)}>
+        <ActionsWrapper
+          disabled={selectedFlatRows.length === 0}
+          open={open}
+          onClick={() => setOpen(!open)}
+        >
           Actions
           <FontAwesomeIcon icon='chevron-down' />
         </ActionsWrapper>
@@ -289,7 +300,7 @@ function CommentsTable({
         position: absolute;
         bottom: 0;
         z-index: 99999;
-        width: 120%;
+        width: 140%;
         box-shadow: 2px 2px 15px -5px #e8e8e8;
         box-shadow: 0 6px 12px rgba(0,0,0,.08);
         left: 0;
@@ -298,12 +309,48 @@ function CommentsTable({
         transition: transform 0.05s ease-out !important;
         top: 110%;
         height: fit-content;
+        white-space: no-wrap;
       `}
         >
-          <Action onClick={() => deleteComments(selectedFlatRows)}>
-            Delete
-          </Action>
-          <Action>Approve</Action>
+          {mode === 'approved' ? (
+            <>
+              <Action
+                onClick={() => {
+                  setOpen(false);
+                  deleteComments(selectedFlatRows);
+                }}
+              >
+                Delete
+              </Action>
+              <Action
+                onClick={() => {
+                  setOpen(false);
+                  unapproveComments(selectedFlatRows);
+                }}
+              >
+                Move to Held For Review
+              </Action>
+            </>
+          ) : (
+            <>
+              <Action
+                onClick={() => {
+                  setOpen(false);
+                  deleteComments(selectedFlatRows);
+                }}
+              >
+                Delete
+              </Action>
+              <Action
+                onClick={() => {
+                  setOpen(false);
+                  approveComments(selectedFlatRows);
+                }}
+              >
+                Approve
+              </Action>
+            </>
+          )}
         </Card>
       </div>
     );
@@ -402,16 +449,31 @@ function CommentsTable({
     }
   );
 
+  const getPagesMapped = () => {
+    const pagesMapped = [];
+    for (let i = 0; i < pageCount; i++) {
+      pagesMapped.push(i);
+    }
+
+    return pagesMapped;
+  };
+
+  console.log(getPagesMapped);
+
   // Render the UI for your table
   return (
-    <>
+    <div>
       {actionsMenuComponent(selectedFlatRows)}
-      <Table {...getTableProps()}>
+      <Table
+        style={{ position: 'relative' }}
+        skelton={loading}
+        {...getTableProps()}
+      >
         <THead>
           {headerGroups.map((headerGroup) => (
             <TR {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
-                <TH {...column.getHeaderProps()}>
+                <TH skeleton={loading} {...column.getHeaderProps()}>
                   <span>
                     {column.canGroupBy ? (
                       // If the column can be grouped, let's add a toggle
@@ -438,7 +500,12 @@ function CommentsTable({
             </TR>
           ))}
         </THead>
-        <TBody {...getTableBodyProps()}>
+        <TBody skeleton={loading} {...getTableBodyProps()}>
+          {loading && (
+            <LoadingWrapper style={{ background: 'transparent' }}>
+              <Loader height={50} color={theme.color.primary.main} />
+            </LoadingWrapper>
+          )}
           {page.map((row) => {
             prepareRow(row);
 
@@ -446,24 +513,26 @@ function CommentsTable({
               <TR dataRef={row.original.ref} {...row.getRowProps()}>
                 {row.cells.map((cell) => {
                   return (
-                    <TD {...cell.getCellProps()}>
-                      {cell.isGrouped ? (
-                        // If it's a grouped cell, add an expander and row count
-                        <>
-                          <span {...row.getToggleRowExpandedProps()}>
-                            {row.isExpanded ? '👇' : '👉'}
-                          </span>{' '}
-                          {cell.render('Cell', { editable: false })} (
-                          {row.subRows.length})
-                        </>
-                      ) : cell.isAggregated ? (
-                        // If the cell is aggregated, use the Aggregated
-                        // renderer for cell
-                        cell.render('Aggregated')
-                      ) : cell.isPlaceholder ? null : ( // For cells with repeated values, render null
-                        // Otherwise, just render the regular cell
-                        cell.render('Cell', { editable: true })
-                      )}
+                    <TD skeleton={loading} {...cell.getCellProps()}>
+                      <span>
+                        {cell.isGrouped ? (
+                          // If it's a grouped cell, add an expander and row count
+                          <>
+                            <span {...row.getToggleRowExpandedProps()}>
+                              {row.isExpanded ? '👇' : '👉'}
+                            </span>{' '}
+                            {cell.render('Cell', { editable: false })} (
+                            {row.subRows.length})
+                          </>
+                        ) : cell.isAggregated ? (
+                          // If the cell is aggregated, use the Aggregated
+                          // renderer for cell
+                          cell.render('Aggregated')
+                        ) : cell.isPlaceholder ? null : ( // For cells with repeated values, render null
+                          // Otherwise, just render the regular cell
+                          cell.render('Cell', { editable: true })
+                        )}
+                      </span>
                     </TD>
                   );
                 })}
@@ -476,38 +545,33 @@ function CommentsTable({
         Pagination can be built however you'd like.
         This is just a very basic UI implementation:
       */}
-      <span className='pagination'>
-        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-          {'<<'}
-        </button>{' '}
-        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-          {'<'}
-        </button>{' '}
-        <button onClick={() => nextPage()} disabled={!canNextPage}>
-          {'>'}
-        </button>{' '}
-        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-          {'>>'}
-        </button>{' '}
+      <TableNav>
         <span>
           Page{' '}
           <strong>
             {pageIndex + 1} of {pageOptions.length}
-          </strong>{' '}
+          </strong>
         </span>
         <span>
-          | Go to page:{' '}
-          <input
-            type='number'
+          Go to page:
+          <select
             defaultValue={pageIndex + 1}
             onChange={(e) => {
               const page = e.target.value ? Number(e.target.value) - 1 : 0;
               gotoPage(page);
             }}
             style={{ width: '100px' }}
-          />
-        </span>{' '}
-        <select
+          >
+            {getPagesMapped() &&
+              getPagesMapped().length > 0 &&
+              getPagesMapped().map((newPage) => {
+                return <option value={newPage + 1}>{newPage + 1}</option>;
+              })}
+          </select>
+          <input type='number' />
+        </span>
+        Rows per page:
+        <RowsPerPage
           value={pageSize}
           onChange={(e) => {
             setPageSize(Number(e.target.value));
@@ -515,12 +579,18 @@ function CommentsTable({
         >
           {[10, 20, 30, 40, 50].map((pageSize) => (
             <option key={pageSize} value={pageSize}>
-              Show {pageSize}
+              {pageSize}
             </option>
           ))}
-        </select>
-      </span>
-      <pre>
+        </RowsPerPage>
+        <NavButton onClick={() => previousPage()} disabled={!canPreviousPage}>
+          {'<'}
+        </NavButton>
+        <NavButton onClick={() => nextPage()} disabled={!canNextPage}>
+          {'>'}
+        </NavButton>
+      </TableNav>
+      {/* <pre>
         <code>
           {JSON.stringify(
             {
@@ -539,8 +609,8 @@ function CommentsTable({
             2
           )}
         </code>
-      </pre>
-    </>
+      </pre> */}
+    </div>
   );
 }
 
@@ -602,6 +672,65 @@ const IndeterminateCheckbox = React.forwardRef(
   }
 );
 
+const TableNav = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+`;
+
+const RowsPerPage = styled.select`
+  border: none;
+  background: #f7f7f7;
+  border-radius: 5px;
+`;
+
+const NavButton = styled.button`
+  border: none;
+  background: white;
+  border-radius: 100px;
+  border: 1px solid ${(props) => props.theme.color.gray.three};
+  color: black;
+  padding: 8px;
+`;
+
+const shimmer = keyframes`
+  100% {
+    transform: translateX(120%);
+  }
+`;
+
+const LoadingWrapper = styled.div`
+  position: absolute;
+  overflow: hidden;
+  height: calc(100% - 66px);
+  z-index: 999999;
+  top: 66px;
+  width: 100%;
+  background: ${(props) => props.theme.color.gray.two}ee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &::after {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100%;
+    height: 100% !important;
+    bottom: 0 !important;
+    transform: translateX(-100%) !important;
+    background-image: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0,
+      rgba(255, 255, 255, 0.5) 30%,
+      rgba(255, 255, 255, 0) 50%,
+      rgba(255, 255, 255, 0.5) 70%,
+      rgba(255, 255, 255, 0) 100%
+    ) !important;
+    animation: ${shimmer} 3s infinite !important;
+  }
+`;
+
 const ActionsWrapper = styled.button`
   border: none;
   outline: none;
@@ -633,6 +762,13 @@ const ActionsWrapper = styled.button`
     transform: rotate(${(props) => (props.open ? '180deg' : '0deg')});
     transition: all 0.1s;
   }
+  ${(props) =>
+    props.disabled &&
+    css`
+      cursor: initial;
+      color: ${(props) => props.theme.color.gray.five};
+      background: ${(props) => props.theme.color.gray.two};
+    `};
 `;
 
 const ActionsMenu = styled.div``;
@@ -675,6 +811,7 @@ const Input = styled.input`
   // background-size: 12px;
   // background-position-x: 90%;
   margin-top: 4px;
+  margin-bottom: 6px;
 `;
 
 const Checkbox = styled.div`
@@ -705,6 +842,7 @@ const Checkbox = styled.div`
     border: 1px solid #e8e8e8;
     background: #ffffff;
     transition: .1s ease-out;
+    background: transparent;
   }
   input:checked ~ .checkmark {
     background: ${(props) => props.theme.color.primary.backgroundDark};
@@ -733,6 +871,13 @@ const Table = styled.table`
   // display: table;
   border-spacing: 0px;
   margin-bottom: 24px;
+  // position: relative;
+  ${(props) =>
+    props.skeleton &&
+    css`
+      position: relative !important;
+      display: block !important;
+    `}
 `;
 
 const THead = styled.thead`
@@ -741,6 +886,10 @@ const THead = styled.thead`
 
 const TBody = styled.tbody`
   margin: 0;
+  tr {
+    vertical-align: top;
+  }
+  position: relative;
 `;
 
 const TR = styled.tr`
@@ -765,6 +914,12 @@ const TH = styled.th`
     text-align: center;
     padding: 12px;
     width: fit-content;
+    position: relative;
+    padding-bottom: 0;
+    span:first-child {
+      position: relative;
+      top: 1px;
+    }
   }
   :nth-child(2) {
     text-align: left;
@@ -797,13 +952,40 @@ const TH = styled.th`
   }
   width: 1px;
   white-space: nowrap;
+  ${(props) =>
+    props.skeleton &&
+    css`
+    input {
+      cursor: not-allowed !important;
+    }
+    input::placeholder {
+      color: transparent !important;
+    }
+    position: relative !important;
+    :first-child span {
+      background: ${(props) => props.theme.color.gray.three} !important;
+      border-radius: 5px !important;
+      color: transparent !important;
+    }
+    // :nth-child(3) span {
+    //   ::after {
+    //     position: relative;
+    //     top: 0;
+    //     display: block;
+    //     height: 100%;
+    //     width: 100%:
+    //     content: "";
+    //     background: ${(props) => props.theme.color.gray.three};
+    //   }
+    // }
+  `};
 `;
 
 const TD = styled.td`
   // border-top: 1px solid #e8e8e8 !important;
   border-bottom: 1px solid #e8e8e8 !important;
   font-weight: 400;
-  padding: 4px 24px 4px 0;
+  padding: 12px 24px 12px 0;
   font-weight: 500;
   text-align: left;
   margin: 0;
@@ -845,6 +1027,45 @@ const TD = styled.td`
   }
   width: 1px;
   white-space: nowrap;
+  ${(props) =>
+    props.skeleton &&
+    css`
+      :nth-child(1) span {
+        background: ${(props) => props.theme.color.gray.three} !important;
+        border-radius: 5px !important;
+        // line-height: 8px !important;
+        color: transparent !important;
+      }
+      :nth-child(2) span,
+      :nth-child(3) span,
+      :nth-child(4) span {
+        background: ${(props) => props.theme.color.gray.three} !important;
+        border-radius: 5px !important;
+        // line-height: 8px !important;
+        max-height: 21px !important;
+        display: block !important;
+        height: fit-content !important;
+        width: fit-content;
+        color: transparent !important;
+      }
+      :nth-child(3) span::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 21px;
+        display: block;
+        background: ${(props) => props.theme.color.gray.three};
+        border-radius: 5px;
+        width: 70%;
+        top: 26px;
+        // z-index: 9999;
+      }
+      :nth-child(3) span {
+        position: relative;
+        margin-bottom: 26px;
+      }
+    `};
 `;
 
 export default CommentsTable;

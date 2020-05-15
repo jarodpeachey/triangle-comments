@@ -18,7 +18,7 @@ export const AppProvider = ({ children }) => {
     setTimeout(() => {
       setNotificationMessage(null);
     }, 3000);
-  }, [notificationType]);
+  }, [notificationType, notificationMessage]);
 
   return (
     <AppContext.Provider
@@ -38,7 +38,7 @@ export const AppProvider = ({ children }) => {
         returnFunction,
         setFunction,
         signedIn,
-        setSignedIn
+        setSignedIn,
         // userAccountInfo,
         // setUserAccountInfo
       }}

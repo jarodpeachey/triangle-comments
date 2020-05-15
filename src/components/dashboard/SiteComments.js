@@ -16,6 +16,11 @@ import Row from '../grid/Row';
 import CommentsTable, { SelectColumnFilter } from '../CommentsTable';
 
 const SiteComments = () => {
+  const { setNotificationType, setNotificationMessage } = useContext(
+    AppContext
+  );
+  const { state, q } = useContext(DatabaseContext);
+  const { user, site, siteClient, userClient } = state;
   const [activeTab, setActiveTab] = useState(
     isBrowser() && window.location.pathname.includes('held-for-review')
       ? 'held'
@@ -23,17 +28,15 @@ const SiteComments = () => {
   );
   const [comments, setComments] = useState([]);
   const [commentsToShow, setCommentsToShow] = useState(comments);
-  const [reRender, setRender] = useState(true);
-
-  const { state, q } = useContext(DatabaseContext);
-  const { user, site, siteClient, userClient } = state;
-
+  const [reRender, setRender] = useState(false);
   const loadedComments = [];
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (loadedComments && loadedComments.length > 0) {
       // setComments(loadedComments);
     } else {
+      setLoading(true);
       siteClient
         .query(
           q.Map(
@@ -43,8 +46,8 @@ const SiteComments = () => {
               q.Let(
                 {
                   comments: q.Get(q.Var('commentsRef')),
-                  // user: q.Get(q.Select(['data', 'user'], q.Var('comments'))),
-                  // site: q.Get(q.Select(['data', 'site'], q.Var('comments'))),
+                  user: q.Get(q.Select(['data', 'user'], q.Var('comments'))),
+                  site: q.Get(q.Select(['data', 'site'], q.Var('comments'))),
                 },
                 {
                   ref: q.Select(['ref'], q.Var('comments')),
@@ -58,39 +61,45 @@ const SiteComments = () => {
           setComments(response.data);
           setCommentsToShow(response.data);
           const dataToDelete = [];
+          setTimeout(() => {
+            setLoading(false);
+          }, 1000);
 
           response.data.map((newData) =>
             dataToDelete.push(newData.ref.value.id)
           );
 
-          siteClient
-            .query(
-              q.Map(
-                dataToDelete,
-                q.Lambda(
-                  'data',
-                  q.Delete(
-                    q.Ref(
-                      q.Collection('comments'),
-                      // q.Select(
-                      //   ['id'],
-                      q.Var('data')
-                      // )
-                    )
-                  )
-                )
-              )
-            )
-            .then((responseTwo) => {
-              console.log(responseTwo);
-              setRender(true);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+          // siteClient
+          //   .query(
+          //     q.Map(
+          //       dataToDelete,
+          //       q.Lambda(
+          //         'data',
+          //         q.Delete(
+          //           q.Ref(
+          //             q.Collection('comments'),
+          //             // q.Select(
+          //             //   ['id'],
+          //             q.Var('data')
+          //             // )
+          //           )
+          //         )
+          //       )
+          //     )
+          //   )
+          //   .then((responseTwo) => {
+          //     console.log(responseTwo);
+          //     setRender(true);
+          //   })
+          //   .catch((err) => {
+          //     console.log(err);
+          //   });
         })
         .catch((error) => {
           console.log(error);
+          setTimeout(() => {
+            setLoading(false);
+          }, 1000);
         });
     }
   }, []);
@@ -123,10 +132,18 @@ const SiteComments = () => {
           console.log('Response comments: ', response.data);
           setComments(response.data);
           setCommentsToShow(response.data);
+          setTimeout(() => {
+            setLoading(false);
+          }, 1000);
         })
         .catch((error) => {
           console.log(error);
+          setTimeout(() => {
+            setLoading(false);
+          }, 1000);
         });
+
+      setRender(false);
     }
   }, [reRender]);
 
@@ -244,6 +261,63 @@ const SiteComments = () => {
     return newComments;
   };
 
+  const dummyData = () => {
+    const newComments = [];
+
+    newComments.push({
+      name: 'Jack Smith',
+      comment:
+        'Blasdh ksldaf lskhdf khsfsjkdlf ,s fksldj sfljdf lhf slkhklsdhf slkh flkhs',
+      date: '02/07/2001',
+      path: '/react-tips-again',
+      ref: '234b23mbg34ty',
+    });
+
+    newComments.push({
+      name: 'Jarod Peachey',
+      comment: 'Blasd khsf  fsdflhsf kh sklhf slkhklsdhf slkh flkhs',
+      date: '10/07/2001',
+      path: '/reacips',
+      ref: '234bt7fdsf3mbg34ty',
+    });
+
+    newComments.push({
+      name: 'Bill Doe',
+      comment: 'Blasdh lskhdf khsf  fsdflhsf kh sklhf slkhklsdhf slkh flkhs',
+      date: '10/07/2001',
+      path: '/react-tips-fo',
+      ref: '234bt734ty',
+    });
+
+    newComments.push({
+      name: 'Jarod William',
+      comment:
+        'Blasdh ksldaf lskhdf khsf  fsdflhsf kh sklhf slkhklsdhf slkh flkhs, asdfkj ksjdf ',
+      date: '10/07/2001',
+      path: '/react',
+      ref: '234bt723mbdg34ty',
+    });
+
+    newComments.push({
+      name: 'Mike Williamson',
+      comment: 'Blasdh ksldaf lskhdf khsf slkh flkhs',
+      date: '10/07/2001',
+      path: '/react-tips-for-dumb',
+      ref: '234bt723mbsdfg34ty',
+    });
+
+    newComments.push({
+      name: 'Jarod Peachey',
+      comment:
+        'Blasdh ksldaf lskhdf khsf  fsdflhsf kh sklhf slkhklsdhf slkh flkhs',
+      date: '10/07/2001',
+      path: '/react-tips',
+      ref: '234bt723mbg34ty',
+    });
+
+    return newComments;
+  };
+
   const deleteComments = (selectedComments) => {
     const allCheckboxes = document.querySelectorAll('.checkbox');
 
@@ -253,6 +327,8 @@ const SiteComments = () => {
       selectedComments.forEach((comment) => {
         commentsToDelete.push(comment.original.ref);
       });
+
+      setLoading(true);
 
       siteClient
         .query(
@@ -267,9 +343,90 @@ const SiteComments = () => {
         .then((response) => {
           console.log(response);
           setRender(true);
+          setNotificationMessage('Comments successfully deleted.');
         })
         .catch((err) => {
           console.log(err);
+          setNotificationMessage('There was an error deleting your comments');
+          setNotificationType('error');
+        });
+    }
+  };
+
+  const approveComments = (selectedComments) => {
+    const allCheckboxes = document.querySelectorAll('.checkbox');
+
+    if (confirm('Are you sure you want to approve these comments?')) {
+      const commentsToApprove = [];
+
+      selectedComments.forEach((comment) => {
+        commentsToApprove.push(comment.original.ref);
+      });
+
+      setLoading(true);
+
+      siteClient
+        .query(
+          q.Map(
+            commentsToApprove,
+            q.Lambda(
+              'data',
+              q.Update(q.Ref(q.Collection('comments'), q.Var('data')), {
+                data: {
+                  draft: false,
+                },
+              })
+            )
+          )
+        )
+        .then((response) => {
+          console.log(response);
+          setRender(true);
+          setNotificationMessage('Comments approved!');
+        })
+        .catch((err) => {
+          console.log(err);
+          setNotificationMessage('There was an error approving your comments');
+          setNotificationType('error');
+        });
+    }
+  };
+
+  const unapproveComments = (selectedComments) => {
+    const allCheckboxes = document.querySelectorAll('.checkbox');
+
+    if (confirm('Are you sure you want to approve these comments?')) {
+      const commentsToApprove = [];
+
+      selectedComments.forEach((comment) => {
+        commentsToApprove.push(comment.original.ref);
+      });
+
+      setLoading(true);
+
+      siteClient
+        .query(
+          q.Map(
+            commentsToApprove,
+            q.Lambda(
+              'data',
+              q.Update(q.Ref(q.Collection('comments'), q.Var('data')), {
+                data: {
+                  draft: true,
+                },
+              })
+            )
+          )
+        )
+        .then((response) => {
+          console.log(response);
+          setRender(true);
+          setNotificationMessage('Comments moved!');
+        })
+        .catch((err) => {
+          console.log(err);
+          setNotificationMessage('There was an error moving your comments');
+          setNotificationType('error');
         });
     }
   };
@@ -320,13 +477,16 @@ const SiteComments = () => {
               <h1 className='m-none'>Approved Comments</h1>
               <Spacer height={24} />
               <Card>
-                {comments && comments.length ? (
+                {(comments && comments.length) || loading ? (
                   <CommentsTable
                     deleteComments={deleteComments}
+                    unapproveComments={unapproveComments}
                     columns={columns}
-                    data={formatCommentsApproved()}
+                    data={loading ? dummyData() : formatCommentsApproved()}
                     updateMyData={updateMyData}
                     skipReset={skipResetRef.current}
+                    mode='approved'
+                    loading={loading}
                   />
                 ) : (
                   <Card>Looks like you have no comments on your site yet!</Card>
@@ -339,13 +499,16 @@ const SiteComments = () => {
               <h1 className='m-none'>Held For Review</h1>
               <Spacer height={24} />
               <Card>
-                {comments && comments.length ? (
+                {(comments && comments.length) || loading ? (
                   <CommentsTable
                     deleteComments={deleteComments}
+                    approveComments={approveComments}
                     columns={columns}
-                    data={formatCommentsHeld()}
+                    data={loading ? dummyData() : formatCommentsHeld()}
                     updateMyData={updateMyData}
                     skipReset={skipResetRef.current}
+                    mode='held'
+                    loading={loading}
                   />
                 ) : (
                   <Card>Looks like you have no comments on your site yet!</Card>
